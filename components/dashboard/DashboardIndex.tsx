@@ -12,26 +12,6 @@ const DashboardIndex: React.FC = () => {
       <ScrollView>
         <Header />
         <View style={styles.content}>
-          {/* <View style={styles.welcomeSection}>
-            <View style={styles.locationContainer}>
-              <Image
-                resizeMode="contain"
-                source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/67f578fcd9cba5d097e610205d1bb59f3976a4ee99a7a87f5d43a0814567c595?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a" }}
-                style={styles.locationIcon}
-              />
-              <Text style={styles.locationText}>House 30, ISB</Text>
-            </View>
-            <Text style={styles.welcomeText}>Welcome Midhat!</Text>
-          </View> */}
-          {/* <TouchableOpacity style={styles.planEventButton}>
-            <Image
-              resizeMode="contain"
-              source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/b23cc298b73427e8ff413c97e65d7f818b17effa7ea6005ff3d291c0024be9ad?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a" }}
-              style={styles.planEventIcon}
-            />
-            <Text style={styles.planEventText}>Plan an Event</Text>
-          </TouchableOpacity> */}
-          {/* <SearchBar /> */}
           <CategoryGrid />
           <VenueList />
         </View>
@@ -76,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#007AFF',
     borderRadius: 12,
-    padding: 16,
+    padding: 26,
     marginBottom: 20,
   },
   planEventIcon: {
