@@ -1,88 +1,116 @@
 import React from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
-import OnboardingSlider from './OnBoardingSlider';
-import NavigationButtons from './NavigationButton';
+import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
+import { Asset } from 'expo-asset';
+import { router } from 'expo-router';
 
-interface VendorSearchScreenProps {}
-
-const Sandwich1Index: React.FC<VendorSearchScreenProps> = () => {
+const Sandwich1Index = () => {
+  const sandwich1Image = Asset.fromModule(require('./../../assets/images/sandwich1.png')).uri;
   return (
     <View style={styles.container}>
       <Image
-        resizeMode="contain"
-        source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/4fb476eba138edb6f746bb6393f46a23238c3e02af4b453d31799a53813cd8c8?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a" }}
-        style={styles.decorativeImage}
+        source={{ uri: sandwich1Image }}
+        style={styles.image}
       />
-      <Image
-        resizeMode="contain"
-        source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/364bfbd42c94b15df86b129eade702a28ebd72686b7f1cc5cf5b33eae0048a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a" }}
-        style={styles.mainImage}
-      />
-      <View style={styles.contentContainer}>
+
+      <View style={styles.textContainer}>
         <Text style={styles.title}>
-          "Vendors at Your Fingertips!"
+          "VENDORS AT YOUR <Text style={styles.highlight}>FINGERTIPS!</Text>"
         </Text>
         <Text style={styles.description}>
-          Easily search, sort by price and reviews, and find the perfect vendors for your event in no time.
+          Easily search, sort by price and reviews, and find the perfect vendors
+          for your event in no time.
         </Text>
       </View>
-      <OnboardingSlider />
-      <NavigationButtons />
+
+      <View style={styles.footer}>
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/intro");
+          }}
+        >
+          <Text style={styles.footerText}>SKIP</Text>
+        </TouchableOpacity>
+
+        <View style={styles.dotsContainer}>
+          <View style={[styles.dot, styles.activeDot]} />
+          <View style={styles.dot} />
+          <View style={styles.dot} />
+        </View>
+
+        <TouchableOpacity
+          onPress={() => {
+            console.log("Sandwich 2")
+            router.push("/sandwich2")
+          }}
+        >
+          <Text style={styles.footerText}>NEXT</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 40,
-    display: 'flex',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    maxWidth: 480,
-    width: '100%',
-    paddingBottom: 73,
-    flexDirection: 'column',
-    overflow: 'hidden',
+    flex: 1,
+    backgroundColor: '#F8E9F0',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F8E9F0'
+    paddingVertical: 40,
   },
-  decorativeImage: {
-    position: 'relative',
-    display: 'flex',
-    marginTop: 142,
-    marginRight: 63,
-    width: 87,
-    aspectRatio: 0.95,
+  image: {
+    width: '80%',
+    height: '40%',
+    resizeMode: 'contain',
   },
-  mainImage: {
-    position: 'relative',
-    display: 'flex',
-    width: '100%',
-    maxWidth: 267,
-    aspectRatio: 1.16,
-  },
-  contentContainer: {
-    marginTop: 63,
+  textContainer: {
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    marginTop: 20,
   },
   title: {
-    color: 'rgba(0, 0, 0, 1)',
-    fontSize: 18,
-    fontFamily: 'Poppins, sans-serif',
-    fontWeight: '700',
-    lineHeight: 18,
-    letterSpacing: 0.9,
+    fontSize: 24,
+    fontWeight: 'bold',
     textAlign: 'center',
-    textTransform: 'uppercase',
+    color: '#000',
+  },
+  highlight: {
+    color: '#E15A45', // Highlight color for "FINGERTIPS!"
   },
   description: {
-    color: 'rgba(0, 0, 0, 1)',
     fontSize: 16,
-    fontFamily: 'Poppins, sans-serif',
-    fontWeight: '400',
-    lineHeight: 15,
-    letterSpacing: 0.8,
     textAlign: 'center',
-    marginTop: 5,
+    color: '#555',
+    marginTop: 10,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 30,
+  },
+  footerText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000',
+  },
+  dotsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#000',
+    marginHorizontal: 5,
+  },
+  activeDot: {
+    backgroundColor: '#8A2BE2', // Active dot color
   },
 });
 

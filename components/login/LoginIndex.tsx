@@ -1,54 +1,201 @@
-import React from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
-import SocialLoginButton from './SocialLoginButton';
-import OrDivider from './OrDivider';
-import LoginForm from './LoginForm';
-import BottomIndicator from './ButtonIndicator';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Asset } from 'expo-asset';
+import { Ionicons } from '@expo/vector-icons'
+import { router, useNavigation } from 'expo-router';
 
-const LoginIndex: React.FC = () => {
+export default function LoginScreen() {
+  const navigation = useNavigation();
+  const google = Asset.fromModule(require('./../../assets/images/google-icon.png')).uri;
+  const facebook = Asset.fromModule(require('./../../assets/images/facebook-icon.png')).uri;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleGoogleLogin = () => {
+    console.log('Google Login pressed!');
+  };
+
+  const handleFacebookLogin = () => {
+    console.log('Facebook Login pressed!');
+  };
+
+  const handleLogin = () => {
+    console.log('Login pressed!');
+  };
+
+  const handleForgotPassword = () => {
+    console.log('Forgot Password pressed!');
+  };
+
+  const handleBackPress = () => {
+    console.log('Back button pressed!');
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
-      <Image
-        resizeMode="contain"
-        source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/4372f11214dc77f9a489663e401758d2ece8d27654072202c366b200f39b2af0?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a" }}
-        style={styles.logo}
+      <TouchableOpacity style={styles.backButton} onPress={() => { router.back() }}>
+        <Ionicons name="arrow-back" size={24} color="#333" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.socialButton1} onPress={handleGoogleLogin}>
+        <Image
+          source={{ uri: google }}
+          style={styles.socialIcon}
+        />
+        <Text style={styles.socialButtonText}>Login with Google</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.socialButton2} onPress={handleFacebookLogin}>
+        <Image
+          source={{ uri: facebook }}
+          style={styles.socialIcon}
+        />
+        <Text style={styles.socialButtonText}>Login with Facebook</Text>
+      </TouchableOpacity>
+
+      <View style={styles.separatorContainer}>
+        <View style={styles.separatorLine} />
+        <Text style={styles.separatorText}>OR</Text>
+        <View style={styles.separatorLine} />
+      </View>
+
+      <Text style={styles.label}>E-mail</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter e-mail"
+        placeholderTextColor="#999"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
-      <SocialLoginButton
-        icon="https://cdn.builder.io/api/v1/image/assets/TEMP/46b1f0daf9a989b77aaa5ad5f26018270a20e4f1d84273791a767e4f86d51adb?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a"
-        text="Login with Google"
-      />
-      <SocialLoginButton
-        icon="https://cdn.builder.io/api/v1/image/assets/TEMP/be0e1fa1016cf2d701543db037975a8f6f34d3c551ce6f1810fe53c3cc8b8642?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a"
-        text="Login with Facebook"
-      />
-      <OrDivider />
-      <LoginForm />
+
+      <Text style={styles.label}>Password</Text>
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter password"
+          placeholderTextColor="#999"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        {/* <TouchableOpacity>
+          <Text style={styles.eyeIcon}>👁️</Text>
+        </TouchableOpacity> */}
+      </View>
+
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Login</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleForgotPassword}>
+        <Text style={styles.forgotPasswordText}>Forgot Your Password</Text>
+      </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 40,
-    display: "flex",
-    marginLeft: "auto",
-    marginRight: "auto",
-    maxWidth: 480,
-    width: "100%",
-    paddingLeft: 7,
-    paddingRight: 7,
-    flexDirection: "column",
-    overflow: "hidden",
-    alignItems: "center",
-backgroundColor: '#F8E9F0'
+    flex: 1,
+    backgroundColor: '#F7ECF5', // Light pink background
+    paddingHorizontal: 40,
+    paddingTop: 80,
   },
-  logo: {
-    position: "relative",
-    display: "flex",
-    marginTop: 10,
-    width: 36,
-    aspectRatio: 1,
+  socialButton1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 10,
+    paddingVertical: 15,
+    marginBottom: 15,
+    backgroundColor: '#FFF',
+    marginTop: 100
+  },
+  socialButton2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 10,
+    paddingVertical: 15,
+    marginBottom: 15,
+    backgroundColor: '#FFF',
+  },
+  socialIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  socialButtonText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  separatorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  separatorLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#CCC',
+  },
+  separatorText: {
+    marginHorizontal: 10,
+    fontSize: 14,
+    color: '#999',
+  },
+  label: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 5,
+  },
+  input: {
+    width: '100%',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: '#FFF',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  eyeIcon: {
+    fontSize: 18,
+    color: '#999',
+    paddingHorizontal: 10,
+  },
+  loginButton: {
+    backgroundColor: '#780C60', // Dark purple color
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  loginButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  forgotPasswordText: {
+    fontSize: 14,
+    color: '#780C60',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 10,
   },
 });
 
-export default LoginIndex;

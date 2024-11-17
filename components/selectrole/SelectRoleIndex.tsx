@@ -1,55 +1,119 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import RoleSelector from './RoleSelector';
-import ConfirmButton from './ConfirmButton';
+import { Picker } from '@react-native-picker/picker';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 
-interface SelectRoleScreenProps {}
+export default function SelectRoleScreen() {
+  const [modalVisible, setModalVisible] = useState(false);
 
-const SelectRoleScreen: React.FC<SelectRoleScreenProps> = () => {
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+  const [selectedRole, setSelectedRole] = useState('');
+
+  const handleConfirm = () => {
+    console.log('Selected Role:', selectedRole);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Select Your Role</Text>
-        <Text style={styles.subtitle}>Join As</Text>
-        <RoleSelector />
-        <ConfirmButton />
-      </View>
+      {/* Title */}
+      <Text style={styles.title}>Select Your Role</Text>
+
+      {/* Role Picker */}
+      <Text style={styles.label}>Join As</Text>
+      <TouchableOpacity style={styles.selectButton} onPress={toggleModal}>
+        <Text style={styles.buttonText}>
+          {selectedRole ? selectedRole : 'Select'}
+        </Text>
+      </TouchableOpacity>
+
+      <Modal visible={modalVisible} animationType="slide">
+        <View style={styles.modalContainer}>
+          <Picker
+            selectedValue={selectedRole}
+            onValueChange={(itemValue) => {
+              setSelectedRole(itemValue);
+              toggleModal();
+            }}
+            mode="dialog"
+            style={styles.picker}
+          >
+            <Picker.Item label="Select" value="" />
+            <Picker.Item label="Vendor" value="Vendor" />
+            <Picker.Item label="Organizer" value="Organizer" />
+          </Picker>
+        </View>
+      </Modal>
+
+      {/* Confirm Button */}
+      <TouchableOpacity
+        style={styles.confirmButton}
+        onPress={handleConfirm}
+        disabled={!selectedRole}
+      >
+        <Text style={styles.confirmButtonText}>Confirm</Text>
+      </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderRadius: 60,
-    maxWidth: 480,
-    width: '100%',
+    backgroundColor: '#F7ECF5', // Light pink background
+    paddingHorizontal: 20,
+    paddingTop: 150,
     alignItems: 'center',
-    backgroundColor: '#F8E9F0',
-  },
-  content: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    paddingHorizontal: 24,
   },
   title: {
-    color: 'rgba(38, 38, 38, 1)',
-    fontSize: 30,
-    fontFamily: 'Poppins, sans-serif',
-    fontWeight: '700',
-    textAlign: 'center',
-    marginTop: 109,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 20,
   },
-  subtitle: {
-    color: 'rgba(51, 51, 51, 1)',
-    fontSize: 20,
-    fontFamily: 'Poppins, sans-serif',
-    fontWeight: '600',
-    marginTop: 121,
+  label: {
+    fontSize: 16,
+    color: '#333',
     alignSelf: 'flex-start',
-    marginLeft: 35,
+    marginBottom: 10,
+    paddingHorizontal: 30,
+    marginTop: 50
+  },
+  confirmButton: {
+    backgroundColor: '#780C60', // Dark purple color
+    width: '80%',
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  confirmButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  selectButton: {
+    width: '80%',
+    paddingVertical: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  picker: {
+    width: '80%',
+    height: 200,
   },
 });
 
-export default SelectRoleScreen;
+

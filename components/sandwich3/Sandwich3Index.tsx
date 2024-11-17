@@ -1,95 +1,110 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
-import Header from './Header';
+import { Asset } from 'expo-asset';
 import { router } from 'expo-router';
 
-
-interface EventPlannerScreenProps {}
-
-const Sandwich3Index: React.FC<EventPlannerScreenProps> = () => {
+const Sandwich3Index = () => {
+  const sandwich3Image = Asset.fromModule(require('./../../assets/images/sandwich3.png')).uri;
   return (
     <View style={styles.container}>
-      <Header />
       <Image
-        resizeMode="contain"
-        source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/d24d1ebd4c9319e81764fb2995ce41f17aedb4023b3fa2a7a2c53b54641bae4e?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a" }}
-        style={styles.mainImage}
+        source={{ uri: sandwich3Image }}
+        style={styles.image}
       />
-      <Text style={styles.title}>
-        Enjoy Every Moment with Expert Event Planners!
-      </Text>
-      <Text style={styles.subtitle}>
-        Let top event planners handle the details, so you can focus on enjoying your special day.
-      </Text>
-      <TouchableOpacity style={styles.getStartedButton}
-         onPress={() => { router.push("/intro") }}>
-        <Text style={styles.getStartedText}>Get Started</Text>
-      </TouchableOpacity>
+
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>
+          "ENJOY EVERY MOMENT WITH EXPERT <Text style={styles.highlight}>EVENT PLANNERS!</Text>"
+        </Text>
+        <Text style={styles.description}>
+          Let top event planners handle the details, so you can focus on enjoying your special day.
+        </Text>
+      </View>
+
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.button} onPress={() => { router.push("/intro") }}>
+          <Text style={styles.buttonText}>Get Started</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 40,
-    display: "flex",
-    marginLeft: "auto",
-    marginRight: "auto",
-    maxWidth: 480,
-    width: "100%",
-    paddingBottom: 71,
-    flexDirection: "column",
-    overflow: "hidden",
-    alignItems: "center",
-    backgroundColor: '#F8E9F0'
+    flex: 1,
+    backgroundColor: '#F8E9F0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
   },
-  mainImage: {
-    position: "relative",
-    display: "flex",
-    marginTop: 9,
-    width: "100%",
-    maxWidth: 310,
-    aspectRatio: 1.42,
+  image: {
+    width: '80%',
+    height: '40%',
+    resizeMode: 'contain',
+  },
+  textContainer: {
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    marginTop: 20,
   },
   title: {
-    color: "rgba(0, 0, 0, 1)",
-    fontSize: 16,
-    fontFamily: "Poppins, sans-serif",
-    fontWeight: "700",
-    lineHeight: 16,
-    letterSpacing: 0.8,
-    textAlign: "center",
-    textTransform: "uppercase",
-    marginTop: 65,
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#000',
   },
-  subtitle: {
-    color: "rgba(0, 0, 0, 1)",
-    fontSize: 16,
-    fontFamily: "Poppins, sans-serif",
-    fontWeight: "400",
-    lineHeight: 15,
-    letterSpacing: 0.8,
-    textAlign: "center",
-    marginTop: 5,
+  highlight: {
+    color: '#E15A45', // Highlight color for "FINGERTIPS!"
   },
-  getStartedButton: {
-    alignSelf: "stretch",
-    width: "100%",
+  description: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#555',
+    marginTop: 10,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 30,
+  },
+  footerText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000',
+  },
+  dotsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#000',
+    marginHorizontal: 5,
+  },
+  activeDot: {
+    backgroundColor: '#8A2BE2', // Active dot color
+  },
+  button: {
+    backgroundColor: '#780C60', // Dark purple color
+    paddingVertical: 15,
+    paddingHorizontal: 40,
     borderRadius: 10,
-    marginTop: 75,
-    maxWidth: 300,
-    paddingLeft: 68,
-    paddingRight: 68,
-    paddingTop: 13,
-    paddingBottom: 13,
-    backgroundColor: "#780c61",
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: "100%"
   },
-  getStartedText: {
-    fontFamily: "Poppins, sans-serif",
-    fontSize: 16,
-    color: "#FFF",
-    fontWeight: "500",
-    textAlign: "center",
+  buttonText: {
+    color: '#FFFFFF', // White text color
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 
