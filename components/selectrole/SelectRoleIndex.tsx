@@ -1,4 +1,6 @@
+import { saveSecureData } from '@/store';
 import { Picker } from '@react-native-picker/picker';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 
@@ -10,8 +12,10 @@ export default function SelectRoleScreen() {
   };
   const [selectedRole, setSelectedRole] = useState('');
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     console.log('Selected Role:', selectedRole);
+    await saveSecureData("role", selectedRole);
+    router.push("/signup");
   };
 
   return (

@@ -1,13 +1,21 @@
 import axios, { AxiosRequestConfig } from "axios";
-export default async function Register(email: string, password: string, name: string) {
-    const url = `http://65.2.137.194:3000/auth/register`;
-    const config: AxiosRequestConfig = {
-        maxBodyLength: Infinity,
-        method: "POST",
-        data: { email, password, name },
-        url,
-    };
+export default async function Register(email: string, password: string, name: string, role: string) {
+    try {
+        const url = `http://65.2.137.194:3000/auth/register`;
+        const config: AxiosRequestConfig = {
+            maxBodyLength: Infinity,
+            method: "POST",
+            data: { email, password, name, role },
+            url,
+        };
 
-    const response = await axios(config);
-    return response.data;
+        const response = await axios(config);
+        return response.data;
+    } catch (error: any) {
+        if (error.response && error.response.data && error.response.data.message) {
+            throw error.response.data.message;
+        } else {
+            throw error.message
+        }
+    }
 }

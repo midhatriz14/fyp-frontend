@@ -1,16 +1,38 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { Asset } from 'expo-asset';
 import { Ionicons } from '@expo/vector-icons'
-import { router, useNavigation } from 'expo-router';
+import { router } from 'expo-router';
+import { getSecureData } from '@/store';
+import Register from '@/services/register';
+import Toast from 'react-native-toast-message';
 
 export default function SignupScreen() {
-  const navigation = useNavigation();
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const google = Asset.fromModule(require('./../../assets/images/google-icon.png')).uri;
   const facebook = Asset.fromModule(require('./../../assets/images/facebook-icon.png')).uri;
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState<string>('');
+
+  useEffect(() => {
+    getRole();
+  }, []);
+
+  useEffect(() => {
+    if (name.length > 0 && email.length > 0 && password.length > 0) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [name, email, password])
+
+  const getRole = async () => {
+    const roleData = await getSecureData("role");
+    setRole(roleData || "");
+  }
 
   const handleGoogleLogin = () => {
     console.log('Google Login pressed!');
@@ -20,17 +42,36 @@ export default function SignupScreen() {
     console.log('Facebook Login pressed!');
   };
 
-  const handleLogin = () => {
-    console.log('Login pressed!');
+  const handleRegister = async () => {
+    try {
+      console.log('Register pressed!');
+      setIsLoading(true);
+      setIsDisabled(true);
+      await Register(email, password, name, role);
+      setIsLoading(false);
+      reset();
+      router.push("/dashboard");
+    } catch (e: any) {
+      console.log(e);
+      setIsLoading(false);
+      setIsDisabled(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Failed',
+        text2: e,
+      });
+    }
   };
 
-  const handleBackPress = () => {
-    console.log('Back button pressed!');
-    navigation.goBack();
-  };
+  const reset = async () => {
+    setEmail("");
+    setPassword("");
+    setName("");
+  }
 
   return (
     <View style={styles.container}>
+      <Toast />
       <TouchableOpacity style={styles.backButton} onPress={() => { router.back() }}>
         <Ionicons name="arrow-back" size={24} color="#333" />
       </TouchableOpacity>
@@ -87,14 +128,19 @@ export default function SignupScreen() {
           onChangeText={setPassword}
           secureTextEntry
         />
-        {/* <TouchableOpacity>
-          <Text style={styles.eyeIcon}>👁️</Text>
-        </TouchableOpacity> */}
       </View>
       <Text style={styles.termsText}>By creating your account, you agree to the <Text style={styles.highlight}>Terms of Service</Text> and <Text style={styles.highlight}>Privacy Policy</Text></Text>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Create Account</Text>
+      <TouchableOpacity
+        style={[styles.registerButton, isDisabled && styles.disabledButton]}
+        onPress={handleRegister}
+        disabled={isDisabled}
+      >
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#FFF" />
+        ) : (
+          <Text style={styles.registerButtonText}>Create Account</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -178,14 +224,14 @@ const styles = StyleSheet.create({
     color: '#999',
     paddingHorizontal: 10,
   },
-  loginButton: {
+  registerButton: {
     backgroundColor: '#780C60', // Dark purple color
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: 'center',
     marginVertical: 20,
   },
-  loginButtonText: {
+  registerButtonText: {
     color: '#FFF',
     fontSize: 16,
     fontWeight: '600',
@@ -196,12 +242,16 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 40,
+    top: 120,
     left: 20,
     zIndex: 10,
   },
   highlight: {
     color: '#E15A45', // Highlight color for "FINGERTIPS!"
+  },
+  disabledButton: {
+    backgroundColor: '#A9A9A9', // Lighter color for disabled state
+    opacity: 0.6, // Make it appear dimmed
   },
 });
 

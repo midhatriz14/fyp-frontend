@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { Asset } from 'expo-asset';
 import { Ionicons } from '@expo/vector-icons'
-import { router, useNavigation } from 'expo-router';
+import { router } from 'expo-router';
+import Login from '@/services/login';
+import { saveSecureData } from '@/store';
+import Toast from 'react-native-toast-message';
 
 export default function LoginScreen() {
-  const navigation = useNavigation();
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const google = Asset.fromModule(require('./../../assets/images/google-icon.png')).uri;
   const facebook = Asset.fromModule(require('./../../assets/images/facebook-icon.png')).uri;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (email.length > 0 && password.length > 0) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [email, password])
 
   const handleGoogleLogin = () => {
     console.log('Google Login pressed!');
@@ -19,21 +31,39 @@ export default function LoginScreen() {
     console.log('Facebook Login pressed!');
   };
 
-  const handleLogin = () => {
-    console.log('Login pressed!');
+  const handleLogin = async () => {
+    try {
+      setIsLoading(true);
+      setIsDisabled(true);
+      const response = await Login(email, password);
+      saveSecureData("token", response.token);
+      setIsLoading(false);
+      reset();
+      router.push("/dashboard");
+    } catch (e: any) {
+      console.log(e);
+      setIsLoading(false);
+      setIsDisabled(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Failed',
+        text2: e,
+      });
+    }
   };
+
+  const reset = async () => {
+    setEmail("");
+    setPassword("");
+  }
 
   const handleForgotPassword = () => {
     console.log('Forgot Password pressed!');
   };
 
-  const handleBackPress = () => {
-    console.log('Back button pressed!');
-    navigation.goBack();
-  };
-
   return (
     <View style={styles.container}>
+      <Toast />
       <TouchableOpacity style={styles.backButton} onPress={() => { router.back() }}>
         <Ionicons name="arrow-back" size={24} color="#333" />
       </TouchableOpacity>
@@ -86,8 +116,16 @@ export default function LoginScreen() {
         </TouchableOpacity> */}
       </View>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Login</Text>
+      <TouchableOpacity
+        style={[styles.loginButton, isDisabled && styles.disabledButton]}
+        onPress={handleLogin}
+        disabled={isDisabled}
+      >
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#FFF" />
+        ) : (
+          <Text style={styles.loginButtonText}>Login</Text>
+        )}
       </TouchableOpacity>
 
       <TouchableOpacity onPress={handleForgotPassword}>
@@ -193,9 +231,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 40,
+    top: 100,
     left: 20,
-    zIndex: 10,
+    zIndex: 0,
+  },
+  disabledButton: {
+    backgroundColor: '#A9A9A9', // Lighter color for disabled state
+    opacity: 0.6, // Make it appear dimmed
   },
 });
 

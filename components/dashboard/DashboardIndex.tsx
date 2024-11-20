@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8E9F0',
+    paddingTop: 50
   },
   content: {
     padding: 24,
@@ -72,3 +73,4 @@ const styles = StyleSheet.create({
 });
 
 export default DashboardIndex;
+
