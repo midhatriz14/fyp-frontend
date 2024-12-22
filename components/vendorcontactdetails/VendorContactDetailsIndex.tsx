@@ -54,7 +54,7 @@ const ContactDetailsScreen = () => {
             <Text style={styles.title}>Contact Details</Text>
             <View style={styles.logoContainer}>
                 <Image
-                    source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png')}
+                    source={require('./../../assets/images/GetStarted.png')}
                     style={styles.logo}
                 />
                 <Text style={styles.logoText}>Drag a logo here</Text>

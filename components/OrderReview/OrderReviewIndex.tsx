@@ -16,28 +16,28 @@ const MyOrdersScreen = () => {
             name: "Hanif Rajput Catering",
             price: 59000,
             details: "Guests: 30\nMenu: Chicken 1 dish\nDate/Time: Nov 20, 2024, 3pm",
-            image: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+            image: require("./../../assets/images/GetStarted.png"), // Replace with your image path
         },
         {
             id: 2,
             name: "Fortress",
             price: 90000,
             details: "Guests: 30\nDate/Time: Nov 20, 2024, 3pm",
-            image: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+            image: require("./../../assets/images/GetStarted.png"), // Replace with your image path
         },
         {
             id: 3,
             name: "Allure Beauty",
             price: 70000,
             details: "Signature Makeup\nDate/Time: Nov 20, 2024, 3pm",
-            image: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+            image: require("./../../assets/images/GetStarted.png"), // Replace with your image path
         },
         {
             id: 4,
             name: "Maha Photography",
             price: 70000,
             details: "Package 1\nDate/Time: Nov 20, 2024, 3pm",
-            image: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+            image: require("./../../assets/images/GetStarted.png"), // Replace with your image path
         },
     ];
 

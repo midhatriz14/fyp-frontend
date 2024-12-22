@@ -60,7 +60,7 @@ describe("IntroIndex Component", () => {
 
     // Verify the Asset.fromModule was called
     expect(Asset.fromModule).toHaveBeenCalledWith(
-      require("./../../assets/images/GetStarted.png")
+      require("./../.././../../assets/images/GetStarted.png")
     );
   });
 });

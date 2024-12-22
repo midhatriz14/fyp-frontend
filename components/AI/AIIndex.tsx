@@ -38,7 +38,7 @@ const AIPackageScreen: React.FC = () => {
         <View style={styles.container}>
             <Text style={styles.heading}>Generating Your AI Package</Text>
             <Image
-                source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png')} // Replace with your actual image path
+                source={require('./../../assets/images/GetStarted.png')} // Replace with your actual image path
                 style={styles.image}
             />
             <Text style={styles.subheading}>Generating the Best AI Package for You...</Text>

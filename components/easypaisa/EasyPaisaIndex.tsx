@@ -33,7 +33,7 @@ const EasyPaisaPaymentScreen = () => {
             {/* EasyPaisa Logo and Instructions */}
             <View style={styles.logoContainer}>
                 <Image
-                    source={require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png")} // Replace with your EasyPaisa logo path
+                    source={require("./../../assets/images/GetStarted.png")} // Replace with your EasyPaisa logo path
                     style={styles.logo}
                 />
                 <Text style={styles.description}>

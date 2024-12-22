@@ -15,19 +15,19 @@
 //             id: 1,
 //             name: "Credit/Debit Card",
 //             description: "",
-//             icon: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+//             icon: require("./../../assets/images/GetStarted.png"), // Replace with your image path
 //         },
 //         {
 //             id: 2,
 //             name: "JazzCash",
 //             description: "",
-//             icon: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+//             icon: require("./../../assets/images/GetStarted.png"), // Replace with your image path
 //         },
 //         {
 //             id: 3,
 //             name: "EasyPaisa",
 //             description: "Easypaisa mobile account required",
-//             icon: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+//             icon: require("./../../assets/images/GetStarted.png"), // Replace with your image path
 //         },
 //     ];
 
@@ -208,19 +208,19 @@ const PaymentMethodScreen = () => {
             id: 1,
             name: "Credit/Debit Card",
             description: "",
-            icon: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+            icon: require("./../../assets/images/GetStarted.png"), // Replace with your image path
         },
         {
             id: 2,
             name: "JazzCash",
             description: "",
-            icon: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+            icon: require("./../../assets/images/GetStarted.png"), // Replace with your image path
         },
         {
             id: 3,
             name: "EasyPaisa",
             description: "Easypaisa mobile account required",
-            icon: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your image path
+            icon: require("./../../assets/images/GetStarted.png"), // Replace with your image path
         },
     ];
 
