@@ -37,7 +37,7 @@ const CreditCardPaymentScreen = () => {
             <Text style={styles.sectionTitle}>Payment Method</Text>
             <View style={styles.methodCard}>
                 <Image
-                    source={require("./../../assets/images/GetStarted.png")} // Replace with your card image path
+                    source={require("./../../assets/images/mastercard.png")} // Replace with your card image path
                     style={styles.methodIcon}
                 />
             </View>
@@ -46,7 +46,7 @@ const CreditCardPaymentScreen = () => {
             <Text style={styles.label}>Cardholder Name</Text>
             <View style={styles.inputContainer}>
                 <Image
-                    source={require("./../../assets/images/GetStarted.png")} // Replace with your user icon path
+                    source={require("./../../assets/images/mastercard.png")} // Replace with your user icon path
                     style={styles.icon}
                 />
                 <TextInput placeholder="Cardholder Name" style={styles.input} />
@@ -56,7 +56,7 @@ const CreditCardPaymentScreen = () => {
             <Text style={styles.label}>Cardnumber</Text>
             <View style={styles.inputContainer}>
                 <Image
-                    source={require("./../../assets/images/GetStarted.png")} // Replace with your card icon path
+                    source={require("./../../assets/images/mastercard.png")} // Replace with your card icon path
                     style={styles.icon}
                 />
                 <TextInput placeholder="Card Number" style={styles.input} keyboardType="numeric" />
@@ -66,14 +66,14 @@ const CreditCardPaymentScreen = () => {
             <View style={styles.row}>
                 <View style={styles.inputContainerSmall}>
                     <Image
-                        source={require("./../../assets/images/GetStarted.png")} // Replace with your calendar icon path
+                        source={require("./../../assets/images/mastercard.png")} // Replace with your calendar icon path
                         style={styles.icon}
                     />
                     <TextInput placeholder="MM/YY" style={styles.input} />
                 </View>
                 <View style={styles.inputContainerSmall}>
                     <Image
-                        source={require("./../../assets/images/GetStarted.png")} // Replace with your lock icon path
+                        source={require("./../../assets/images/mastercard.png")} // Replace with your lock icon path
                         style={styles.icon}
                     />
                     <TextInput placeholder="CVV" style={styles.input} keyboardType="numeric" />

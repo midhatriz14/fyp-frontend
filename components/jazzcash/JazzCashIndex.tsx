@@ -33,7 +33,7 @@ const JazzCashPaymentScreen = () => {
             {/* JazzCash Logo and Instructions */}
             <View style={styles.logoContainer}>
                 <Image
-                    source={require("./../../assets/images/GetStarted.png")} // Replace with your JazzCash logo path
+                    source={require("./../../assets/images/jazzcash.png")} // Replace with your JazzCash logo path
                     style={styles.logo}
                 />
                 <Text style={styles.description}>

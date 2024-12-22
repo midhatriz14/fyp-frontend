@@ -33,7 +33,7 @@ const EasyPaisaPaymentScreen = () => {
             {/* EasyPaisa Logo and Instructions */}
             <View style={styles.logoContainer}>
                 <Image
-                    source={require("./../../assets/images/GetStarted.png")} // Replace with your EasyPaisa logo path
+                    source={require("./../../assets/images/easypaisa.png")} // Replace with your EasyPaisa logo path
                     style={styles.logo}
                 />
                 <Text style={styles.description}>
@@ -130,9 +130,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     logo: {
-        width: 100,
+        width: 50,
         height: 50,
         marginBottom: 10,
+        //  paddingTop: 50,
     },
     description: {
         fontSize: 14,
