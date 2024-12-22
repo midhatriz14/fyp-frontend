@@ -16,9 +16,11 @@ export default function SignupScreen() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<string>('');
+  const [buisnessCategory, setBuisnessCategory] = useState<string>('');
 
   useEffect(() => {
     getRole();
+    getSelectedCategory();
   }, []);
 
   useEffect(() => {
@@ -34,6 +36,12 @@ export default function SignupScreen() {
     setRole(roleData || "");
   }
 
+  const getSelectedCategory = async () => {
+    const categoryId = await getSecureData("buisness");
+    console.log(categoryId);
+    setBuisnessCategory(categoryId || "");
+  }
+
   const handleGoogleLogin = () => {
     console.log('Google Login pressed!');
   };
@@ -47,10 +55,11 @@ export default function SignupScreen() {
       console.log('Register pressed!');
       setIsLoading(true);
       setIsDisabled(true);
-      await Register(email, password, name, role);
+      console.log(email, password, name, role, buisnessCategory);
+      await Register(email, password, name, role, buisnessCategory);
       setIsLoading(false);
       reset();
-      router.push("/dashboard");
+      router.push("/vendorcontactdetails");
     } catch (e: any) {
       console.log(e);
       setIsLoading(false);
@@ -81,7 +90,7 @@ export default function SignupScreen() {
           source={{ uri: google }}
           style={styles.socialIcon}
         />
-        <Text style={styles.socialButtonText}>Login with Google</Text>
+        <Text style={styles.socialButtonText}>SignUp with Google</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.socialButton2} onPress={handleFacebookLogin}>
@@ -89,7 +98,7 @@ export default function SignupScreen() {
           source={{ uri: facebook }}
           style={styles.socialIcon}
         />
-        <Text style={styles.socialButtonText}>Login with Facebook</Text>
+        <Text style={styles.socialButtonText}>SignUp with Facebook</Text>
       </TouchableOpacity>
 
       <View style={styles.separatorContainer}>
@@ -149,7 +158,7 @@ export default function SignupScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7ECF5', // Light pink background
+    backgroundColor: '#F8E9F0',
     paddingHorizontal: 40,
     paddingTop: 80,
   },

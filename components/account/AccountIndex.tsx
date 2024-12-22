@@ -25,7 +25,7 @@ const AccountScreen: React.FC = () => {
         router.push('/notificationacc');
         break;
       case 'Frequently Asked Questions':
-        router.push('/feedbacknreview');
+        router.push('/faqs');
         break;
       case 'Contact Us':
         openWhatsApp(); // Open WhatsApp
@@ -104,9 +104,13 @@ const AccountScreen: React.FC = () => {
 
         {/* Terms and Privacy */}
         <View style={styles.termsContainer}>
-          <Text style={styles.termsText}>Terms of Service</Text>
+          <TouchableOpacity onPress={() => router.push('/termsofservices')}>
+            <Text style={styles.termsText}>Terms of Service</Text>
+          </TouchableOpacity>
           <Text style={styles.separator}>|</Text>
-          <Text style={styles.termsText}>Privacy Policy</Text>
+          <TouchableOpacity onPress={() => router.push('/privacypolicy')}>
+            <Text style={styles.termsText}>Privacy Policy</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -129,7 +133,7 @@ const AccountScreen: React.FC = () => {
 
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push('/account')}
+          onPress={() => router.push('/bottommessages')}
         >
           <View style={styles.iconContainer}>
             <Image
@@ -144,7 +148,7 @@ const AccountScreen: React.FC = () => {
 
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push('/notificationacc')}
+          onPress={() => router.push('/bottomnotification')}
         >
           <View style={styles.iconContainer}>
             <Image

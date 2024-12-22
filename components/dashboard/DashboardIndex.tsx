@@ -6,6 +6,7 @@ import CategoryGrid from './CategoryGrid';
 import VenueList from './VenueList';
 import BottomNavigation from './BottomNavigation';
 
+
 const DashboardIndex: React.FC = () => {
   return (
     <View style={styles.container}>
@@ -73,4 +74,3 @@ const styles = StyleSheet.create({
 });
 
 export default DashboardIndex;
-

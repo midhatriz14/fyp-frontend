@@ -15,8 +15,12 @@ export default function SelectRoleScreen() {
   const handleConfirm = async () => {
     console.log('Selected Role:', selectedRole);
     await saveSecureData("role", selectedRole);
-    router.push("/signup");
+    router.push("/bussinessselection");
   };
+
+  function handleOrganiserConfirm() {
+    // throw new Error('Function not implemented.');
+  }
 
   return (
     <View style={styles.container}>
@@ -31,7 +35,11 @@ export default function SelectRoleScreen() {
         </Text>
       </TouchableOpacity>
 
-      <Modal visible={modalVisible} animationType="slide">
+      <Modal
+        visible={modalVisible}
+        animationType="slide" // Slide animation
+        transparent={false} // Ensure it's full-screen
+      >
         <View style={styles.modalContainer}>
           <Picker
             selectedValue={selectedRole}
@@ -52,8 +60,20 @@ export default function SelectRoleScreen() {
       {/* Confirm Button */}
       <TouchableOpacity
         style={styles.confirmButton}
-        onPress={handleConfirm}
-        disabled={!selectedRole}
+        onPress={() => {
+          if (selectedRole === "Vendor") {
+            router.push('/bussinessselection')
+            // Action for when the selected role is "vendor"
+            handleConfirm();
+          } else if (selectedRole === "Organizer") {
+            router.push('/signup')
+            // Action for when the selected role is "organiser"
+            handleOrganiserConfirm();
+          } else {
+            alert("Please select a valid role!"); // Fallback if something goes wrong
+          }
+        }}
+        disabled={!selectedRole} // Disable button if no role is selected
       >
         <Text style={styles.confirmButtonText}>Confirm</Text>
       </TouchableOpacity>

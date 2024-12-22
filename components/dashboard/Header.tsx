@@ -1,106 +1,127 @@
+
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
-import { View, StyleSheet, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 
 const Header: React.FC = () => {
   return (
     <View style={styles.container}>
-      {/* Header Section */}
+      {/* Location and Notification */}
       <View style={styles.header}>
-        <View style={styles.addressContainer}>
-          <Text style={styles.location}>House 30, ISB ▼</Text>
+        <View style={styles.locationContainer}>
+          <Ionicons name="location-outline" size={18} color="#7B2869" />
+          <Text style={styles.locationText}>House 30, ISB</Text>
+          <Ionicons name="chevron-down-outline" size={16} color="#7B2869" />
         </View>
-        <Image
-          resizeMode="contain"
-          source={{
-            uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
-          }}
+        <TouchableOpacity
           style={styles.notificationIcon}
-        />
+          onPress={() => router.push('/bdphotographer')}>
+          <Ionicons name="notifications" size={24} color="#000" />
+        </TouchableOpacity>
       </View>
 
       {/* Welcome Section */}
       <View style={styles.welcomeContainer}>
-        <Text style={styles.welcomeText}>Welcome{'\n'}Midhat!</Text>
-        <TouchableOpacity style={styles.planButton}>
+        <View>
+          <Text style={styles.welcomeText}>Welcome</Text>
+          <Text style={styles.username}>Midhat!</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.planButton}
+          activeOpacity={0.7} // Add touch opacity
+          onPress={() => router.push('/EventDetailsForm')} // Add navigation logic
+        >
           <Text style={styles.planButtonText}>Plan an Event</Text>
         </TouchableOpacity>
       </View>
 
       {/* Search Bar */}
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Search vendors and venues"
-        placeholderTextColor="#9E9E9E"
-      />
+      <View style={styles.searchBarContainer}>
+        <Ionicons name="search-outline" size={20} color="#9E9E9E" />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search vendors and venues"
+          placeholderTextColor="#9E9E9E"
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: '#F8E9F0',
+    padding: 16,
+    backgroundColor: '#F8EAF2',
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingLeft: 10,
   },
-  addressContainer: {
+  locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  location: {
+  locationText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#333',
+    color: '#7B2869',
+    marginHorizontal: 4,
   },
   notificationIcon: {
-    width: 24,
-    height: 24,
+    padding: 8,
+    //backgroundColor: '#7B2869',
   },
   welcomeContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 10,
+    alignItems: 'center',
+    marginBottom: 20,
   },
   welcomeText: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: '#000',
+    paddingLeft: 10,
+  },
+  username: {
     fontSize: 24,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: 'bold',
+    color: '#000',
+    paddingLeft: 10,
   },
   planButton: {
-    backgroundColor: '#8B006D',
+    backgroundColor: '#7B2869',
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    justifyContent: 'center',
-    height: 40,
+    paddingHorizontal: 16,
+    borderRadius: 8,
   },
   planButtonText: {
     color: '#FFF',
+    fontSize: 14,
     fontWeight: '600',
-    fontSize: 14,
-    textAlign: 'center',
   },
-  searchBar: {
-    height: 50,
-    borderRadius: 20,
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#FFF',
-    paddingHorizontal: 16,
-    fontSize: 14,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    height: 50,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 3,
-    width: '100%',
-    maxWidth: 340,
-    alignSelf: 'center',
-    marginTop: 16,
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#000',
   },
 });
 

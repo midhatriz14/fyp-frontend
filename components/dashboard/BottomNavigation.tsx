@@ -18,12 +18,14 @@ const navItems: NavItem[] = [
 const NavItem: React.FC<{ item: NavItem }> = ({ item }) => (
   <TouchableOpacity style={styles.navItem} accessibilityRole="button"
     onPress={() => {
-      if(item.id === '1') {
+      if (item.id === '1') {
         router.push("/dashboard")
-      } 
+      }
       else if (item.id === '2') {
+        router.push("/bottommessages")
       }
       else if (item.id === '3') {
+        router.push("/packages")
       }
       else if (item.id === '4') {
         router.push("/account")
@@ -57,7 +59,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderTopWidth: 1,
     borderTopColor: '#E0E0E0',
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
+    paddingBottom: 15,
 
   },
   navItem: {

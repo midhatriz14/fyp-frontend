@@ -1,9 +1,10 @@
 import getAllCategories from '@/services/getAllCategories';
+import { saveSecureData } from '@/store';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 
-interface Category {
+export interface ICategory {
   _id: string
   createdAt: string
   description: string
@@ -11,34 +12,12 @@ interface Category {
   name: string
 }
 
-const CategoryItem: React.FC<{ item: Category }> = ({ item }) => (
+const CategoryItem: React.FC<{ item: ICategory }> = ({ item }) => (
   <View style={styles.categoryItem}>
     <TouchableOpacity style={styles.categoryIcon} accessibilityRole="button"
-      onPress={() => {
-        if (item._id === '1') {
-          router.push("/dashboard")
-        }
-        else if (item._id === '2') {
-          router.push("/cateringvendor")
-        }
-        else if (item._id === '3') {
-          router.push("/makeupvendor")
-        }
-        else if (item._id === '4') {
-          router.push("/account")
-        }
-        else if (item._id === '5') {
-          router.push("/account")
-        }
-        else if (item._id === '6') {
-          router.push("/account")
-        }
-        else if (item._id === '7') {
-          router.push("/account")
-        }
-        else if (item._id === '8') {
-          router.push("/account")
-        }
+      onPress={async () => {
+        await saveSecureData("categoryId", item._id);
+        router.push("/categoryvendorlisting");
       }}>
       <Image
         resizeMode="contain"
@@ -51,7 +30,7 @@ const CategoryItem: React.FC<{ item: Category }> = ({ item }) => (
 );
 
 const CategoryGrid: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
   useEffect(() => {
     getCategories();
   }, []);
@@ -113,7 +92,7 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   categoryName: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '500',
     color: '#000000',
     textAlign: 'center',

@@ -45,6 +45,48 @@ export default function RootLayout() {
         <Stack.Screen name="editprofile" options={{ headerShown: false }} />
         <Stack.Screen name="notificationacc" options={{ headerShown: false }} />
         <Stack.Screen name="feedbacknreview" options={{ headerShown: false }} />
+        <Stack.Screen name="vendorcategories" options={{ headerShown: false }} />
+        <Stack.Screen name="categoryvendorlisting" options={{ headerShown: false }} />
+        <Stack.Screen name="photographyvendor" options={{ headerShown: false }} />
+        <Stack.Screen name="bussinessselection" options={{ headerShown: false }} />
+        <Stack.Screen name="makeupfilter" options={{ headerShown: false }} />
+        <Stack.Screen name="vendorprofiledetails" options={{ headerShown: false }} />
+        <Stack.Screen name="faqs" options={{ headerShown: false }} />
+        <Stack.Screen name="termsofservices" options={{ headerShown: false }} />
+        <Stack.Screen name="privacypolicy" options={{ headerShown: false }} />
+        <Stack.Screen name="message" options={{ headerShown: false }} />
+        <Stack.Screen name="splashscreen" options={{ headerShown: false }} />
+        <Stack.Screen name="start" options={{ headerShown: false }} />
+        <Stack.Screen name="packages" options={{ headerShown: false }} />
+        <Stack.Screen name="images" options={{ headerShown: false }} />
+        <Stack.Screen name="vendorreview" options={{ headerShown: false }} />
+        <Stack.Screen name="vendorprofileimages" options={{ headerShown: false }} />
+        <Stack.Screen name="bottomnotification" options={{ headerShown: false }} />
+        <Stack.Screen name="bottommessages" options={{ headerShown: false }} />
+        <Stack.Screen name="bdphotographer" options={{ headerShown: false }} />
+        <Stack.Screen name="EventDetailsForm" options={{ headerShown: false }} />
+        <Stack.Screen name="AI" options={{ headerShown: false }} />
+        <Stack.Screen name="AIPackage" options={{ headerShown: false }} />
+        <Stack.Screen name="OrderReview" options={{ headerShown: false }} />
+        <Stack.Screen name="OrderSummary" options={{ headerShown: false }} />
+        <Stack.Screen name="paymentmethod" options={{ headerShown: false }} />
+        <Stack.Screen name="creditcard" options={{ headerShown: false }} />
+        <Stack.Screen name="jazzcash" options={{ headerShown: false }} />
+        <Stack.Screen name="easypaisa" options={{ headerShown: false }} />
+        <Stack.Screen name="paymentconfirmation" options={{ headerShown: false }} />
+        <Stack.Screen name="vendorcontactdetails" options={{ headerShown: false }} />
+        <Stack.Screen name="vendordashboard" options={{ headerShown: false }} />
+        <Stack.Screen name="vendorpackages" options={{ headerShown: false }} />
+        <Stack.Screen name="editpackage" options={{ headerShown: false }} />
+        <Stack.Screen name="bdsalon" options={{ headerShown: false }} />
+        <Stack.Screen name="bdcatering" options={{ headerShown: false }} />
+        <Stack.Screen name="bdvenue" options={{ headerShown: false }} />
+        <Stack.Screen name="bdcakes" options={{ headerShown: false }} />
+        <Stack.Screen name="bdmehndi" options={{ headerShown: false }} />
+        <Stack.Screen name="bdsounds" options={{ headerShown: false }} />
+        <Stack.Screen name="imagesuploaded" options={{ headerShown: false }} />
+
+
         <Stack.Screen name="+not-found" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>

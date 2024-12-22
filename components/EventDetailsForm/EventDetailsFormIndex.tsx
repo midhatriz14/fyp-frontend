@@ -1,272 +1,274 @@
-// import React from 'react';
-// import { View, Text, StyleSheet, Image } from 'react-native';
-// import GenderSelection from './GenderSelection';
-// import RoleSelection from './RoleSelection';
-// import DateInput from './DateInput';
-// import BudgetInput from './BudgetInput';
-// import SubmitButton from './SubmitButton';
+// import React, { useState } from 'react';
+// import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
-// const EventDetailsFormIndex: React.FC = () => {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>
-//         Enter your details for personalized experience
-//       </Text>
-//       <GenderSelection />
-//       <RoleSelection />
-//       <Text style={styles.sectionTitle}>Event</Text>
-//       <View style={styles.inputContainer}>
-//         <Text style={styles.inputLabel}>Enter your Mobile Number</Text>
-//       </View>
-//       <DateInput />
-//       <Text style={styles.sectionTitle}>Event</Text>
-//       <BudgetInput />
-//       <SubmitButton />
-//     </View>
-//   );
+
+// const PersonalizedExperienceScreen: React.FC = () => {
+//     const [selectedServices, setSelectedServices] = useState<string[]>([]);
+
+//     const toggleService = (service: string) => {
+//         if (selectedServices.includes(service)) {
+//             setSelectedServices(selectedServices.filter((item) => item !== service));
+//         } else {
+//             setSelectedServices([...selectedServices, service]);
+//         }
+//     };
+
+//     return (
+//         <ScrollView contentContainerStyle={styles.container}>
+//             <Text style={styles.heading}>Enter your details for personalized experience</Text>
+
+//             <Text style={styles.label}>Event Name</Text>
+//             <TextInput style={styles.input} placeholder="Enter event name" placeholderTextColor="#aaa" />
+
+//             <Text style={styles.label}>Event Type</Text>
+//             <TextInput style={styles.input} placeholder="Enter event type" placeholderTextColor="#aaa" />
+
+//             <Text style={styles.label}>Event Date</Text>
+//             <TextInput style={styles.input} placeholder="Enter event date" placeholderTextColor="#aaa" />
+
+//             <Text style={styles.label}>Total Guests</Text>
+//             <TextInput style={styles.input} placeholder="Enter guests" placeholderTextColor="#aaa" keyboardType="numeric" />
+
+//             <Text style={styles.label}>Desired Services</Text>
+//             <View style={styles.checkboxContainer}>
+//                 <Text style={styles.checkbox}>⬜ Venue</Text>
+//                 <Text style={styles.checkbox}>⬜ Catering</Text>
+//                 <Text style={styles.checkbox}>⬜ Makeup</Text>
+//                 <Text style={styles.checkbox}>⬜ Photography</Text>
+//                 <Text style={styles.checkbox}>⬜ Hina Artist</Text>
+//                 <Text style={styles.checkbox}>⬜ DJ/Sound</Text>
+//             </View>
+
+//             <View style={styles.buttonContainer}>
+//                 <TouchableOpacity style={styles.aiPlanButton}>
+//                     <Text style={styles.aiPlanButtonText}>AI Suggested Plan</Text>
+//                 </TouchableOpacity>
+//                 <TouchableOpacity style={styles.customizeButton}>
+//                     <Text style={styles.customizeButtonText}>Customize Your Own</Text>
+//                 </TouchableOpacity>
+//             </View>
+//         </ScrollView>
+//     );
 // };
 
 // const styles = StyleSheet.create({
-//   container: {
-//     borderRadius: 40,
-//     display: 'flex',
-//     marginLeft: 'auto',
-//     marginRight: 'auto',
-//     maxWidth: 480,
-//     width: '100%',
-//     paddingLeft: 10,
-//     paddingRight: 10,
-//     paddingBottom: 78,
-//     flexDirection: 'column',
-//     overflow: 'hidden',
-//     alignItems: 'center',
-//   },
-//   title: {
-//     color: 'rgba(0, 0, 0, 1)',
-//     fontSize: 20,
-//     fontFamily: 'Inter, sans-serif',
-//     fontWeight: '600',
-//     textAlign: 'center',
-//     marginTop: 50,
-//     width: 249,
-//   },
-//   sectionTitle: {
-//     color: 'rgba(0, 0, 0, 1)',
-//     fontSize: 16,
-//     fontFamily: 'Inter, sans-serif',
-//     fontWeight: '600',
-//     textAlign: 'center',
-//     marginTop: 30,
-//     marginLeft: 16,
-//   },
-//   inputContainer: {
-//     borderRadius: 12,
-//     display: 'flex',
-//     marginTop: 24,
-//     width: '100%',
-//     maxWidth: 340,
-//     flexDirection: 'column',
-//     alignItems: 'stretch',
-//     fontFamily: 'Inter, sans-serif',
-//     fontSize: 13,
-//     color: 'rgba(132, 132, 132, 0.46)',
-//     fontWeight: '400',
-//     textAlign: 'center',
-//   },
-//   inputLabel: {
-//     borderRadius: 12,
-//     paddingLeft: 16,
-//     paddingRight: 16,
-//     paddingTop: 20,
-//     paddingBottom: 12,
-//   },
+//     container: {
+//         flexGrow: 1,
+//         backgroundColor: '#f9e8f4',
+//         alignItems: 'center',
+//         padding: 20,
+//         paddingTop: 70,
+//     },
+//     heading: {
+//         fontSize: 18,
+//         fontWeight: 'bold',
+//         textAlign: 'center',
+//         marginBottom: 20,
+//         color: '#000',
+//     },
+//     label: {
+//         fontSize: 14,
+//         color: '#000',
+//         alignSelf: 'flex-start',
+//         marginBottom: 5,
+//     },
+//     input: {
+//         width: '100%',
+//         height: 50,
+//         backgroundColor: '#fff',
+//         borderRadius: 10,
+//         paddingHorizontal: 10,
+//         marginBottom: 15,
+//         shadowColor: '#000',
+//         shadowOffset: { width: 0, height: 2 },
+//         shadowOpacity: 0.1,
+//         shadowRadius: 3,
+//         elevation: 3,
+//     },
+//     checkboxContainer: {
+//         flexDirection: 'row',
+//         flexWrap: 'wrap',
+//         justifyContent: 'space-between',
+//         marginBottom: 20,
+//         width: '100%',
+//     },
+//     checkbox: {
+//         width: '48%',
+//         fontSize: 14,
+//         color: '#000',
+//         marginBottom: 10,
+//     },
+//     buttonContainer: {
+//         flexDirection: 'row',
+//         justifyContent: 'space-between',
+//         width: '100%',
+//     },
+//     aiPlanButton: {
+//         flex: 1,
+//         backgroundColor: '#7e1158',
+//         borderRadius: 10,
+//         paddingVertical: 15,
+//         alignItems: 'center',
+//         marginRight: 10,
+//     },
+//     customizeButton: {
+//         flex: 1,
+//         backgroundColor: '#a971b3',
+//         borderRadius: 10,
+//         paddingVertical: 15,
+//         alignItems: 'center',
+//         marginLeft: 10,
+//     },
+//     aiPlanButtonText: {
+//         color: '#fff',
+//         fontWeight: 'bold',
+//         fontSize: 14,
+//     },
+//     customizeButtonText: {
+//         color: '#fff',
+//         fontWeight: 'bold',
+//         fontSize: 14,
+//     },
 // });
 
-// export default EventDetailsFormIndex;
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  //CheckBox,
-} from "react-native";
-import CheckBox from "@react-native-community/checkbox";
+// export default PersonalizedExperienceScreen;
+import { router } from 'expo-router';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
+const PersonalizedExperienceScreen: React.FC = () => {
+    const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
-const EventDetailsFormIndex = () => {
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+    const toggleService = (service: string) => {
+        if (selectedServices.includes(service)) {
+            setSelectedServices(selectedServices.filter((item) => item !== service));
+        } else {
+            setSelectedServices([...selectedServices, service]);
+        }
+    };
 
-  const toggleService = (service: string) => {
-    if (selectedServices.includes(service)) {
-      setSelectedServices(selectedServices.filter((item) => item !== service));
-    } else {
-      setSelectedServices([...selectedServices, service]);
-    }
-  };
+    return (
+        <ScrollView contentContainerStyle={styles.container}>
+            <Text style={styles.heading}>Enter your details for personalized experience</Text>
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Heading */}
-      <Text style={styles.heading}>
-        Enter your details for personalized experience
-      </Text>
+            <Text style={styles.label}>Event Name</Text>
+            <TextInput style={styles.input} placeholder="Enter event name" placeholderTextColor="#aaa" />
 
-      {/* Input Fields */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Event Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter event name"
-          placeholderTextColor="#aaa"
-        />
-      </View>
+            <Text style={styles.label}>Event Type</Text>
+            <TextInput style={styles.input} placeholder="Enter event type" placeholderTextColor="#aaa" />
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Event Type</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter event type"
-          placeholderTextColor="#aaa"
-        />
-      </View>
+            <Text style={styles.label}>Event Date</Text>
+            <TextInput style={styles.input} placeholder="Enter event date" placeholderTextColor="#aaa" />
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Event Date</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter event date"
-          placeholderTextColor="#aaa"
-        />
-      </View>
+            <Text style={styles.label}>Total Guests</Text>
+            <TextInput style={styles.input} placeholder="Enter guests" placeholderTextColor="#aaa" keyboardType="numeric" />
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Total Guests</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter guests"
-          placeholderTextColor="#aaa"
-        />
-      </View>
+            <Text style={styles.label}>Desired Services</Text>
+            <View style={styles.checkboxContainer}>
+                {['Venue', 'Catering', 'Makeup', 'Photography', 'Hina Artist', 'DJ/Sound'].map((service) => (
+                    <TouchableOpacity
+                        key={service}
+                        style={styles.checkbox}
+                        onPress={() => toggleService(service)}
+                    >
+                        <Text style={{ color: '#000', fontSize: 14 }}>
+                            {selectedServices.includes(service) ? '☑️' : '⬜'} {service}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
 
-      {/* Desired Services */}
-      <Text style={styles.label}>Desired Services</Text>
-      <View style={styles.servicesContainer}>
-        {[
-          "Venue",
-          "Catering",
-          "Makeup",
-          "Photography",
-          "Hina Artist",
-          "DJ/Sound",
-        ].map((service, index) => (
-          <View key={index} style={styles.serviceItem}>
-            <CheckBox
-              value={selectedServices.includes(service)}
-              onValueChange={() => toggleService(service)}
-            />
-            <Text style={styles.serviceText}>{service}</Text>
-          </View>
-        ))}
-      </View>
-
-      {/* Action Buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.aiButton}>
-          <Text style={styles.aiButtonText}>AI Suggested Plan</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.customButton}>
-          <Text style={styles.customButtonText}>Customise Your Own</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-  );
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    style={styles.aiPlanButton}
+                    onPress={() => router.push('/AI')}
+                >
+                    <Text style={styles.aiPlanButtonText}>AI Suggested Plan</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.customizeButton}>
+                    <Text style={styles.customizeButtonText}>Customize Your Own</Text>
+                </TouchableOpacity>
+            </View>
+        </ScrollView>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: "#F8EFFF",
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  heading: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "#000",
-    marginBottom: 30,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#000",
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: "#FFF",
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 14,
-    color: "#000",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  servicesContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginVertical: 20,
-  },
-  serviceItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 20,
-    marginBottom: 10,
-  },
-  serviceText: {
-    marginLeft: 8,
-    fontSize: 14,
-    color: "#000",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 30,
-  },
-  aiButton: {
-    flex: 1,
-    backgroundColor: "#7C185E",
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginRight: 10,
-    alignItems: "center",
-  },
-  aiButtonText: {
-    color: "#FFF",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  customButton: {
-    flex: 1,
-    backgroundColor: "#CBA5D4",
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginLeft: 10,
-    alignItems: "center",
-  },
-  customButtonText: {
-    color: "#7C185E",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
+    container: {
+        flexGrow: 1,
+        backgroundColor: '#F8E9F0',
+        alignItems: 'center',
+        padding: 20,
+        paddingTop: 70,
+    },
+    heading: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+        color: '#000',
+    },
+    label: {
+        fontSize: 14,
+        color: '#000',
+        alignSelf: 'flex-start',
+        marginBottom: 5,
+    },
+    input: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 3,
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+        width: '100%',
+    },
+    checkbox: {
+        width: '48%',
+        marginBottom: 10,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    aiPlanButton: {
+        flex: 1,
+        backgroundColor: '#7e1158',
+        borderRadius: 10,
+        paddingVertical: 15,
+        alignItems: 'center',
+        marginRight: 10,
+    },
+    customizeButton: {
+        flex: 1,
+        backgroundColor: '#a971b3',
+        borderRadius: 10,
+        paddingVertical: 15,
+        alignItems: 'center',
+        marginLeft: 10,
+    },
+    aiPlanButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+    customizeButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
 });
 
-export default EventDetailsFormIndex;
+export default PersonalizedExperienceScreen;

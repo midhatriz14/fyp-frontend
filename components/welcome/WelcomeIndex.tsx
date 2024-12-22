@@ -3,11 +3,13 @@ import { View } from 'react-native';
 import WelcomeImageDisplay from './WelcomeImageDisplay';
 import { router } from 'expo-router';
 
+
+
 const WelcomeIndex: React.FC = () => {
   useEffect(() => {
     setTimeout(() => {
-      router.push("/account");
-    }, 3000)
+      router.push("/vendoraccount");
+    }, 1000)
   }, []);
   return (
     <View>
