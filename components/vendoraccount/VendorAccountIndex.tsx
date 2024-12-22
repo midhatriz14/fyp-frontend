@@ -118,17 +118,17 @@ const AccountScreen: React.FC = () => {
             <View style={styles.bottomNavigation}>
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => router.push('/dashboard')}
+                    onPress={() => router.push('/vendordashboard')}
                 >
                     <View style={styles.iconContainer}>
                         <Image
                             source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/804d8e3d-57b0-4f1c-b8b3-46c417316ea6?placeholderIfAbsent=true&apiKey=b95bf478340c44448a2ab0604562a117',
+                                uri: '/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/myorder.png',
                             }}
                             style={styles.iconImage}
                         />
                     </View>
-                    <Text style={styles.navText}>Dashboard</Text>
+                    <Text style={styles.navText}>My Orders</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -138,7 +138,7 @@ const AccountScreen: React.FC = () => {
                     <View style={styles.iconContainer}>
                         <Image
                             source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/549e73c4-da91-40a5-a5c8-fd173b0e2a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a614f1d9-eba9-4f54-b7ec-c93132dcb1a9?placeholderIfAbsent=true&apiKey=b95bf478340c44448a2ab0604562a117',
                             }}
                             style={styles.iconImage}
                         />
@@ -148,17 +148,31 @@ const AccountScreen: React.FC = () => {
 
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => router.push('/bottomnotification')}
+                    onPress={() => router.push('/bottommessages')}
                 >
                     <View style={styles.iconContainer}>
                         <Image
                             source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                                uri: '/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/home.png',
                             }}
                             style={styles.iconImage}
                         />
                     </View>
-                    <Text style={styles.navText}>Notifications</Text>
+                    {/* <Text style={styles.navText}>Messages</Text> */}
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push('/bottomnotification')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/myevent.png')} // Ensure this path is correct
+                            style={styles.iconImage}
+                        />
+                    </View>
+
+                    <Text style={styles.navText}>My Events</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -176,6 +190,78 @@ const AccountScreen: React.FC = () => {
                     <Text style={styles.navText}>Account</Text>
                 </TouchableOpacity>
             </View>
+            <View style={styles.bottomNavigation}>
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push('/vendordashboard')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/myorder.png')}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>My Orders</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push('/bottommessages')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={{
+                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a614f1d9-eba9-4f54-b7ec-c93132dcb1a9?placeholderIfAbsent=true&apiKey=b95bf478340c44448a2ab0604562a117',
+                            }}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>Messages</Text>
+                </TouchableOpacity>
+
+                {/* Home Button */}
+                <TouchableOpacity
+                    style={[styles.navItem, styles.homeButton]} // Apply the custom homeButton style
+                    onPress={() => router.push('/vendordashboard')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/home.png')} // Replace with actual home image path
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>Home</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push('/bottomnotification')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/myevent.png')}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>My Events</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push('/vendoraccount')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={{
+                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                            }}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>Account</Text>
+                </TouchableOpacity>
+            </View>
+
 
             {/* Logout Confirmation Modal */}
             <Modal
@@ -386,6 +472,11 @@ const styles = StyleSheet.create({
     confirmButtonText: {
         color: '#fff',
     },
+    homeButton: {
+        // marginBottom: 30, // Moves the Home button slightly upward
+        transform: [{ translateY: -10 }], // Alternatively, use translateY to lift it
+    },
+
 });
 
 export default AccountScreen;

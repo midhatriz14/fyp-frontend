@@ -208,19 +208,19 @@ const PaymentMethodScreen = () => {
             id: 1,
             name: "Credit/Debit Card",
             description: "",
-            icon: require("./../../assets/images/GetStarted.png"), // Replace with your image path
+            icon: require("./../../assets/images/mastercard.png"), // Replace with your image path
         },
         {
             id: 2,
             name: "JazzCash",
             description: "",
-            icon: require("./../../assets/images/GetStarted.png"), // Replace with your image path
+            icon: require("./../../assets/images/jazzcash.png"), // Replace with your image path
         },
         {
             id: 3,
             name: "EasyPaisa",
             description: "Easypaisa mobile account required",
-            icon: require("./../../assets/images/GetStarted.png"), // Replace with your image path
+            icon: require("./../../assets/images/easypaisa.png"), // Replace with your image path
         },
     ];
 

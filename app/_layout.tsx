@@ -85,6 +85,10 @@ export default function RootLayout() {
         <Stack.Screen name="bdmehndi" options={{ headerShown: false }} />
         <Stack.Screen name="bdsounds" options={{ headerShown: false }} />
         <Stack.Screen name="imagesuploaded" options={{ headerShown: false }} />
+        <Stack.Screen name="vendoraccount" options={{ headerShown: false }} />
+        <Stack.Screen name="vendormessages" options={{ headerShown: false }} />
+        <Stack.Screen name="vendornotifications" options={{ headerShown: false }} />
+
 
 
         <Stack.Screen name="+not-found" options={{ headerShown: false }} />
