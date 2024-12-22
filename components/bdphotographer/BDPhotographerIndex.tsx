@@ -156,7 +156,7 @@ const BusinessDetailsScreen: React.FC = () => {
 
             <Text style={styles.label}>Down Payment Type*</Text>
             <View style={styles.covidContainer}>
-                {['PERCENTAGE', 'FIXED AMOUNT'].map((option) => (
+                {['PERCENTAGE', 'FIXED'].map((option) => (
                     <TouchableOpacity
                         key={option}
                         style={[

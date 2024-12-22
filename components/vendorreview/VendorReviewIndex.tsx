@@ -1,13 +1,63 @@
 
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    ScrollView,
+    TouchableOpacity,
+    Modal,
+    ActivityIndicator,
+} from 'react-native';
+import axios from 'axios';
+import getVendorById from '@/services/getVendorById';
+import { getSecureData } from '@/store';
 
 const ReviewScreen = () => {
     const [isModalVisible, setModalVisible] = useState(false);
+    //const [vendorData, setVendorData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [vendorData, setVendorData] = useState<any>(null);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     const openModal = () => setModalVisible(true);
     const closeModal = () => setModalVisible(false);
+
+    useEffect(() => {
+        const fetchVendorData = async () => {
+            const user = JSON.parse(await getSecureData("user") || "");
+            console.log(user);
+            try {
+                const vendor = await getVendorById(user._id);
+                console.log(vendor);
+                setVendorData(vendor);
+            } catch (error) {
+                console.error('Error fetching vendor data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchVendorData();
+    }, []);
+
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color="#780C60" />
+            </View>
+        );
+    }
+
+    if (!vendorData) {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.errorText}>Failed to load vendor data.</Text>
+            </View>
+        );
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -18,13 +68,19 @@ const ReviewScreen = () => {
                 <Text style={styles.cardTitle}>Personal Details</Text>
                 <View style={styles.row}>
                     <Image
-                        source={{ uri: 'https://example.com/avatar.jpg' }}
+                        source={{
+                            uri: vendorData.images[0]
+                                ? `https://your-server-url.com${vendorData.images[0]}`
+                                : 'https://example.com/avatar.jpg',
+                        }}
                         style={styles.avatar}
                     />
                     <View>
-                        <Text style={styles.name}>fatyma</Text>
-                        <Text style={styles.email}>syeda.rixvi891@gmail.com</Text>
-                        <Text style={styles.phone}>+923055543437</Text>
+                        <Text style={styles.name}>{vendorData.name}</Text>
+                        <Text style={styles.email}>{vendorData.email}</Text>
+                        <Text style={styles.phone}>
+                            {vendorData.contactDetails.contactNumber}
+                        </Text>
                     </View>
                 </View>
             </View>
@@ -32,18 +88,15 @@ const ReviewScreen = () => {
             {/* Business Details */}
             <View style={styles.card}>
                 <Text style={styles.cardTitle}>Business Details</Text>
-                <View style={styles.row}>
-                    <Image
-                        source={{ uri: 'https://example.com/avatar.jpg' }}
-                        style={styles.avatar}
-                    />
-                    <View>
-                        <Text style={styles.name}>fatyma</Text>
-                        <Text style={styles.subTitle}>STAFF</Text>
-                        <Text style={styles.subTitle}>CITIES</Text>
-                        <Text style={styles.city}>Karachi</Text>
-                    </View>
-                </View>
+                {/* <View style={styles.row}> */}
+                <Text style={styles.name}>{vendorData.contactDetails.brandName}</Text>
+                <Text style={styles.subTitle}>
+                    Staff: {vendorData?.photographerBusinessDetails?.staff || 'N/A'}
+                </Text>
+                <Text style={styles.city}>
+                    City: {vendorData.contactDetails.city}
+                </Text>
+                {/* </View> */}
             </View>
 
             {/* Pricing */}
@@ -55,33 +108,70 @@ const ReviewScreen = () => {
                         <Text style={[styles.tableHeader, styles.flex1]}>Price</Text>
                         <Text style={[styles.tableHeader, styles.flex3]}>Services</Text>
                     </View>
-                    <View style={styles.tableRow}>
-                        <Text style={[styles.tableCell, styles.flex1]}>Basic</Text>
-                        <Text style={[styles.tableCell, styles.flex1, styles.price]}>
-                            100000
-                        </Text>
-                        <Text style={[styles.tableCell, styles.flex3]}>
-                            1 Day Event - Team Coverage 1 Day Shoot
-                            {'\n'}1 Event Albums (100 photos per album)
-                            {'\n'}1 Shoot Album (50 photos per album)
-                            {'\n'}1 Long Videos (20-50 mins)
-                            {'\n'}1 Highlight of Event (3-5 mins)
-                            {'\n'}1 Shoot Highlight (30-60 Sec)
-                            {'\n'}All Raw Photos provided after event.
-                        </Text>
-                    </View>
+                    {vendorData.packages.map((pkg: any) => (
+                        <View style={styles.tableRow} key={pkg._id}>
+                            <Text style={[styles.tableCell, styles.flex1]}>
+                                {pkg.packageName}
+                            </Text>
+                            <Text style={[styles.tableCell, styles.flex1, styles.price]}>
+                                {pkg.price}
+                            </Text>
+                            <Text style={[styles.tableCell, styles.flex3]}>
+                                {pkg.services}
+                            </Text>
+                        </View>
+                    ))}
                 </View>
             </View>
 
             {/* Location */}
             <View style={styles.card}>
                 <Text style={styles.cardTitle}>Location</Text>
-                <Text style={styles.link}>Main Branch</Text>
-                <Image
-                    source={{ uri: 'https://via.placeholder.com/300x200.png' }} // Replace with your map image or use a MapView
+                <Text style={styles.link}>{vendorData.contactDetails.city}</Text>
+                {/* <Image
+                    source={{ uri: 'https://via.placeholder.com/300x200.png' }}
                     style={styles.map}
-                />
+                /> */}
             </View>
+
+            {/* Photos */}
+            <View style={styles.card}>
+                <Text style={styles.cardTitle}>Photos</Text>
+                <ScrollView horizontal style={styles.photoContainer}>
+                    {vendorData.images.map((image: string, index: number) => (
+                        <Image
+                            key={index}
+                            source={{
+                                uri: `http://65.2.137.194:3000${image}`,
+                            }}
+                            style={styles.photo}
+                        />
+                    ))}
+                </ScrollView>
+            </View>
+            {/* Enlarged Image Modal
+            <Modal
+                visible={isModalVisible}
+                transparent={true}
+                onRequestClose={closeModal}
+                animationType="fade"
+            >
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContent}>
+                        {selectedImage && (
+                            <Image
+                                source={{ uri: selectedImage }}
+                                style={styles.enlargedImage}
+                                resizeMode="contain"
+                            />
+                        )}
+                        <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+                            <Text style={styles.closeButtonText}>Close</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal> */}
+
 
             {/* Buttons */}
             <View style={styles.buttonContainer}>
@@ -107,20 +197,13 @@ const ReviewScreen = () => {
                             and we will notify you once it is published.
                         </Text>
                         <View style={styles.modalButtons}>
-                            {/* <TouchableOpacity
-                                style={styles.confirmButton}
-                                onPress={closeModal}
-                                onPress={() => {
-                                    router.push("/bdphotographer");
-                                }}>
-                                <Text style={styles.confirmButtonText}>Okay</Text>
-                            </TouchableOpacity> */}
                             <TouchableOpacity
                                 style={styles.confirmButton}
                                 onPress={() => {
-                                    closeModal(); // First action
-                                    router.push("/vendordashboard"); // Second action
-                                }}>
+                                    closeModal();
+                                    router.push('/vendordashboard');
+                                }}
+                            >
                                 <Text style={styles.confirmButtonText}>Okay</Text>
                             </TouchableOpacity>
 
@@ -148,6 +231,13 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         color: '#000',
     },
+    errorText: {
+        fontSize: 18,
+        color: 'red',
+        textAlign: 'center',
+        marginTop: 20,
+    },
+    // Add the rest of your styles here
     card: {
         backgroundColor: '#fff',
         borderRadius: 10,
@@ -165,8 +255,9 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start', // Aligns items to the start of the cross-axis
     },
+
     avatar: {
         width: 50,
         height: 50,
@@ -275,13 +366,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    modalContent: {
-        width: '80%',
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
+    // modalContent: {
+    //     width: '80%',
+    //     backgroundColor: '#fff',
+    //     padding: 20,
+    //     borderRadius: 10,
+    //     alignItems: 'center',
+    // },
     modalMessage: {
         fontSize: 16,
         textAlign: 'center',
@@ -313,6 +404,43 @@ const styles = StyleSheet.create({
     },
     cancelButtonText: {
         color: '#000',
+    },
+    photoContainer: {
+        flexDirection: 'row',
+    },
+    photo: {
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+        marginRight: 10,
+    },
+    modalBackground: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.8)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        width: '90%',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 10,
+        alignItems: 'center',
+    },
+    enlargedImage: {
+        width: '100%',
+        height: 300,
+        marginBottom: 20,
+    },
+    closeButton: {
+        backgroundColor: '#780C60',
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    closeButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
     },
 });
 

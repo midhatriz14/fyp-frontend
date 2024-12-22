@@ -96,6 +96,7 @@ const ImageUploadScreen: React.FC = () => {
             {/* Header Section */}
             <Text style={styles.header}>Images</Text>
             <Text style={styles.subHeader}>Upload images{"\n"}You can upload up to 30 images</Text>
+            <Text style={styles.subHeader}>The first picture will be set as your cover photo*</Text>
 
             {/* Upload Card */}
             <TouchableOpacity style={styles.uploadCard} onPress={handleFileUpload}>

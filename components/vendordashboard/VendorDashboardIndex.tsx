@@ -1,27 +1,48 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { router } from "expo-router";
+import { getSecureData } from "@/store";
 
 const screenWidth = Dimensions.get("window").width;
 
 
 
 const DashboardScreen = () => {
+
+    const [username, setUsername] = useState<string>(""); // State for username
+
+    useEffect(() => {
+        fetchUsername(); // Fetch username on component mount
+    }, []);
+
+    const fetchUsername = async () => {
+        const storedUsername = (await getSecureData("user")) || "Guest"; // Retrieve username or set default
+        setUsername(JSON.parse(storedUsername).name);
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView>
                 {/* Header Section */}
                 <View style={styles.header}>
                     <View style={styles.profileContainer}>
-                        <Image
-                            source={{ uri: "https://example.com/profile-pic.png" }} // Replace with actual image
-                            style={styles.profileImage}
-                        />
-                        <Text style={styles.username}>Hamza_12</Text>
+                        <View style={styles.profileDetails}>
+                            <Image
+                                source={{ uri: "https://example.com/profile-pic.png" }} // Replace with actual image
+                                style={styles.profileImage}
+                            />
+                            <Text style={styles.username}>{username}</Text> {/* Display the username */}
+                        </View>
+                        <TouchableOpacity
+                            style={styles.notificationIcon}
+                            onPress={() => router.push('/vendornotifications')}
+                        >
+                            <Ionicons name="notifications" size={24} color="#000" />
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.statsContainer}>
                         <View style={[styles.statBox, styles.ordersBox]}>
@@ -38,6 +59,7 @@ const DashboardScreen = () => {
                         </View>
                     </View>
                 </View>
+
 
                 {/* Sales Statistics Section */}
                 <View style={styles.sectionContainer}>
@@ -83,7 +105,10 @@ const DashboardScreen = () => {
                                 <Text style={styles.packageLabel}>Package</Text>
                                 <TouchableOpacity
                                     style={styles.detailsButton}
-                                    onPress={() => router.push('/vendorpackages')} // Navigate to "Details" screen
+                                    onPress={() => {
+                                        // const 
+                                        router.push('/vendorpackages')
+                                    }} // Navigate to "Details" screen
                                 >
                                     <Text style={styles.detailsText}>Details</Text>
                                 </TouchableOpacity>
@@ -93,13 +118,13 @@ const DashboardScreen = () => {
                 </View>
 
                 {/* Pending Actions Section */}
-                <View style={styles.pendingSection}>
+                {/* <View style={styles.pendingSection}>
                     <Text style={styles.sectionTitle}>Pending Clients Actions</Text>
                     <View style={styles.pendingBoxAction}>
                         <Text style={styles.pendingText}>Payment Overdue By Clients</Text>
                         <Text style={styles.pendingDate}>For Event on <Text style={styles.highlight}>24th Oct 2023</Text></Text>
                     </View>
-                </View>
+                </View> */}
                 {/* Vendor Profile Section
                 <View style={styles.vendorProfileContainer}>
                     <Image  style={styles.vendorImage} />
@@ -114,6 +139,14 @@ const DashboardScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View> */}
+
+                {/* Vendor Profile Button */}
+                <TouchableOpacity
+                    style={styles.vendorProfileButton}
+                    onPress={() => router.push('/vendorprofiledetails')} // Replace with the correct route to the Vendor Profile page
+                >
+                    <Text style={styles.vendorProfileButtonText}>View Vendor Profile</Text>
+                </TouchableOpacity>
             </ScrollView>
 
 
@@ -284,11 +317,11 @@ const chartConfig = {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#F8E9F0', },
+    container: { flex: 1, backgroundColor: '#F8E9F0', paddingTop: 50, },
     header: { padding: 20 },
-    profileContainer: { alignItems: "center" },
-    profileImage: { width: 60, height: 60, borderRadius: 30 },
-    username: { fontSize: 18, fontWeight: "bold", marginVertical: 10 },
+    /// profileContainer: { alignItems: "center" },
+    //profileImage: { width: 60, height: 60, borderRadius: 30 },
+    //username: { fontSize: 18, fontWeight: "bold", marginVertical: 10 },
     statsContainer: { flexDirection: "row", justifyContent: "space-around" },
     statBox: { width: 100, padding: 10, borderRadius: 10, alignItems: "center" },
     ordersBox: { backgroundColor: "#D6A7E3" },
@@ -415,6 +448,47 @@ const styles = StyleSheet.create({
         fontSize: 10,
         color: '#000000',
     },
+    vendorProfileButton: {
+        backgroundColor: '#7D0C72',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginHorizontal: 16,
+        marginTop: 10,
+    },
+    vendorProfileButtonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
+    profileContainer: {
+        flexDirection: "row", // Align items in a row
+        justifyContent: "space-between", // Space out elements
+        alignItems: "center", // Vertically center align items
+        marginBottom: 20,
+    },
+    profileDetails: {
+        flexDirection: "row", // Profile image and username in a row
+        alignItems: "center",
+    },
+    profileImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        marginRight: 10, // Space between image and text
+    },
+    username: {
+        fontSize: 18,
+        fontWeight: "bold",
+
+    },
+    notificationIcon: {
+        padding: 8,
+        // Align icon with the row
+    },
+
 
 });
 

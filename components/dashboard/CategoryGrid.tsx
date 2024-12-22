@@ -17,6 +17,7 @@ const CategoryItem: React.FC<{ item: ICategory }> = ({ item }) => (
     <TouchableOpacity style={styles.categoryIcon} accessibilityRole="button"
       onPress={async () => {
         await saveSecureData("categoryId", item._id);
+        await saveSecureData("categoryName", item.name); // Save category name
         router.push("/categoryvendorlisting");
       }}>
       <Image

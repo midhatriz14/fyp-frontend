@@ -20,7 +20,7 @@ const NotificationsAccIndex: React.FC = () => {
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push('/account')}>
+                <TouchableOpacity onPress={() => router.back()}>
                     <Text style={styles.backButton}>{'<'} Back</Text>
                 </TouchableOpacity>
                 <Text style={styles.title}>Notifications</Text>

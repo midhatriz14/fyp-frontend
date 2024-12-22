@@ -74,7 +74,7 @@ const FAQScreen: React.FC = () => {
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity
-                    onPress={() => router.push('/account')}
+                    onPress={() => router.back()}
                     style={styles.backButtonContainer}
                 >
                     <Text style={styles.backButton}>{'<'} Back</Text>

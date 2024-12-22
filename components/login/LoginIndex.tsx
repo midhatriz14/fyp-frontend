@@ -38,9 +38,16 @@ export default function LoginScreen() {
       const response = await Login(email, password);
       saveSecureData("token", response.token);
       saveSecureData("user", JSON.stringify(response.user));
+      console.log(response.user.role)
       setIsLoading(false);
       reset();
-      router.push("/imagesuploaded");
+      if (response.user.role === "Vendor") {
+        router.push("/vendordashboard"); //next screen
+      } else {
+        router.push("/dashboard"); //next screen
+
+      }
+
     } catch (e: any) {
       console.log(e);
       setIsLoading(false);

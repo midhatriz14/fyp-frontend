@@ -139,7 +139,7 @@ const BusinessDetailsForm = () => {
 
 
             {/* Expertise */}
-            <Text style={styles.label}>Expertise*</Text>
+            <Text style={styles.label}>Expertise* </Text>
             <TextInput style={styles.input} onChangeText={(text) => { setExpertise(text); }} placeholder="Enter expertise" />
 
             {/* Travels to Client Home */}

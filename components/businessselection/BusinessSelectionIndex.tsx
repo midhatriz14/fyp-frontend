@@ -9,6 +9,7 @@ import { ICategory } from '../dashboard/CategoryGrid';
 
 const BusinessSelectionIndex: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null); // Track selected category
+    const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null); // Track selected category
     const [categories, setCategories] = useState<ICategory[]>([]);
     const image = Asset.fromModule(require('./../../assets/images/GetStarted.png')).uri;
 
@@ -39,7 +40,7 @@ const BusinessSelectionIndex: React.FC = () => {
                             styles.card,
                             selectedCategory === category._id && styles.selectedCard, // Highlight selected card
                         ]}
-                        onPress={() => setSelectedCategory(category._id)} // Update selected category
+                        onPress={() => { setSelectedCategory(category._id); setSelectedCategoryName(category.name) }} // Update selected category
                     >
                         <Image style={styles.icon} source={{ uri: category.image }} />
                         <Text style={styles.cardText}>{category.name}</Text>
@@ -60,8 +61,9 @@ const BusinessSelectionIndex: React.FC = () => {
                         !selectedCategory && styles.disabledNextButton, // Disable button if no category selected
                     ]}
                     onPress={async () => {
-                        if (selectedCategory) {
+                        if (selectedCategory && selectedCategoryName) {
                             await saveSecureData("buisness", selectedCategory.toString());
+                            await saveSecureData("buisnessName", selectedCategoryName);
                             router.push('/signup'); // Navigate to the signup screen
                         }
                     }}

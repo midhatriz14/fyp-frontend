@@ -45,8 +45,38 @@ const ContactDetailsScreen = () => {
                 officialAddress: address, // Renamed to match DTO
                 officialGoogleLink: googleLink,
             });
+            const categoryName = await getSecureData("buisnessName");
+            console.log(categoryName);
+            if (categoryName === "Venues") {
+                console.log("bdvenue")
+                router.push("/bdvenue")
+            }
+            else if (categoryName === "Caterings") {
+                console.log("bdcatering")
+                router.push("/bdcatering")
+            }
+            else if (categoryName === "Photography") {
+                console.log("bdphotographer")
+                router.push("/bdphotographer")
+            }
+            else if (categoryName === "Makeup") {
+                console.log("bdsalon")
+                router.push("/bdsalon")
+            }
+            else if (categoryName === "Mehndi") {
+                console.log("bdmehndi")
+                router.push("/bdmehndi")
+            }
+            else if (categoryName === "DJ & Sound") {
+                console.log("bdsounds")
+                router.push("/bdsounds")
+            }
+            else if (categoryName === "Cakes") {
+                console.log("bdcakes")
+                router.push("/bdcakes")
+            }
             Alert.alert("Success", "Contact details saved successfully!");
-            router.push("/bdphotographer");
+            // router.push("/bdphotographer");
         } catch (error) {
             Alert.alert("Error", "Something went wrong. Please try again.");
         }
