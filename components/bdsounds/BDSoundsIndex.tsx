@@ -12,6 +12,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import postCateringBusinessDetails from '@/services/postCateringBusinessDetails';
 import { useState } from "react";
+import { getSecureData } from "@/store";
 
 const BusinessDetailsForm = () => {
     const [foodTesting, setFoodTesting] = useState<boolean>(false);
@@ -39,7 +40,9 @@ const BusinessDetailsForm = () => {
         }
 
         try {
-            await postCateringBusinessDetails("6761cd1588c5394676335bf4", {
+            const user = JSON.parse(await getSecureData("user") || "");
+            console.log(user);
+            await postCateringBusinessDetails(user._id, {
                 expertise,
                 travelsToClientHome: true,
                 cityCovered: selectedCity,

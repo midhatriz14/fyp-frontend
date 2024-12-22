@@ -11,6 +11,7 @@ import {
     Alert,
 } from "react-native";
 import postSalonBusinessDetails from '@/services/postSalonBusinessDetails';
+import { getSecureData } from "@/store";
 
 const BusinessDetailsForm = () => {
     const [staffType, setStaffType] = useState<string>("");
@@ -57,7 +58,9 @@ const BusinessDetailsForm = () => {
 
 
         try {
-            await postSalonBusinessDetails("6761cd9788c5394676335bf9", {
+            const user = JSON.parse(await getSecureData("user") || "");
+            console.log(user);
+            await postSalonBusinessDetails(user._id, {
                 staffType,
                 expertise,
                 travelsToClientHome,

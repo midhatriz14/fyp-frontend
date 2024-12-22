@@ -37,9 +37,10 @@ export default function LoginScreen() {
       setIsDisabled(true);
       const response = await Login(email, password);
       saveSecureData("token", response.token);
+      saveSecureData("user", JSON.stringify(response.user));
       setIsLoading(false);
       reset();
-      router.push("/dashboard");
+      router.push("/imagesuploaded");
     } catch (e: any) {
       console.log(e);
       setIsLoading(false);

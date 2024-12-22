@@ -1,5 +1,6 @@
 
 import postContactDetails from '@/services/postContactDetails';
+import { getSecureData } from '@/store';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -30,7 +31,9 @@ const ContactDetailsScreen = () => {
             return;
         }
         try {
-            await postContactDetails("6761b96286d04a9a932a7b0c", {
+            const user = JSON.parse(await getSecureData("user") || "");
+            console.log(user);
+            await postContactDetails(user._id, {
                 brandName,
                 brandLogo: 'logo',
                 contactNumber,

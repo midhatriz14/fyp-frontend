@@ -13,6 +13,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
 import postPhotographyBusinessDetails from '@/services/postPhotographyBusinessDetails';
+import { getSecureData } from '@/store';
 
 const BusinessDetailsScreen: React.FC = () => {
     const [selectedCity, setSelectedCity] = useState<string>("");
@@ -31,7 +32,9 @@ const BusinessDetailsScreen: React.FC = () => {
         }
 
         try {
-            await postPhotographyBusinessDetails("6761b96286d04a9a932a7b0c", {
+            const user = JSON.parse(await getSecureData("user") || "");
+            console.log(user);
+            await postPhotographyBusinessDetails(user._id, {
                 cityCovered: selectedCity,
                 staff: selectedStaff,
                 minimumPrice: Number(),

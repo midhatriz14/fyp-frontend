@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityInd
 import { Asset } from 'expo-asset';
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router';
-import { getSecureData } from '@/store';
+import { getSecureData, saveSecureData } from '@/store';
 import Register from '@/services/register';
 import Toast from 'react-native-toast-message';
 
@@ -56,7 +56,9 @@ export default function SignupScreen() {
       setIsLoading(true);
       setIsDisabled(true);
       console.log(email, password, name, role, buisnessCategory);
-      await Register(email, password, name, role, buisnessCategory);
+      const response = await Register(email, password, name, role, buisnessCategory);
+      saveSecureData("token", response.token);
+      saveSecureData("user", JSON.stringify(response.user));
       setIsLoading(false);
       reset();
       router.push("/vendorcontactdetails");

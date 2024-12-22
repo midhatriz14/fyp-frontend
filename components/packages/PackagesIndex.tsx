@@ -1,5 +1,6 @@
 import { PackageDto } from "@/dto/CreatePackage.dto";
 import postAddPackages from "@/services/postAddPackages";
+import { getSecureData } from "@/store";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
@@ -26,8 +27,10 @@ const PackagesScreen: React.FC = () => {
     };
 
     const onSubmit = async () => {
-        await postAddPackages("6761b96286d04a9a932a7b0c", { packages: packages });
-        router.push("/images")
+        const user = JSON.parse(await getSecureData("user") || "");
+        console.log(user);
+        await postAddPackages(user._id, { packages: packages });
+        router.push("/imagesuploaded")
     }
 
     return (

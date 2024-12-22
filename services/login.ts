@@ -10,7 +10,7 @@ export default async function Login(email: string, password: string) {
             url,
         };
 
-        const response = await axios<{ token: string }>(config);
+        const response = await axios<{ token: string, user: any }>(config);
         return response.data;
     } catch (error: any) {
         if (error.response && error.response.data && error.response.data.message) {

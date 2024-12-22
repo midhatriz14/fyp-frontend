@@ -11,6 +11,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import postCateringBusinessDetails from '@/services/postCateringBusinessDetails';
+import { getSecureData } from "@/store";
 
 const BusinessDetailsForm = () => {
     const [expertise, setExpertise] = useState('');
@@ -42,7 +43,10 @@ const BusinessDetailsForm = () => {
         }
 
         try {
-            await postCateringBusinessDetails("676299ac722c19f9fc5e9fa2", {
+
+            const user = JSON.parse(await getSecureData("user") || "");
+            console.log(user);
+            await postCateringBusinessDetails(user._id, {
                 expertise,
                 travelsToClientHome: true,
                 cityCovered: selectedCity,

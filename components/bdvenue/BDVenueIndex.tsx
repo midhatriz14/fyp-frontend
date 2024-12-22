@@ -11,6 +11,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import postVenueBusinessDetails from "@/services/postVenueBusinessDetails";
+import { getSecureData } from "@/store";
 
 const BusinessDetailsForm = () => {
     // States
@@ -47,7 +48,9 @@ const BusinessDetailsForm = () => {
         }
 
         try {
-            await postVenueBusinessDetails("6761cd1588c5394676335bf4", {
+            const user = JSON.parse(await getSecureData("user") || "");
+            console.log(user);
+            await postVenueBusinessDetails(user._id, {
                 typeOfVenue: venueType,
                 expertise: expertise,
                 amenities: amenities,
