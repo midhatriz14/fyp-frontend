@@ -31,7 +31,7 @@ export default function SelectRoleScreen() {
       <Text style={styles.label}>Join As</Text>
       <TouchableOpacity style={styles.selectButton} onPress={toggleModal}>
         <Text style={styles.buttonText}>
-          {selectedRole ? selectedRole : 'Select'}
+          {selectedRole ? selectedRole : "Select"}
         </Text>
       </TouchableOpacity>
 
@@ -42,6 +42,7 @@ export default function SelectRoleScreen() {
       >
         <View style={styles.modalContainer}>
           <Picker
+            testID="picker" // Add this testID
             selectedValue={selectedRole}
             onValueChange={(itemValue) => {
               setSelectedRole(itemValue);
@@ -59,14 +60,15 @@ export default function SelectRoleScreen() {
 
       {/* Confirm Button */}
       <TouchableOpacity
+        testID="confirm-button" // Add this testID
         style={styles.confirmButton}
         onPress={() => {
           if (selectedRole === "Vendor") {
-            router.push('/bussinessselection')
+            router.push("/bussinessselection");
             // Action for when the selected role is "vendor"
             handleConfirm();
           } else if (selectedRole === "Organizer") {
-            router.push('/signup')
+            router.push("/signup");
             // Action for when the selected role is "organiser"
             handleOrganiserConfirm();
           } else {
