@@ -15,7 +15,7 @@ exports[`Sandwich3Index Screen UI does not change unexpectedly 1`] = `
   <Image
     source={
       {
-        "uri": undefined,
+        "uri": "mocked_image_uri",
       }
     }
     style={
@@ -156,7 +156,7 @@ exports[`Sandwich3Index Screen matches the snapshot 1`] = `
   <Image
     source={
       {
-        "uri": undefined,
+        "uri": "mocked_image_uri",
       }
     }
     style={

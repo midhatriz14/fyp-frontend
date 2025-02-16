@@ -60,10 +60,10 @@ describe("Sandwich3Index Screen", () => {
     const { getByText } = render(<Sandwich3Index />);
     expect(getByText(/Get Started/)).toBeTruthy();
   });
-  test("UI does not change unexpectedly", () => {
-    const { toJSON } = render(<Sandwich3Index />);
-    expect(toJSON()).toMatchSnapshot();
-  });
+    test("UI does not change unexpectedly", () => {
+      const { toJSON } = render(<Sandwich3Index />);
+      expect(toJSON()).toMatchSnapshot();
+    });
   test("no other route is called on button press", () => {
     const { getByText } = render(<Sandwich3Index />);
     const getStartedButton = getByText("Get Started");

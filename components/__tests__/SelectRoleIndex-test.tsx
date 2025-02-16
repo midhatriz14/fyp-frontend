@@ -61,17 +61,26 @@ describe("SelectRoleScreen", () => {
     });
   });
 
-  it("displays an alert if no role is selected", () => {
-    global.alert = jest.fn(); // Mock the alert function
+  it("does not allow confirmation if no role is selected", async () => {
+    const { getByTestId } = render(<SelectRoleScreen />);
 
-    const { getByText } = render(<SelectRoleScreen />);
+    // Get the Confirm button
+    const confirmButton = getByTestId("confirm-button");
 
-    // Simulate pressing the Confirm button
-    fireEvent.press(getByText("Confirm"));
+    // Check if the button is disabled when no role is selected
+    expect(confirmButton.props.accessibilityState.disabled).toBe(true);
 
-    // Check that the alert was triggered
-    expect(global.alert).toHaveBeenCalledWith("Please select a valid role!");
+    // Try pressing the Confirm button (should not trigger alert)
+    fireEvent.press(confirmButton);
+
+    // Ensure alert is NOT called because the button is disabled
+    await waitFor(() => {
+      expect(global.alert).not.toHaveBeenCalled();
+    });
   });
+
+
+
 
   it("enables the Confirm button when a role is selected", () => {
     const { getByTestId, getByText } = render(<SelectRoleScreen />);
@@ -86,4 +95,11 @@ describe("SelectRoleScreen", () => {
     // Check that the Confirm button is enabled
     expect(confirmButton.props.accessibilityState.disabled).toBe(false);
   });
+
+    it("opens the picker modal when selecting a role", () => {
+      const { getByText, getByTestId } = render(<SelectRoleScreen />);
+
+      fireEvent.press(getByText("Select")); // Open modal
+      expect(getByTestId("picker")).toBeTruthy(); // Picker should be visible
+    });
 });
