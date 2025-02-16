@@ -41,7 +41,7 @@ const AccountScreen: React.FC = () => {
   const openWhatsApp = () => {
     const phoneNumber = '923331283810'; // Replace with your WhatsApp phone number
     const message = 'Hello, I need assistance.'; // Default message
-    const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}}`;
+    const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
 
     Linking.canOpenURL(url)
       .then((supported) => {
@@ -97,18 +97,18 @@ const AccountScreen: React.FC = () => {
               onPress={() => handleMenuPress(option.title)}
             >
               <Text style={styles.menuText}>{option.title}</Text>
-              <Text style={styles.arrow}>{'>'}</Text>
+              <Text style={styles.arrow}>{">"}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
         {/* Terms and Privacy */}
         <View style={styles.termsContainer}>
-          <TouchableOpacity onPress={() => router.push('/termsofservices')}>
+          <TouchableOpacity onPress={() => router.push("/termsofservices")}>
             <Text style={styles.termsText}>Terms of Service</Text>
           </TouchableOpacity>
           <Text style={styles.separator}>|</Text>
-          <TouchableOpacity onPress={() => router.push('/privacypolicy')}>
+          <TouchableOpacity onPress={() => router.push("/privacypolicy")}>
             <Text style={styles.termsText}>Privacy Policy</Text>
           </TouchableOpacity>
         </View>
@@ -118,12 +118,12 @@ const AccountScreen: React.FC = () => {
       <View style={styles.bottomNavigation}>
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push('/dashboard')}
+          onPress={() => router.push("/dashboard")}
         >
           <View style={styles.iconContainer}>
             <Image
               source={{
-                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
               }}
               style={styles.iconImage}
             />
@@ -133,12 +133,12 @@ const AccountScreen: React.FC = () => {
 
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push('/bottommessages')}
+          onPress={() => router.push("/bottommessages")}
         >
           <View style={styles.iconContainer}>
             <Image
               source={{
-                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/549e73c4-da91-40a5-a5c8-fd173b0e2a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/549e73c4-da91-40a5-a5c8-fd173b0e2a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
               }}
               style={styles.iconImage}
             />
@@ -148,12 +148,12 @@ const AccountScreen: React.FC = () => {
 
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push('/bottomnotification')}
+          onPress={() => router.push("/bottomnotification")}
         >
           <View style={styles.iconContainer}>
             <Image
               source={{
-                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
               }}
               style={styles.iconImage}
             />
@@ -163,12 +163,12 @@ const AccountScreen: React.FC = () => {
 
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push('/account')}
+          onPress={() => router.push("/account")}
         >
           <View style={styles.iconContainer}>
             <Image
               source={{
-                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
               }}
               style={styles.iconImage}
             />
@@ -183,6 +183,7 @@ const AccountScreen: React.FC = () => {
         transparent={true}
         visible={isModalVisible}
         onRequestClose={cancelLogout}
+        testID="logout-modal" // ✅ Add this testID
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -208,7 +209,7 @@ const AccountScreen: React.FC = () => {
                 style={styles.confirmButton}
                 onPress={() => {
                   confirmLogout();
-                  router.push('/intro'); // Navigate to /intro
+                  router.push("/intro"); // Navigate to /intro
                 }}
               >
                 <Text style={styles.confirmButtonText}>Log Out</Text>
@@ -216,8 +217,8 @@ const AccountScreen: React.FC = () => {
             </View>
           </View>
         </View>
-      </Modal >
-    </View >
+      </Modal>
+    </View>
   );
 };
 
