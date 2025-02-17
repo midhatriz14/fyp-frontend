@@ -17,111 +17,130 @@ const NotificationsAccIndex: React.FC = () => {
     const [deadlineToggle, setDeadlineToggle] = useState(true);
 
     return (
-        <View style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()}>
-                    <Text style={styles.backButton}>{'<'} Back</Text>
-                </TouchableOpacity>
-                <Text style={styles.title}>Notifications</Text>
-                <View style={{ width: 40 }} />
-            </View>
-
-            {/* Notification Options */}
-            <View style={styles.notificationContainer}>
-                <View style={styles.notificationItem}>
-                    <View style={styles.notificationText}>
-                        <Text style={styles.notificationTitle}>
-                            Receive notification when guests RSVP to the event
-                        </Text>
-                    </View>
-                    <Switch
-                        value={rsvpToggle}
-                        onValueChange={setRsvpToggle}
-                        trackColor={{ false: '#E0E0E0', true: '#780C60' }}
-                        thumbColor={rsvpToggle ? '#FFFFFF' : '#f4f3f4'}
-                    />
-                </View>
-
-                <View style={styles.notificationItem}>
-                    <View style={styles.notificationText}>
-                        <Text style={styles.notificationTitle}>
-                            Receive notification for activity that involves me
-                        </Text>
-                        <Text style={styles.notificationDescription}>
-                            When a guest replies to me, mentions, or tags me
-                        </Text>
-                    </View>
-                    <Switch
-                        value={activityToggle}
-                        onValueChange={setActivityToggle}
-                        trackColor={{ false: '#E0E0E0', true: '#780C60' }}
-                        thumbColor={activityToggle ? '#FFFFFF' : '#f4f3f4'}
-                    />
-                </View>
-
-                <View style={styles.notificationItem}>
-                    <View style={styles.notificationText}>
-                        <Text style={styles.notificationTitle}>
-                            Receive notification about approaching deadlines for tasks
-                        </Text>
-                    </View>
-                    <Switch
-                        value={deadlineToggle}
-                        onValueChange={setDeadlineToggle}
-                        trackColor={{ false: '#E0E0E0', true: '#780C60' }}
-                        thumbColor={deadlineToggle ? '#FFFFFF' : '#f4f3f4'}
-                    />
-                </View>
-            </View>
-
-            {/* Bottom Navigation */}
-            <View style={styles.bottomNavigation}>
-                <TouchableOpacity style={styles.navItem} onPress={() => router.push('/dashboard')}>
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Dashboard</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.navItem} onPress={() => router.push('/dashboard')}>
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/549e73c4-da91-40a5-a5c8-fd173b0e2a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a' }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Messages</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.navItem} onPress={() => router.push('/dashboard')}>
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a' }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Notifications</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.navItem} onPress={() => router.push('/account')}>
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Account</Text>
-                </TouchableOpacity>
-            </View>
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text style={styles.backButton}>{"<"} Back</Text>
+          </TouchableOpacity>
+          <Text style={styles.title}>Notifications</Text>
+          <View style={{ width: 40 }} />
         </View>
+
+        {/* Notification Options */}
+        <View style={styles.notificationContainer}>
+          <View style={styles.notificationItem}>
+            <View style={styles.notificationText}>
+              <Text style={styles.notificationTitle}>
+                Receive notification when guests RSVP to the event
+              </Text>
+            </View>
+            <Switch
+              testID="rsvp-switch" // Adding testID here
+              value={rsvpToggle}
+              onValueChange={setRsvpToggle}
+              trackColor={{ false: "#E0E0E0", true: "#780C60" }}
+              thumbColor={rsvpToggle ? "#FFFFFF" : "#f4f3f4"}
+            />
+          </View>
+
+          <View style={styles.notificationItem}>
+            <View style={styles.notificationText}>
+              <Text style={styles.notificationTitle}>
+                Receive notification for activity that involves me
+              </Text>
+              <Text style={styles.notificationDescription}>
+                When a guest replies to me, mentions, or tags me
+              </Text>
+            </View>
+            <Switch
+              testID="activity-switch" // Adding testID here
+              value={activityToggle}
+              onValueChange={setActivityToggle}
+              trackColor={{ false: "#E0E0E0", true: "#780C60" }}
+              thumbColor={activityToggle ? "#FFFFFF" : "#f4f3f4"}
+            />
+          </View>
+
+          <View style={styles.notificationItem}>
+            <View style={styles.notificationText}>
+              <Text style={styles.notificationTitle}>
+                Receive notification about approaching deadlines for tasks
+              </Text>
+            </View>
+            <Switch
+              testID="deadline-switch" // Adding testID here
+              value={deadlineToggle}
+              onValueChange={setDeadlineToggle}
+              trackColor={{ false: "#E0E0E0", true: "#780C60" }}
+              thumbColor={deadlineToggle ? "#FFFFFF" : "#f4f3f4"}
+            />
+          </View>
+        </View>
+
+        {/* Bottom Navigation */}
+        <View style={styles.bottomNavigation}>
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => router.push("/dashboard")}
+          >
+            <View style={styles.iconContainer}>
+              <Image
+                source={{
+                  uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+                }}
+                style={styles.iconImage}
+              />
+            </View>
+            <Text style={styles.navText}>Dashboard</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => router.push("/dashboard")}
+          >
+            <View style={styles.iconContainer}>
+              <Image
+                source={{
+                  uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/549e73c4-da91-40a5-a5c8-fd173b0e2a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+                }}
+                style={styles.iconImage}
+              />
+            </View>
+            <Text style={styles.navText}>Messages</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => router.push("/dashboard")}
+          >
+            <View style={styles.iconContainer}>
+              <Image
+                source={{
+                  uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+                }}
+                style={styles.iconImage}
+              />
+            </View>
+            <Text style={styles.navText}>Notifications</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => router.push("/account")}
+          >
+            <View style={styles.iconContainer}>
+              <Image
+                source={{
+                  uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+                }}
+                style={styles.iconImage}
+              />
+            </View>
+            <Text style={styles.navText}>Account</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
 };
 

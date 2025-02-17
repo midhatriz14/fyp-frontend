@@ -43,3 +43,6 @@ jest.mock("react-native-toast-message", () => ({
   show: jest.fn(),
   hide: jest.fn(),
 }));
+
+// ✅ Mock `clearImmediate` for React Native environment
+global.clearImmediate = (id: any) => clearTimeout(id);

@@ -83,7 +83,8 @@ const EditProfileScreen: React.FC = () => {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="screen-container">
+      /* ✅ Added testID here */
       {/* Set Status Bar */}
       <StatusBar
         backgroundColor="#F8E9F0" // Match the pink background color
@@ -92,14 +93,13 @@ const EditProfileScreen: React.FC = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backButton}>{'<'} Back</Text>
+          <Text style={styles.backButton}>{"<"} Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Edit Profile</Text>
         <TouchableOpacity>
           <Text style={styles.saveButton}>SAVE</Text>
         </TouchableOpacity>
       </View>
-
       {/* Content */}
       <ScrollView contentContainerStyle={styles.content}>
         {/* Avatar Section */}
@@ -110,7 +110,7 @@ const EditProfileScreen: React.FC = () => {
           <TouchableOpacity style={styles.cameraIcon}>
             <Image
               source={{
-                uri: 'https://cdn-icons-png.flaticon.com/512/149/149852.png', // Camera Icon
+                uri: "https://cdn-icons-png.flaticon.com/512/149/149852.png", // Camera Icon
               }}
               style={styles.cameraImage}
             />
@@ -132,7 +132,10 @@ const EditProfileScreen: React.FC = () => {
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>E-mail</Text>
-            <TextInput style={styles.input} placeholder="midhatrizvi@gmail.com" />
+            <TextInput
+              style={styles.input}
+              placeholder="midhatrizvi@gmail.com"
+            />
           </View>
 
           <View style={styles.inputContainer}>
@@ -146,7 +149,7 @@ const EditProfileScreen: React.FC = () => {
               <View style={styles.phoneRow}>
                 <Image
                   source={{
-                    uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Flag_of_Pakistan.svg/1024px-Flag_of_Pakistan.svg.png',
+                    uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Flag_of_Pakistan.svg/1024px-Flag_of_Pakistan.svg.png",
                   }}
                   style={styles.flagIcon}
                 />
@@ -167,14 +170,16 @@ const EditProfileScreen: React.FC = () => {
           </View>
         </View>
       </ScrollView>
-
       {/* Bottom Navigation */}
       <View style={styles.bottomNavigation}>
-        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/dashboard')}>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => router.push("/dashboard")}
+        >
           <View style={styles.iconContainer}>
             <Image
               source={{
-                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
               }}
               style={styles.iconImage}
             />
@@ -182,31 +187,44 @@ const EditProfileScreen: React.FC = () => {
           <Text style={styles.navText}>Dashboard</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/dashboard')}>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => router.push("/dashboard")}
+        >
           <View style={styles.iconContainer}>
             <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/549e73c4-da91-40a5-a5c8-fd173b0e2a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a' }}
+              source={{
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/549e73c4-da91-40a5-a5c8-fd173b0e2a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+              }}
               style={styles.iconImage}
             />
           </View>
           <Text style={styles.navText}>Messages</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/dashboard')}>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => router.push("/dashboard")}
+        >
           <View style={styles.iconContainer}>
             <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a' }}
+              source={{
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+              }}
               style={styles.iconImage}
             />
           </View>
           <Text style={styles.navText}>Notifications</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/account')}>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => router.push("/account")}
+        >
           <View style={styles.iconContainer}>
             <Image
               source={{
-                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
               }}
               style={styles.iconImage}
             />
