@@ -46,3 +46,10 @@ jest.mock("react-native-toast-message", () => ({
 
 // ✅ Mock `clearImmediate` for React Native environment
 global.clearImmediate = (id: any) => clearTimeout(id);
+
+// Add this to your existing jest-setup.ts
+jest.mock("expo-secure-store", () => ({
+  setItemAsync: jest.fn(),
+  getItemAsync: jest.fn(),
+  deleteItemAsync: jest.fn(),
+}));

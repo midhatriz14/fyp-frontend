@@ -14,7 +14,7 @@
   "jest": {
     "preset": "react-native",
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-native|@react-native|expo|expo-asset|expo-router|expo-modules-core|expo-constants|expo-font|@expo/vector-icons|react-native-toast-message)/)"
+      "node_modules/(?!(react-native|@react-native|expo|expo-asset|expo-router|expo-modules-core|expo-constants|expo-font|@expo/vector-icons|react-native-toast-message|expo-secure-store)/)"
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/jest-setup.ts"
@@ -29,6 +29,7 @@
       "expo-font": "<rootDir>/__mocks__/expo-font.ts",
       "expo-router": "<rootDir>/__mocks__/expo-router.ts",
       "react-native-toast-message": "<rootDir>/__mocks__/react-native-toast-message.ts",
+      "expo-secure-store": "<rootDir>/__mocks__/expo-secure-store.ts",
       "\\.(jpg|jpeg|png|gif|svg|ttf|woff|woff2)$": "<rootDir>/__mocks__/fileMock.ts"
     }
   },
@@ -82,7 +83,7 @@
     "@types/react-test-renderer": "^18.0.7",
     "babel-jest": "^29.7.0",
     "jest": "~29.7.0",
-    "jest-expo": "^52.0.0",
+    "jest-expo": "^52.0.4",
     "metro-react-native-babel-preset": "^0.77.0",
     "react-test-renderer": "18.2.0",
     "typescript": "^5.3.3"

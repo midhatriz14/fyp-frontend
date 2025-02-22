@@ -83,99 +83,97 @@ const ContactDetailsScreen = () => {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Contact Details</Text>
-            <View style={styles.logoContainer}>
-                <Image
-                    source={require('./../../assets/images/GetStarted.png')}
-                    style={styles.logo}
-                />
-                <Text style={styles.logoText}>Drag a logo here</Text>
-            </View>
+      <ScrollView contentContainerStyle={styles.container} testID="scrollView">
+        {/* Added testID for testing ScrollView accessibility in UI tests */}
+        <Text style={styles.title}>Contact Details</Text>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require("./../../assets/images/GetStarted.png")}
+            style={styles.logo}
+          />
+          <Text style={styles.logoText}>Drag a logo here</Text>
+        </View>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Brand Name*"
-                onChangeText={setBrandName}
-                value={brandName}
-            />
+        <TextInput
+          style={styles.input}
+          placeholder="Brand Name*"
+          onChangeText={setBrandName}
+          value={brandName}
+        />
 
-            <View style={styles.phoneInputContainer}>
-                <Text style={styles.flag}>🇵🇰</Text>
-                <TextInput
-                    style={styles.phoneInput}
-                    placeholder="+92"
-                    keyboardType="phone-pad"
-                    onChangeText={setContactNumber}
-                    value={contactNumber}
-                />
-            </View>
+        <View style={styles.phoneInputContainer}>
+          <Text style={styles.flag}>🇵🇰</Text>
+          <TextInput
+            style={styles.phoneInput}
+            placeholder="+92"
+            keyboardType="phone-pad"
+            onChangeText={setContactNumber}
+            value={contactNumber}
+          />
+        </View>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Instagram Link*"
-                onChangeText={setInstagramLink}
-                value={instagramLink}
-            />
+        <TextInput
+          style={styles.input}
+          placeholder="Instagram Link*"
+          onChangeText={setInstagramLink}
+          value={instagramLink}
+        />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Facebook Link"
-                onChangeText={setFacebookLink}
-                value={facebookLink}
-            />
+        <TextInput
+          style={styles.input}
+          placeholder="Facebook Link"
+          onChangeText={setFacebookLink}
+          value={facebookLink}
+        />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Booking Email*"
-                keyboardType="email-address"
-                onChangeText={setBookingEmail}
-                value={bookingEmail}
-            />
+        <TextInput
+          style={styles.input}
+          placeholder="Booking Email*"
+          keyboardType="email-address"
+          onChangeText={setBookingEmail}
+          value={bookingEmail}
+        />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Website"
-                onChangeText={setWebsite}
-                value={website}
-            />
+        <TextInput
+          style={styles.input}
+          placeholder="Website"
+          onChangeText={setWebsite}
+          value={website}
+        />
 
-            <TextInput
-                style={styles.input}
-                placeholder="City*"
-                onChangeText={setCity}
-                value={city}
-            />
+        <TextInput
+          style={styles.input}
+          placeholder="City*"
+          onChangeText={setCity}
+          value={city}
+        />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Official Address"
-                onChangeText={setAddress}
-                value={address}
-            />
+        <TextInput
+          style={styles.input}
+          placeholder="Official Address"
+          onChangeText={setAddress}
+          value={address}
+        />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Official Google Link"
-                onChangeText={setGoogleLink}
-                value={googleLink}
-            />
+        <TextInput
+          style={styles.input}
+          placeholder="Official Google Link"
+          onChangeText={setGoogleLink}
+          value={googleLink}
+        />
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => router.back()}
-                >
-                    <Text style={styles.backButtonText}>Back</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.saveButton}
-                    onPress={submit}
-                >
-                    <Text style={styles.saveButtonText}>Save & Continue</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.backButtonText}>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.saveButton} onPress={submit}>
+            <Text style={styles.saveButtonText}>Save & Continue</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     );
 };
 
