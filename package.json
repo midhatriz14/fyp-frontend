@@ -12,26 +12,26 @@
     "lint": "expo lint"
   },
   "jest": {
-  "preset": "react-native",
-  "transformIgnorePatterns": [
-    "node_modules/(?!(react-native|@react-native|expo|expo-asset|expo-router|expo-modules-core|expo-constants|expo-font|@expo/vector-icons|react-native-toast-message)/)"
-  ],
-  "setupFilesAfterEnv": [
-    "<rootDir>/jest-setup.ts"
-  ],
-  "testEnvironment": "jsdom",
-  "moduleNameMapper": {
-    "^@/components/(.*)$": "<rootDir>/components/$1",
-    "^@/store$": "<rootDir>/store/index",
-    "^@/services/(.*)$": "<rootDir>/services/$1",
-    "^@/(.*)$": "<rootDir>/$1",
-    "expo-asset": "<rootDir>/__mocks__/expo-asset.ts",
-    "expo-font": "<rootDir>/__mocks__/expo-font.ts",
-    "expo-router": "<rootDir>/__mocks__/expo-router.ts",
-    "react-native-toast-message": "<rootDir>/__mocks__/react-native-toast-message.ts",
-    "\\.(jpg|jpeg|png|gif|svg|ttf|woff|woff2)$": "<rootDir>/__mocks__/fileMock.ts"
-  }
-},
+    "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|@react-native|expo|expo-asset|expo-router|expo-modules-core|expo-constants|expo-font|@expo/vector-icons|react-native-toast-message)/)"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest-setup.ts"
+    ],
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "^@/components/(.*)$": "<rootDir>/components/$1",
+      "^@/store$": "<rootDir>/store/index",
+      "^@/services/(.*)$": "<rootDir>/services/$1",
+      "^@/(.*)$": "<rootDir>/$1",
+      "expo-asset": "<rootDir>/__mocks__/expo-asset.ts",
+      "expo-font": "<rootDir>/__mocks__/expo-font.ts",
+      "expo-router": "<rootDir>/__mocks__/expo-router.ts",
+      "react-native-toast-message": "<rootDir>/__mocks__/react-native-toast-message.ts",
+      "\\.(jpg|jpeg|png|gif|svg|ttf|woff|woff2)$": "<rootDir>/__mocks__/fileMock.ts"
+    }
+  },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
     "@react-native-clipboard/clipboard": "^1.16.1",
