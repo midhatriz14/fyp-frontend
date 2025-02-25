@@ -8,7 +8,7 @@ import { router } from 'expo-router';
 const WelcomeIndex: React.FC = () => {
   useEffect(() => {
     setTimeout(() => {
-      router.push("/intro");
+      router.push("/vendordashboard");
     }, 1000)
   }, []);
   return (

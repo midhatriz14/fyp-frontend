@@ -15,7 +15,6 @@ export default function SelectRoleScreen() {
   const handleConfirm = async () => {
     console.log('Selected Role:', selectedRole);
     await saveSecureData("role", selectedRole);
-    router.push("/bussinessselection");
   };
 
   function handleOrganiserConfirm() {
@@ -64,13 +63,11 @@ export default function SelectRoleScreen() {
         style={styles.confirmButton}
         onPress={() => {
           if (selectedRole === "Vendor") {
-            router.push("/bussinessselection");
-            // Action for when the selected role is "vendor"
             handleConfirm();
+            router.push("/bussinessselection");
           } else if (selectedRole === "Organizer") {
+            handleConfirm();
             router.push("/signup");
-            // Action for when the selected role is "organiser"
-            handleOrganiserConfirm();
           } else {
             alert("Please select a valid role!"); // Fallback if something goes wrong
           }

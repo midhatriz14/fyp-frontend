@@ -1,81 +1,86 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import React, { useState } from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    FlatList,
+    Image,
+} from "react-native";
+import { Calendar } from "react-native-calendars";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
-const messages = [
-    {
-        id: '1',
-        avatar: 'https://randomuser.me/api/portraits/thumb/men/1.jpg',
-        title: 'Have a great day with my amazing..',
-        subtitle: 'Hi there!',
-        time: '9:56 AM',
-        unreadCount: 2,
-    },
-    {
-        id: '2',
-        avatar: 'https://randomuser.me/api/portraits/thumb/men/2.jpg',
-        title: 'Have a great day with my amazing..',
-        subtitle: 'Hi there!',
-        time: '9:56 AM',
-        unreadCount: 2,
-    },
-    {
-        id: '3',
-        avatar: 'https://randomuser.me/api/portraits/thumb/men/3.jpg',
-        title: 'Have a great day with my amazing..',
-        subtitle: 'Hi there!',
-        time: '9:56 AM',
-        unreadCount: 0,
-    },
-    {
-        id: '4',
-        avatar: 'https://randomuser.me/api/portraits/thumb/men/4.jpg',
-        title: 'Have a great day with my amazing..',
-        subtitle: 'Hi there!',
-        time: '9:56 AM',
-        unreadCount: 0,
-    },
-];
+const MyEventsScreen = () => {
+    const [selectedDate, setSelectedDate] = useState<string>("2024-12-03");
 
-const MessagesScreen: React.FC = () => {
-    const renderMessage = ({ item }: { item: typeof messages[0] }) => (
-        <View style={styles.messageContainer}>
-            <Image source={{ uri: item.avatar }} style={styles.avatar} />
-            <View style={styles.textContainer}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.subtitle}>{item.subtitle}</Text>
-            </View>
-            <View style={styles.rightContainer}>
-                <Text style={styles.time}>{item.time}</Text>
-                {item.unreadCount > 0 && (
-                    <View style={styles.unreadBadge}>
-                        <Text style={styles.unreadText}>{item.unreadCount}</Text>
-                    </View>
-                )}
-            </View>
-        </View>
-    );
+    const events = [
+        {
+            id: "1",
+            title: "Family Get-Together",
+            date: "2023-12-06",
+            time: "11:30 am - 5:00 pm",
+            location: "A5 Villa, Kochi",
+            image: require("/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/GetStarted.png"), // Replace with your actual image
+        },
+    ];
 
     return (
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.back()}>
-                    <Ionicons name="arrow-back" size={24} color="#800080" />
+                    <Ionicons name="arrow-back" size={24} color="#000" />
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Messages</Text>
-                <TouchableOpacity>
-                    <Ionicons name="settings-outline" size={24} color="#800080" />
+                <Text style={styles.headerTitle}>My Events</Text>
+                <TouchableOpacity onPress={() => router.push('/vendornotifications')}>
+                    <Ionicons name="notifications-outline" size={24} color="#000" />
                 </TouchableOpacity>
             </View>
 
-            {/* Messages List */}
+            <Calendar
+                current={"2024-12-01"}
+                markedDates={{
+                    [selectedDate]: { selected: true, selectedColor: "#780C60" }, // Selected Date Color
+                }}
+                onDayPress={(day) => setSelectedDate(day.dateString)}
+                theme={{
+                    backgroundColor: "#FFFFFF", // White Background
+                    calendarBackground: "#FFFFFF", // White Calendar Background
+                    textSectionTitleColor: "#000", // Black Month and Weekday Titles
+                    selectedDayBackgroundColor: "#780C60", // Correct Selected Date Color
+                    selectedDayTextColor: "#FFFFFF", // White Text on Selected Date
+                    todayTextColor: "#000", // Black Text for Today
+                    arrowColor: "#000", // Black Arrows for Month Navigation
+                    monthTextColor: "#000", // Black Month Name
+                }}
+            />
+
+
+            {/* Events List */}
+            <Text style={styles.sectionTitle}>This month</Text>
             <FlatList
-                data={messages}
-                renderItem={renderMessage}
+                data={events}
                 keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.list}
+                renderItem={({ item }) => (
+                    <View style={styles.eventCard}>
+                        <Image source={item.image} style={styles.eventImage} />
+                        <View style={styles.eventDetails}>
+                            <Text style={styles.eventDate}>
+                                Wednesday, 6 Dec 2023
+                            </Text>
+                            <Text style={styles.eventTitle}>{item.title}</Text>
+                            <View style={styles.eventMeta}>
+                                <Ionicons name="time-outline" size={16} color="#555" />
+                                <Text style={styles.eventText}>{item.time}</Text>
+                            </View>
+                            <View style={styles.eventMeta}>
+                                <Ionicons name="location-outline" size={16} color="#555" />
+                                <Text style={styles.eventText}>{item.location}</Text>
+                            </View>
+                        </View>
+                    </View>
+                )}
             />
 
             {/* Bottom Navigation */}
@@ -151,77 +156,78 @@ const MessagesScreen: React.FC = () => {
                     <Text style={styles.navText}>Account</Text>
                 </TouchableOpacity>
             </View>
+
+
         </View>
     );
 };
 
+export default MyEventsScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8E9F0',
-        paddingTop: 50,
+        backgroundColor: "#F8E9F0",
+        paddingHorizontal: 15,
+        paddingTop: 70,
     },
     header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        paddingTop: 40,
-        paddingBottom: 16,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: 20,
     },
     headerTitle: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "#000",
+    },
+    sectionTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
-        color: '#000',
+        fontWeight: "bold",
+        color: "#000",
+        marginVertical: 15,
     },
-    list: {
-        paddingHorizontal: 16,
+    eventCard: {
+        flexDirection: "row",
+        backgroundColor: "#fff",
+        padding: 10,
+        borderRadius: 10,
+        alignItems: "center",
+        marginBottom: 10,
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 2,
     },
-    messageContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: '#EEE',
+    eventImage: {
+        width: 70,
+        height: 70,
+        borderRadius: 10,
+        marginRight: 10,
     },
-    avatar: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 16,
-    },
-    textContainer: {
+    eventDetails: {
         flex: 1,
     },
-    title: {
+    eventDate: {
+        fontSize: 12,
+        color: "#666",
+    },
+    eventTitle: {
         fontSize: 16,
-        fontWeight: 'bold',
-        color: '#000',
+        fontWeight: "bold",
+        color: "#000",
     },
-    subtitle: {
-        fontSize: 14,
-        color: '#666',
-        marginTop: 2,
+    eventMeta: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 5,
     },
-    rightContainer: {
-        alignItems: 'flex-end',
+    eventText: {
+        marginLeft: 5,
+        color: "#555",
     },
-    time: {
-        fontSize: 12,
-        color: '#666',
-    },
-    unreadBadge: {
-        backgroundColor: '#800080',
-        borderRadius: 12,
-        paddingHorizontal: 6,
-        paddingVertical: 2,
-        marginTop: 4,
-    },
-    unreadText: {
-        color: '#FFF',
-        fontSize: 12,
-        fontWeight: 'bold',
-    },
+
+
 
     bottomNavigation: {
         flexDirection: 'row',
@@ -261,6 +267,5 @@ const styles = StyleSheet.create({
         // marginBottom: 30, // Moves the Home button slightly upward
         transform: [{ translateY: -10 }], // Alternatively, use translateY to lift it
     },
-});
 
-export default MessagesScreen;
+});

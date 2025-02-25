@@ -61,7 +61,14 @@ export default function SignupScreen() {
       saveSecureData("user", JSON.stringify(response.user));
       setIsLoading(false);
       reset();
-      router.push("/vendorcontactdetails");
+      console.log()
+      if (response.user.role === "Vendor") {
+        router.push("/vendorcontactdetails"); //next screen
+      } else {
+        router.push("/dashboard"); //next screen
+
+      }
+
     } catch (e: any) {
       console.log(e);
       setIsLoading(false);

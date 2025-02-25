@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // For icons
 import { router } from 'expo-router';
+import { Image } from "react-native";
+
+
 
 const PackageScreen = () => {
     const [isModalVisible, setModalVisible] = useState(false);
@@ -70,26 +73,77 @@ const PackageScreen = () => {
                 <Text style={styles.priceText}>Rs. 50,000/-</Text>
             </View>
 
-            {/* Footer Navigation */}
-            <View style={styles.footer}>
-                <TouchableOpacity style={styles.footerIcon}>
-                    <Ionicons name="cart-outline" size={24} color="#780C60" />
-                    <Text style={styles.footerText}>My Orders</Text>
+            {/* Bottom Navigation */}
+
+            <View style={styles.bottomNavigation}>
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push('/vendorordersummary')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/myorder.png')}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>My Orders</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.footerIcon}>
-                    <Ionicons name="mail-outline" size={24} color="#780C60" />
-                    <Text style={styles.footerText}>Messages</Text>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push('/vendormessages')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={{
+                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a614f1d9-eba9-4f54-b7ec-c93132dcb1a9?placeholderIfAbsent=true&apiKey=b95bf478340c44448a2ab0604562a117',
+                            }}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>Messages</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.footerIcon}>
-                    <Ionicons name="home-outline" size={28} color="#780C60" />
+
+                {/* Home Button */}
+                <TouchableOpacity
+                    style={[styles.navItem, styles.homeButton]} // Apply the custom homeButton style
+                    onPress={() => router.push('/vendordashboard')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/home.png')} // Replace with actual home image path
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.footerIcon}>
-                    <Ionicons name="calendar-outline" size={24} color="#780C60" />
-                    <Text style={styles.footerText}>My Events</Text>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push('/vendormyevents')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/myevent.png')}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>My Events</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.footerIcon}>
-                    <Ionicons name="person-outline" size={24} color="#780C60" />
-                    <Text style={styles.footerText}>Account</Text>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push('/vendoraccount')}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={{
+                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                            }}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>Account</Text>
                 </TouchableOpacity>
             </View>
 
@@ -258,6 +312,45 @@ const styles = StyleSheet.create({
         color: '#780C60',
         fontSize: 12,
         marginTop: 4,
+    },
+
+    homeButton: {
+        // marginBottom: 30, // Moves the Home button slightly upward
+        transform: [{ translateY: -10 }], // Alternatively, use translateY to lift it
+    },
+    bottomNavigation: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        height: 80,
+        backgroundColor: '#fff',
+        borderTopWidth: 1,
+        borderTopColor: '#E0E0E0',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+    },
+    navItem: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    iconContainer: {
+        backgroundColor: '#780C60',
+        width: 30,
+        height: 30,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 5,
+    },
+    iconImage: {
+        width: 37,
+        height: 37,
+        marginBottom: 5,
+    },
+    navText: {
+        fontSize: 10,
+        color: '#000000',
     },
 });
 
