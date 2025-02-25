@@ -45,19 +45,43 @@ const DashboardScreen = () => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.statsContainer}>
-                        <View style={[styles.statBox, styles.ordersBox]}>
+                        {/* Orders Box */}
+                        <TouchableOpacity
+                            style={[styles.statBox, styles.ordersBox]}
+                            onPress={() => router.push({ pathname: "/vendorordersummary", params: { selectedTab: "All" } })}
+                        >
                             <Text style={styles.statValue}>27</Text>
                             <Text style={styles.statLabel}>Orders</Text>
-                        </View>
-                        <View style={[styles.statBox, styles.pendingBox]}>
+                        </TouchableOpacity>
+
+                        {/* Pending Box */}
+                        <TouchableOpacity
+                            style={[styles.statBox, styles.pendingBox]}
+                            onPress={() => router.push({ pathname: "/vendorordersummary", params: { selectedTab: "Pending" } })}
+                        >
                             <Text style={styles.statValue}>8</Text>
                             <Text style={styles.statLabel}>Pending</Text>
-                        </View>
-                        <View style={[styles.statBox, styles.processBox]}>
+                        </TouchableOpacity>
+
+                        {/* Processing Box */}
+                        <TouchableOpacity
+                            style={[styles.statBox, styles.processBox]}
+                            onPress={() => router.push({ pathname: "/vendorordersummary", params: { selectedTab: "Processing" } })}
+                        >
                             <Text style={styles.statValue}>19</Text>
                             <Text style={styles.statLabel}>Processing</Text>
-                        </View>
+                        </TouchableOpacity>
+
+                        {/* Completed Box */}
+                        <TouchableOpacity
+                            style={[styles.statBox, styles.completedBox]}
+                            onPress={() => router.push({ pathname: "/vendorordersummary", params: { selectedTab: "Completed" } })}
+                        >
+                            <Text style={styles.statValue}>9</Text>
+                            <Text style={styles.statLabel}>Completed</Text>
+                        </TouchableOpacity>
                     </View>
+
                 </View>
 
 
@@ -151,76 +175,11 @@ const DashboardScreen = () => {
 
 
             {/* Bottom Navigation */}
-            <View style={styles.bottomNavigation}>
 
-                {/* My Orders */}
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendordashboard')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: '/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/myorder.png',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>My Orders</Text>
-                </TouchableOpacity>
-
-                {/* Messages */}
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendormessages')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a614f1d9-eba9-4f54-b7ec-c93132dcb1a9?placeholderIfAbsent=true&apiKey=b95bf478340c44448a2ab0604562a117',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Messages</Text>
-                </TouchableOpacity>
-
-
-                {/* My Events */}
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/bottomnotification')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/myevent.png')} // Ensure this path is correct
-                            style={styles.iconImage}
-                        />
-                    </View>
-
-                    <Text style={styles.navText}>My Events</Text>
-                </TouchableOpacity>
-
-                {/*Account */}
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Account</Text>
-                </TouchableOpacity>
-            </View>
             <View style={styles.bottomNavigation}>
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => router.push('/vendordashboard')}
+                    onPress={() => router.push('/vendorordersummary')}
                 >
                     <View style={styles.iconContainer}>
                         <Image
@@ -262,7 +221,7 @@ const DashboardScreen = () => {
 
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => router.push('/vendornotifications')}
+                    onPress={() => router.push('/vendormyevents')}
                 >
                     <View style={styles.iconContainer}>
                         <Image
@@ -322,13 +281,11 @@ const styles = StyleSheet.create({
     /// profileContainer: { alignItems: "center" },
     //profileImage: { width: 60, height: 60, borderRadius: 30 },
     //username: { fontSize: 18, fontWeight: "bold", marginVertical: 10 },
-    statsContainer: { flexDirection: "row", justifyContent: "space-around" },
-    statBox: { width: 100, padding: 10, borderRadius: 10, alignItems: "center" },
+
     ordersBox: { backgroundColor: "#D6A7E3" },
     pendingBox: { backgroundColor: "#EFCAB8" },
     processBox: { backgroundColor: "#F6A6A2" },
-    statValue: { fontSize: 24, fontWeight: "bold" },
-    statLabel: { fontSize: 14 },
+
     sectionContainer: { paddingHorizontal: 16, marginBottom: 20 },
     sectionTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
     dropdownButton: { backgroundColor: "#7D0C72", borderRadius: 20, padding: 10, alignSelf: "flex-end" },
@@ -489,7 +446,42 @@ const styles = StyleSheet.create({
         // Align icon with the row
     },
 
-
+    statsContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between", // Ensures equal spacing
+        alignItems: "center",
+        marginHorizontal: 10, // Adds padding from screen edges
+    },
+    statBox: {
+        flex: 1, // Ensures all boxes take equal space
+        alignItems: "center",
+        paddingVertical: 10,
+        marginHorizontal: 5, // Adds spacing between boxes
+        borderRadius: 10,
+    },
+    // ordersBox: {
+    //     backgroundColor: "#D8BFD8", // Light purple
+    // },
+    // pendingBox: {
+    //     backgroundColor: "#F8C8CB", // Light red
+    // },
+    // processBox: {
+    //     backgroundColor: "#B0C4DE", // Light blue
+    // },
+    completedBox: {
+        backgroundColor: "#98FB98", // Light green
+    },
+    statValue: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "black",
+    },
+    statLabel: {
+        fontSize: 14,
+        color: "#333",
+    },
 });
+
+
 
 export default DashboardScreen;

@@ -1,196 +1,4 @@
-// import React, { useEffect, useState } from "react";
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   FlatList,
-//   Image,
-//   TouchableOpacity,
-//   StyleSheet,
-// } from "react-native";
-// import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-// import { router } from "expo-router";
-// import getAllVendorsByCategoryId from "@/services/getAllVendorsByCategoryId";
-// import { getSecureData } from "@/store";
 
-// export default function App() {
-//   const [data, setData] = useState<any>([]);
-//   useEffect(() => {
-//     fetchData();
-
-//   }, []);
-//   const fetchData = async () => {
-//     const categoryId = await getSecureData("categoryId") || "";
-//     const data = await getAllVendorsByCategoryId(categoryId);
-//     console.log(data);
-//     setData(data);
-
-
-//   }
-//   useEffect(() => {
-//     console.log("Data", data[0]);
-//   }, [data]);
-//   function renderItem({ item }: any) {
-//     return (
-//       <View style={styles.card}>
-//         <Image source={{ uri: "https://t3.ftcdn.net/jpg/05/28/01/42/360_F_528014283_FMTbnoxTAtLJkVzuYiRT9gI94EAXUoJY.jpg" }} style={styles.image} />
-//         <View style={styles.cardContent}>
-//           <Text style={styles.title}>{item.name}</Text>
-//           <Text style={styles.subtitle}>Pakistan</Text>
-//           <View style={styles.row}>
-//             <Ionicons name="location-outline" size={14} color="#FF8C00" />
-//             <Text style={styles.city}>Islamabad</Text>
-//           </View>
-//         </View>
-//         <View style={styles.priceSection}>
-//           <Text style={styles.priceText}>Starting From</Text>
-//           <Text style={styles.price}>1000</Text>
-//         </View>
-//         <TouchableOpacity style={styles.viewButton} onPress={() => router.push(`/vendorprofiledetails?id=${item._id}`)}>
-//           <Text style={styles.viewButtonText}>View</Text>
-//         </TouchableOpacity>
-//       </View>
-//     )
-//   }
-
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.header}>
-//         <TouchableOpacity onPress={() => router.back()}>
-//           <Ionicons name="arrow-back" size={24} color="black" />
-//         </TouchableOpacity>
-//         {/* <Text style={styles.headerTitle}>Makeup</Text> */}
-//         <Text style={styles.headerTitle}>
-//           Midhat
-//         </Text>
-//       </View>
-//       <View style={styles.searchContainer}>
-//         <Ionicons name="search" size={20} color="#C4C4C4" style={styles.searchIcon} />
-//         <TextInput
-//           placeholder="Search Salon & Spa"
-//           style={styles.searchInput}
-//           placeholderTextColor="#C4C4C4"
-//         />
-//         <TouchableOpacity
-//           onPress={() => {
-//             router.push("/makeupfilter");
-//           }}>
-//           <MaterialIcons name="tune" size={24} color="#C4C4C4" />
-//         </TouchableOpacity>
-//       </View>
-//       <FlatList
-//         data={data}
-//         renderItem={renderItem}
-//         keyExtractor={(item) => item._id}
-//         contentContainerStyle={styles.list}
-//       />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#F8E9F0',
-//     padding: 16,
-//     paddingTop: 70,
-//   },
-//   header: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     marginBottom: 20,
-//   },
-//   headerTitle: {
-//     fontSize: 18,
-//     fontWeight: "bold",
-//     marginLeft: 12,
-//   },
-//   searchContainer: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     backgroundColor: "white",
-//     borderRadius: 25,
-//     paddingVertical: 10,
-//     paddingHorizontal: 15,
-//     marginBottom: 20,
-//     elevation: 1,
-//   },
-//   searchIcon: {
-//     marginRight: 10,
-//   },
-//   searchInput: {
-//     flex: 1,
-//     fontSize: 14,
-//     color: "#000",
-//   },
-//   list: {
-//     paddingBottom: 20,
-//   },
-//   card: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     backgroundColor: "white",
-//     borderRadius: 15,
-//     padding: 15,
-//     marginBottom: 16,
-//     elevation: 1,
-//     justifyContent: "space-between",
-//   },
-//   image: {
-//     width: 70,
-//     height: 70,
-//     borderRadius: 10,
-//     marginRight: 10,
-//   },
-//   cardContent: {
-//     flex: 2,
-//   },
-//   title: {
-//     fontSize: 16,
-//     fontWeight: "bold",
-//     marginBottom: 5,
-//     color: "#000"
-//   },
-//   subtitle: {
-//     fontSize: 14,
-//     color: "#777",
-//     marginBottom: 5,
-//   },
-//   row: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//   },
-//   city: {
-//     fontSize: 12,
-//     color: "#FF8C00",
-//     marginLeft: 4,
-//   },
-//   priceSection: {
-//     alignItems: "flex-end",
-//     flex: 1,
-//     marginRight: 10,
-//   },
-//   priceText: {
-//     fontSize: 12,
-//     color: "#888",
-//   },
-//   price: {
-//     fontSize: 14,
-//     color: "#000",
-//     fontWeight: "bold",
-//   },
-//   viewButton: {
-//     backgroundColor: '#780C60',
-//     paddingVertical: 8,
-//     paddingHorizontal: 16,
-//     borderRadius: 20,
-//   },
-//   viewButtonText: {
-//     color: "white",
-//     fontSize: 14,
-//     fontWeight: "bold",
-//   },
-// });
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -209,6 +17,7 @@ import { getSecureData } from "@/store";
 export default function App() {
   const [data, setData] = useState<any>([]);
   const [headerTitle, setHeaderTitle] = useState<string>("");
+  const [vendorData, setVendorData] = useState<any>(null);
 
   useEffect(() => {
     fetchData();
@@ -218,7 +27,7 @@ export default function App() {
   const fetchData = async () => {
     const categoryId = (await getSecureData("categoryId")) || "";
     const data = await getAllVendorsByCategoryId(categoryId);
-    console.log(data);
+    console.log(data[0].BusinessDetails);
     setData(data);
   };
 
@@ -240,12 +49,13 @@ export default function App() {
         <Text style={styles.subtitle}>Pakistan</Text>
         <View style={styles.row}>
           <Ionicons name="location-outline" size={14} color="#FF8C00" />
-          <Text style={styles.city}>Islamabad</Text>
+          <Text style={styles.address}>{item.contactDetails.city}</Text>
         </View>
       </View>
       <View style={styles.priceSection}>
         <Text style={styles.priceText}>Starting From</Text>
-        <Text style={styles.price}>1000</Text>
+
+        <Text style={styles.price}>{item?.BusinessDetails?.minimumPrice || 'N/A'}/-</Text>
       </View>
       <TouchableOpacity
         style={styles.viewButton}
@@ -397,5 +207,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 14,
     fontWeight: "bold",
+  },
+  address: {
+    fontSize: 14,
+    color: '#7A7A7A',
+    marginVertical: 8,
   },
 });

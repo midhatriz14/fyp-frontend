@@ -88,6 +88,8 @@ export default function RootLayout() {
         <Stack.Screen name="vendoraccount" options={{ headerShown: false }} />
         <Stack.Screen name="vendormessages" options={{ headerShown: false }} />
         <Stack.Screen name="vendornotifications" options={{ headerShown: false }} />
+        <Stack.Screen name="vendorordersummary" options={{ headerShown: false }} />
+        <Stack.Screen name="vendormyevents" options={{ headerShown: false }} />
 
 
 

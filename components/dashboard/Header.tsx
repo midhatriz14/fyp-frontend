@@ -1,10 +1,22 @@
 
+import { getSecureData } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 
 const Header: React.FC = () => {
+  const [username, setUsername] = useState<string>(""); // State for username
+
+  useEffect(() => {
+    fetchUsername(); // Fetch username on component mount
+  }, []);
+
+  const fetchUsername = async () => {
+    const storedUsername = (await getSecureData("user")) || "Guest"; // Retrieve username or set default
+    setUsername(JSON.parse(storedUsername).name);
+  };
+
   return (
     <View style={styles.container}>
       {/* Location and Notification */}
@@ -25,7 +37,7 @@ const Header: React.FC = () => {
       <View style={styles.welcomeContainer}>
         <View>
           <Text style={styles.welcomeText}>Welcome</Text>
-          <Text style={styles.username}>Midhat!</Text>
+          <Text style={styles.username}>{username}</Text> {/* Display the username */}
         </View>
         <TouchableOpacity
           style={styles.planButton}
