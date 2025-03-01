@@ -45,9 +45,13 @@ const ReviewScreen = () => {
 
     if (loading) {
         return (
-            <View style={styles.container}>
-                <ActivityIndicator size="large" color="#780C60" />
-            </View>
+          <View style={styles.container}>
+            <ActivityIndicator
+              testID="loading-indicator" //add test id 
+              size="large"
+              color="#780C60"
+            />
+          </View>
         );
     }
 
@@ -60,96 +64,106 @@ const ReviewScreen = () => {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <Text style={styles.sectionTitle}>Reviews</Text>
+      <ScrollView style={styles.container}>
+        <Text style={styles.sectionTitle}>Reviews</Text>
 
-            {/* Personal Details */}
-            <View style={styles.card}>
-                <Text style={styles.cardTitle}>Personal Details</Text>
-                <View style={styles.row}>
-                    <Image
-                        source={{
-                            uri: vendorData.images[0]
-                                ? `https://your-server-url.com${vendorData.images[0]}`
-                                : 'https://example.com/avatar.jpg',
-                        }}
-                        style={styles.avatar}
-                    />
-                    <View>
-                        <Text style={styles.name}>{vendorData.name}</Text>
-                        <Text style={styles.email}>{vendorData.email}</Text>
-                        <Text style={styles.phone}>
-                            {vendorData.contactDetails.contactNumber}
-                        </Text>
-                    </View>
-                </View>
+        {/* Personal Details */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Personal Details</Text>
+          <View style={styles.row}>
+            <Image
+              testID="vendor-image" // ✅ Add this testID
+              source={{
+                uri: vendorData.images[0]
+                  ? `https://your-server-url.com${vendorData.images[0]}`
+                  : "https://example.com/avatar.jpg",
+              }}
+              style={styles.avatar}
+            />
+            <View>
+              <Text style={styles.name}>{vendorData.name}</Text>
+              <Text style={styles.email}>{vendorData.email}</Text>
+              <Text style={styles.phone}>
+                {vendorData.contactDetails.contactNumber}
+              </Text>
             </View>
+          </View>
+        </View>
 
-            {/* Business Details */}
-            <View style={styles.card}>
-                <Text style={styles.cardTitle}>Business Details</Text>
-                {/* <View style={styles.row}> */}
-                <Text style={styles.name}>{vendorData.contactDetails.brandName}</Text>
-                <Text style={styles.subTitle}>
-                    Staff: {vendorData?.photographerBusinessDetails?.staff || 'N/A'}
+        {/* Business Details */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Business Details</Text>
+          {/* <View style={styles.row}> */}
+          <Text style={styles.name}>{vendorData.contactDetails.brandName}</Text>
+          <Text style={styles.subTitle}>
+            Staff: {vendorData?.photographerBusinessDetails?.staff || "N/A"}
+          </Text>
+          <Text style={styles.city}>
+            City: {vendorData.contactDetails.city}
+          </Text>
+          {/* </View> */}
+        </View>
+
+        {/* Pricing */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Pricing</Text>
+          <View testID="pricing-table" style={styles.table}>
+            {" "}
+            {/* ✅ Add testID */}
+            <View style={styles.tableRow}>
+              <Text style={[styles.tableHeader, styles.flex1]}>
+                Package Name
+              </Text>
+              <Text style={[styles.tableHeader, styles.flex1]}>Price</Text>
+              <Text style={[styles.tableHeader, styles.flex3]}>Services</Text>
+            </View>
+            {vendorData.packages.map((pkg: any) => (
+              <View style={styles.tableRow} key={pkg._id}>
+                <Text style={[styles.tableCell, styles.flex1]}>
+                  {pkg.packageName}
                 </Text>
-                <Text style={styles.city}>
-                    City: {vendorData.contactDetails.city}
+                <Text style={[styles.tableCell, styles.flex1, styles.price]}>
+                  {pkg.price}
                 </Text>
-                {/* </View> */}
-            </View>
+                <Text style={[styles.tableCell, styles.flex3]}>
+                  {pkg.services}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
 
-            {/* Pricing */}
-            <View style={styles.card}>
-                <Text style={styles.cardTitle}>Pricing</Text>
-                <View style={styles.table}>
-                    <View style={styles.tableRow}>
-                        <Text style={[styles.tableHeader, styles.flex1]}>Package Name</Text>
-                        <Text style={[styles.tableHeader, styles.flex1]}>Price</Text>
-                        <Text style={[styles.tableHeader, styles.flex3]}>Services</Text>
-                    </View>
-                    {vendorData.packages.map((pkg: any) => (
-                        <View style={styles.tableRow} key={pkg._id}>
-                            <Text style={[styles.tableCell, styles.flex1]}>
-                                {pkg.packageName}
-                            </Text>
-                            <Text style={[styles.tableCell, styles.flex1, styles.price]}>
-                                {pkg.price}
-                            </Text>
-                            <Text style={[styles.tableCell, styles.flex3]}>
-                                {pkg.services}
-                            </Text>
-                        </View>
-                    ))}
-                </View>
-            </View>
-
-            {/* Location */}
-            <View style={styles.card}>
-                <Text style={styles.cardTitle}>Location</Text>
-                <Text style={styles.link}>{vendorData.contactDetails.city}</Text>
-                {/* <Image
+        {/* Location */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Location</Text>
+          <Text style={styles.link}>{vendorData.contactDetails.city}</Text>
+          {/* <Image
                     source={{ uri: 'https://via.placeholder.com/300x200.png' }}
                     style={styles.map}
                 /> */}
-            </View>
+        </View>
 
-            {/* Photos */}
-            <View style={styles.card}>
-                <Text style={styles.cardTitle}>Photos</Text>
-                <ScrollView horizontal style={styles.photoContainer}>
-                    {vendorData.images.map((image: string, index: number) => (
-                        <Image
-                            key={index}
-                            source={{
-                                uri: `http://65.2.137.194:3000${image}`,
-                            }}
-                            style={styles.photo}
-                        />
-                    ))}
-                </ScrollView>
-            </View>
-            {/* Enlarged Image Modal
+        {/* Photos */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Photos</Text>
+          <ScrollView
+            testID="photo-list" //add test id
+            horizontal
+            style={styles.photoContainer}
+          >
+            {vendorData.images.map((image: string, index: number) => (
+              <Image
+                key={index}
+                testID="vendor-image" // ✅ Add this testID
+                source={{
+                  uri: `http://65.2.137.194:3000${image}`,
+                }}
+                style={styles.photo}
+              />
+            ))}
+          </ScrollView>
+        </View>
+        {/* Enlarged Image Modal
             <Modal
                 visible={isModalVisible}
                 transparent={true}
@@ -172,49 +186,62 @@ const ReviewScreen = () => {
                 </View>
             </Modal> */}
 
+        {/* Buttons */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            testID="back-button" //add test id
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.backButtonText}>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID="save-button" //add test id
+            style={styles.saveButton}
+            onPress={() => openModal()}
+          >
+            <Text style={styles.saveButtonText}>Save & Continue</Text>
+          </TouchableOpacity>
+        </View>
 
-            {/* Buttons */}
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-                    <Text style={styles.backButtonText}>Back</Text>
+        {/* Save Confirmation Modal */}
+        <Modal
+          testID="modal-container" // ✅ Add testID
+          animationType="slide"
+          transparent={true}
+          visible={isModalVisible}
+          onRequestClose={closeModal}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalMessage}>
+                Thank you for creating your profile. It is currently under
+                review and we will notify you once it is published.
+              </Text>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity
+                  testID="okay-button" // ✅ Add testID
+                  style={styles.confirmButton}
+                  onPress={() => {
+                    closeModal();
+                    router.push("/vendordashboard");
+                  }}
+                >
+                  <Text style={styles.confirmButtonText}>Okay</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.saveButton} onPress={() => openModal()}>
-                    <Text style={styles.saveButtonText}>Save & Continue</Text>
+
+                <TouchableOpacity
+                  testID="cancel-button" // ✅ Add testID
+                  style={styles.cancelButton}
+                  onPress={closeModal}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
+              </View>
             </View>
-
-            {/* Save Confirmation Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isModalVisible}
-                onRequestClose={closeModal}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalMessage}>
-                            Thank you for creating your profile. It is currently under review
-                            and we will notify you once it is published.
-                        </Text>
-                        <View style={styles.modalButtons}>
-                            <TouchableOpacity
-                                style={styles.confirmButton}
-                                onPress={() => {
-                                    closeModal();
-                                    router.push('/vendordashboard');
-                                }}
-                            >
-                                <Text style={styles.confirmButtonText}>Okay</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
-                                <Text style={styles.cancelButtonText}>Cancel</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-        </ScrollView>
+          </View>
+        </Modal>
+      </ScrollView>
     );
 };
 
