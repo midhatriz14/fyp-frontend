@@ -90,6 +90,7 @@ export default function RootLayout() {
         <Stack.Screen name="vendornotifications" options={{ headerShown: false }} />
         <Stack.Screen name="vendorordersummary" options={{ headerShown: false }} />
         <Stack.Screen name="vendormyevents" options={{ headerShown: false }} />
+        <Stack.Screen name="vendorfaqs" options={{ headerShown: false }} />
 
 
 

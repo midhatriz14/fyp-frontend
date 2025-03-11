@@ -25,7 +25,7 @@ const AccountScreen: React.FC = () => {
                 router.push('/notificationacc');
                 break;
             case 'Frequently Asked Questions':
-                router.push('/faqs');
+                router.push('/vendorfaqs');
                 break;
             case 'Contact Us':
                 openWhatsApp(); // Open WhatsApp
