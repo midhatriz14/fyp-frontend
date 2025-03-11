@@ -35,7 +35,7 @@ export default function App() {
     const categoryName = (await getSecureData("categoryName")) || "Category";
     setHeaderTitle(categoryName);
   };
-
+  
   const renderItem = ({ item }: any) => (
     <View style={styles.card}>
       <Image
@@ -45,7 +45,9 @@ export default function App() {
         style={styles.image}
       />
       <View style={styles.cardContent}>
-        <Text style={styles.title}>{item.name}</Text>
+        <Text style={styles.title}>
+          {item.name}
+        </Text>
         <Text style={styles.subtitle}>Pakistan</Text>
         <View style={styles.row}>
           <Ionicons name="location-outline" size={14} color="#FF8C00" />
@@ -55,7 +57,9 @@ export default function App() {
       <View style={styles.priceSection}>
         <Text style={styles.priceText}>Starting From</Text>
 
-        <Text style={styles.price}>{item?.BusinessDetails?.minimumPrice || 'N/A'}/-</Text>
+        <Text style={styles.price}>
+          {item?.BusinessDetails?.minimumPrice || "N/A"}/-
+        </Text>
       </View>
       <TouchableOpacity
         style={styles.viewButton}
@@ -69,12 +73,11 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        {/*add test id */}
+        <TouchableOpacity testID="back-button" onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>
-          {headerTitle || "Loading..."}
-        </Text>
+        <Text style={styles.headerTitle}>{headerTitle || "Loading..."}</Text>
       </View>
       <View style={styles.searchContainer}>
         <Ionicons
@@ -88,7 +91,9 @@ export default function App() {
           style={styles.searchInput}
           placeholderTextColor="#C4C4C4"
         />
+        {/*add test id */}
         <TouchableOpacity
+          testID="filter-button"
           onPress={() => {
             router.push("/makeupfilter");
           }}

@@ -36,60 +36,81 @@ const PhotographerDetailsScreen: React.FC = () => {
 
     if (loading) {
         return (
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#7B2869" />
-                <Text>Loading vendor details...</Text>
-            </View>
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator
+              testID="loading-indicator" //add test id
+              size="large"
+              color="#7B2869"
+            />
+            <Text>Loading vendor details...</Text>
+          </View>
         );
     }
-
+          // add test id 
     if (!vendorData) {
         return (
-            <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>Failed to load vendor details. Please try again.</Text>
-            </View>
+          <View testID="error-message" style={styles.errorContainer}>
+            <Text style={styles.errorText}>
+              Failed to load vendor details. Please try again.
+            </Text>
+          </View>
         );
     }
 
     return (
-        <ScrollView style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()}>
-                    <Text style={styles.backText}>Back</Text>
-                </TouchableOpacity>
-                <Text style={styles.title}>Photographer Details</Text>
-            </View>
+      <ScrollView style={styles.container}>
+        {/* Header
+         Add test Id */}
+        <View style={styles.header}>
+          <TouchableOpacity testID="back-button" onPress={() => router.back()}>
+            <Text style={styles.backText}>Back</Text>
+          </TouchableOpacity>
+          <Text style={styles.title}>Photographer Details</Text>
+        </View>
 
+        {/* Cover Image */}
+        <Image
+          testID="vendor-cover-image" // ✅ Added testID
+          source={{
+            uri: vendorData?.coverImage
+              ? `http://65.2.137.194:3000${vendorData.coverImage}`
+              : "https://via.placeholder.com/200",
+          }}
+          style={styles.mainImage}
+        />
 
+        {/* Tab Navigation */}
+        <View style={styles.tabContainer}>
+          {["Details", "Packages", "Reviews"].map((tab) => (
+            <TouchableOpacity
+              key={tab}
+              testID={
+                tab === "Details"
+                  ? "tab-details"
+                  : tab === "Packages"
+                  ? "tab-packages"
+                  : "tab-reviews"
+              } // ✅ Add testID here
+              style={[styles.tab, activeTab === tab && styles.activeTab]}
+              onPress={() =>
+                setActiveTab(tab as "Details" | "Packages" | "Reviews")
+              }
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === tab && styles.activeTabText,
+                ]}
+              >
+                {tab}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-            {/* Cover Image */}
-            <Image
-                source={{
-                    uri: vendorData?.coverImage
-                        ? `http://65.2.137.194:3000${vendorData.coverImage}`
-                        : 'https://via.placeholder.com/200',
-                }}
-                style={styles.mainImage}
-            />
+        {/* Tab Content*/}
 
-
-            {/* Tab Navigation */}
-            <View style={styles.tabContainer}>
-                {['Details', 'Packages', 'Reviews'].map((tab) => (
-                    <TouchableOpacity
-                        key={tab}
-                        style={[styles.tab, activeTab === tab && styles.activeTab]}
-                        onPress={() => setActiveTab(tab as 'Details' | 'Packages' | 'Reviews')}
-                    >
-                        <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>{tab}</Text>
-                    </TouchableOpacity>
-                ))}
-            </View>
-
-            {/* Tab Content*/}
-
-            {/* {activeTab === 'Details' && (
+        {/* {activeTab === 'Details' && (
                 <View style={styles.detailsContainer}>
                     <Text style={styles.name}>{vendorData.name}</Text>
                     <Text style={styles.address}>{vendorData.contactDetails.officialAddress}</Text>
@@ -113,209 +134,260 @@ const PhotographerDetailsScreen: React.FC = () => {
                     <Text style={styles.detailValue}>{vendorData.photographerBusinessDetails.description}</Text>
                 </View>
             )} */}
-            {activeTab === 'Details' && (
-                <View style={styles.detailsContainer}>
-                    {/* Top Row: Name and Price */}
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.name}>{vendorData.name}</Text>
-                        <View style={styles.priceContainer}>
-                            <Text style={styles.price}>Starting Price: Rs.{vendorData?.BusinessDetails?.minimumPrice || 'N/A'}/-</Text>
-                            <Text style={styles.perHead}>Per head</Text>
-                        </View>
-                    </View>
+        {activeTab === "Details" && (
+          <View style={styles.detailsContainer}>
+            {/* Top Row: Name and Price 
+             add test id */}
+            <View style={styles.rowContainer}>
+              <Text testID="vendor-name" style={styles.name}>
+                {vendorData.name}
+              </Text>
+              <View style={styles.priceContainer}>
+                <Text testID="vendor-price" style={styles.price}>
+                  Starting Price: Rs.
+                  {vendorData?.BusinessDetails?.minimumPrice || "N/A"}/-
+                </Text>
+                <Text style={styles.perHead}>Per head</Text>
+              </View>
+            </View>
+            {/*add test id */}
+            <Text testID="vendor-address" style={styles.address}>
+              {vendorData.contactDetails.officialAddress}
+            </Text>
 
-                    <Text style={styles.address}>{vendorData.contactDetails.officialAddress}</Text>
-
-                    {/* Photos Section */}
-                    <View style={styles.photosSection}>
-                        <TouchableOpacity onPress={() => router.push('/vendorprofileimages')}>
-                            <Text style={styles.sectionTitle}>Photos</Text>
-                        </TouchableOpacity>
-                        {/* <ScrollView
+            {/* Photos Section */}
+            <View style={styles.photosSection}>
+              <TouchableOpacity
+                onPress={() => router.push("/vendorprofileimages")}
+              >
+                <Text style={styles.sectionTitle}>Photos</Text>
+              </TouchableOpacity>
+              {/* <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             style={styles.photosScroll}
                         >
                             {/* Replace with dynamic images */}
-                        {/* <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ee8619c3ba7069ac2ac92e880c53f6a08b69c1a800aaf83f5653c512dd5631a5?apiKey=0a92af3bc6e24da3a9ef8b1ae693931a&' }} style={styles.photo} />
+              {/* <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ee8619c3ba7069ac2ac92e880c53f6a08b69c1a800aaf83f5653c512dd5631a5?apiKey=0a92af3bc6e24da3a9ef8b1ae693931a&' }} style={styles.photo} />
                             <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ee8619c3ba7069ac2ac92e880c53f6a08b69c1a800aaf83f5653c512dd5631a5?apiKey=0a92af3bc6e24da3a9ef8b1ae693931a&' }} style={styles.photo} />
                             <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ee8619c3ba7069ac2ac92e880c53f6a08b69c1a800aaf83f5653c512dd5631a5?apiKey=0a92af3bc6e24da3a9ef8b1ae693931a&' }} style={styles.photo} />
                             <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ee8619c3ba7069ac2ac92e880c53f6a08b69c1a800aaf83f5653c512dd5631a5?apiKey=0a92af3bc6e24da3a9ef8b1ae693931a&' }} style={styles.photo} />
                         </ScrollView> */}
-                        <ScrollView horizontal style={styles.photoContainer}>
-                            {vendorData.images.map((image: string, index: number) => (
-                                <Image
-                                    key={index}
-                                    source={{
-                                        uri: `http://65.2.137.194:3000${image}`,
-                                    }}
-                                    style={styles.photo}
-                                />
-                            ))}
-                        </ScrollView>
-                    </View>
+              {/*add test id*/}
+              <ScrollView
+                testID="scroll-view"
+                horizontal
+                style={styles.photoContainer}
+              >
+                {vendorData.images.map((image: string, index: number) => (
+                  <Image
+                    key={index}
+                    source={{
+                      uri: `http://65.2.137.194:3000${image}`,
+                    }}
+                    style={styles.photo}
+                  />
+                ))}
+              </ScrollView>
+            </View>
 
+            {/* Additional Details Section */}
 
-                    {/* Additional Details Section */}
+            {/* Details Section */}
+            <Text style={styles.sectionTitle}>Details</Text>
 
-                    {/* Details Section */}
-                    <Text style={styles.sectionTitle}>Details</Text>
+            <Text style={styles.detailLabel}>Staff</Text>
+            <Text style={styles.detailValue}>
+              {vendorData?.BusinessDetails?.staff || "N/A"}
+            </Text>
 
-                    <Text style={styles.detailLabel}>Staff</Text>
-                    <Text style={styles.detailValue}>{vendorData?.BusinessDetails?.staff || 'N/A'}</Text>
+            <Text style={styles.detailLabel}>Cancellation Policy</Text>
+            <Text style={styles.detailValue}>
+              {vendorData?.BusinessDetails?.covidRefundPolicy || "N/A"}
+            </Text>
 
-                    <Text style={styles.detailLabel}>Cancellation Policy</Text>
-                    <Text style={styles.detailValue}>{vendorData?.BusinessDetails?.covidRefundPolicy || 'N/A'}</Text>
+            <Text style={styles.detailLabel}>Cities Covered</Text>
+            <Text style={styles.detailValue}>
+              {vendorData?.BusinessDetails?.cityCovered || "N/A"}
+            </Text>
 
-                    <Text style={styles.detailLabel}>Cities Covered</Text>
-                    <Text style={styles.detailValue}>{vendorData?.BusinessDetails?.cityCovered || 'N/A'}</Text>
+            <Text style={styles.detailLabel}>Description</Text>
+            <Text style={styles.detailValue}>
+              {vendorData?.BusinessDetails?.description || "N/A"}
+            </Text>
+          </View>
+        )}
 
-                    <Text style={styles.detailLabel}>Description</Text>
-                    <Text style={styles.detailValue}>{vendorData?.BusinessDetails?.description || 'N/A'}</Text>
+        {activeTab === "Packages" && (
+          <>
+            <View style={styles.packageTabContainer}>
+              {vendorData.packages.map((pkg: any) => (
+                <TouchableOpacity
+                  key={pkg._id}
+                  style={[
+                    styles.packageTab,
+                    activePackage === pkg._id && styles.activePackageTab,
+                  ]}
+                  onPress={() => setActivePackage(pkg._id)}
+                >
+                  <Text
+                    style={[
+                      styles.packageTabText,
+                      activePackage === pkg._id && styles.activePackageTabText,
+                    ]}
+                  >
+                    {pkg.packageName}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* Package Details */}
+            {vendorData.packages
+              .filter((pkg: any) => pkg._id === activePackage)
+              .map((pkg: any) => (
+                <View key={pkg._id} style={styles.packageDetails}>
+                  <Text style={styles.sectionTitle}>Services</Text>
+                  <Text
+                    testID="package-services"
+                    style={styles.packageDetailItem}
+                  >
+                    {pkg.services}
+                  </Text>
+                  <Text testID="package-price" style={styles.priceText}>
+                    Price: Rs.{pkg.price}/-
+                  </Text>
                 </View>
-            )}
+              ))}
 
+            <Calendar
+              testID="calendar-component"
+              onDayPress={(day: { dateString: string }) =>
+                console.log("Selected day:", day.dateString)
+              }
+              minDate={new Date().toISOString().split("T")[0]} // Disables past dates
+              markedDates={{
+                "2024-12-03": { selected: true, selectedColor: "#7B2869" },
+              }}
+              theme={{
+                selectedDayBackgroundColor: "#7B2869",
+                todayTextColor: "#7B2869",
+              }}
+            />
+          </>
+        )}
 
-
-            {activeTab === 'Packages' && (
-                <>
-                    <View style={styles.packageTabContainer}>
-                        {vendorData.packages.map((pkg: any) => (
-                            <TouchableOpacity
-                                key={pkg._id}
-                                style={[styles.packageTab, activePackage === pkg._id && styles.activePackageTab]}
-                                onPress={() => setActivePackage(pkg._id)}
-                            >
-                                <Text
-                                    style={[
-                                        styles.packageTabText,
-                                        activePackage === pkg._id && styles.activePackageTabText,
-                                    ]}
-                                >
-                                    {pkg.packageName}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-
-                    {/* Package Details */}
-                    {vendorData.packages
-                        .filter((pkg: any) => pkg._id === activePackage)
-                        .map((pkg: any) => (
-                            <View key={pkg._id} style={styles.packageDetails}>
-                                <Text style={styles.sectionTitle}>Services</Text>
-                                <Text style={styles.packageDetailItem}>{pkg.services}</Text>
-                                <Text style={styles.priceText}>Price: Rs.{pkg.price}/-</Text>
-                            </View>
-                        ))}
-
-                    <Calendar
-                        onDayPress={(day: { dateString: string }) => console.log('Selected day:', day.dateString)}
-                        minDate={new Date().toISOString().split('T')[0]} // Disables past dates
-                        markedDates={{
-                            '2024-12-03': { selected: true, selectedColor: '#7B2869' },
-                        }}
-                        theme={{
-                            selectedDayBackgroundColor: '#7B2869',
-                            todayTextColor: '#7B2869',
-                        }}
-                    />
-                </>
-            )}
-
-            {/* {activeTab === 'Reviews' && (
+        {/* {activeTab === 'Reviews' && (
                 <View style={styles.tabContent}>
                     <Text>Reviews Tab Content (Static for now)</Text>
                 </View>
             )} */}
-            {activeTab === 'Reviews' && (
-                <View style={styles.tabContent}>
-                    {/* Tab Navigation for Reviews */}
-                    <View style={styles.reviewTabContainer}>
-                        <TouchableOpacity
-                            style={[styles.reviewTab, activeReviewTab === 'Eventify' && styles.activeReviewTab]}
-                            onPress={() => setActiveReviewTab('Eventify')}
-                        >
-                            <Text
-                                style={[
-                                    styles.reviewTabText,
-                                    activeReviewTab === 'Eventify' && styles.activeReviewTabText,
-                                ]}
-                            >
-                                Eventify Hub's Reviews
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.reviewTab, activeReviewTab === 'Google' && styles.activeReviewTab]}
-                            onPress={() => setActiveReviewTab('Google')}
-                        >
-                            <Text
-                                style={[
-                                    styles.reviewTabText,
-                                    activeReviewTab === 'Google' && styles.activeReviewTabText,
-                                ]}
-                            >
-                                Google Reviews
-                            </Text>
-                        </TouchableOpacity>
+        {activeTab === "Reviews" && (
+          <View style={styles.tabContent}>
+            {/* Tab Navigation for Reviews 
+             add test id  */}
+            <View style={styles.reviewTabContainer}>
+              <TouchableOpacity
+                testID="review-tab-eventify"
+                style={[
+                  styles.reviewTab,
+                  activeReviewTab === "Eventify" && styles.activeReviewTab,
+                ]}
+                onPress={() => setActiveReviewTab("Eventify")}
+              >
+                <Text
+                  style={[
+                    styles.reviewTabText,
+                    activeReviewTab === "Eventify" &&
+                      styles.activeReviewTabText,
+                  ]}
+                >
+                  Eventify Hub's Reviews
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.reviewTab,
+                  activeReviewTab === "Google" && styles.activeReviewTab,
+                ]}
+                onPress={() => setActiveReviewTab("Google")}
+              >
+                <Text
+                  style={[
+                    styles.reviewTabText,
+                    activeReviewTab === "Google" && styles.activeReviewTabText,
+                  ]}
+                >
+                  Google Reviews
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Eventify Reviews */}
+            {activeReviewTab === "Eventify" && (
+              <View>
+                <Text style={styles.sectionTitle}>1 Review</Text>
+                <View style={styles.eventifyReview}>
+                  <Text style={styles.reviewerName}>Imran</Text>
+                  <Text style={styles.reviewDate}>April 12, 2023</Text>
+                  <Text style={styles.reviewText}>
+                    Venue was good but location is not up to the mark.
+                  </Text>
+                </View>
+                <TouchableOpacity style={styles.showMoreButton}>
+                  <Text style={styles.showMoreButtonText}>Show More</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {/* Google Reviews */}
+            {activeReviewTab === "Google" && (
+              <View>
+                <Text style={styles.googleReviewStats}>130 Reviews ⭐ 4.2</Text>
+                <Text style={styles.reviewNote}>
+                  *Ratings and reviews gathered from online sources*
+                </Text>
+                {/* Ratings Breakdown */}
+                <View style={styles.ratingsBreakdown}>
+                  {[5, 4, 3, 2, 1].map((stars) => (
+                    <View key={stars} style={styles.ratingRow}>
+                      <Text style={styles.ratingText}>{stars} Stars</Text>
+                      <View style={styles.ratingBar}>
+                        <View
+                          style={[
+                            styles.filledRatingBar,
+                            { width: `${stars * 20}%` },
+                          ]}
+                        />
+                      </View>
+                      <Text style={styles.ratingCount}>{stars * 20}</Text>
                     </View>
+                  ))}
+                </View>
+                {/* Individual Reviews */}
+                {["Vlog KAHDI", "Vlog KAHDI", "Vlog KAHDI"].map(
+                  (reviewer, index) => (
+                    <View key={index} style={styles.googleReview}>
+                      <Text style={styles.reviewerName}>{reviewer}</Text>
+                      <Text style={styles.reviewText}>
+                        ⭐ 5.0 - Excellent service. Highly recommended!
+                      </Text>
+                    </View>
+                  )
+                )}
+              </View>
+            )}
+          </View>
+        )}
 
-                    {/* Eventify Reviews */}
-                    {activeReviewTab === 'Eventify' && (
-                        <View>
-                            <Text style={styles.sectionTitle}>1 Review</Text>
-                            <View style={styles.eventifyReview}>
-                                <Text style={styles.reviewerName}>Imran</Text>
-                                <Text style={styles.reviewDate}>April 12, 2023</Text>
-                                <Text style={styles.reviewText}>
-                                    Venue was good but location is not up to the mark.
-                                </Text>
-                            </View>
-                            <TouchableOpacity style={styles.showMoreButton}>
-                                <Text style={styles.showMoreButtonText}>Show More</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-
-                    {/* Google Reviews */}
-                    {activeReviewTab === 'Google' && (
-                        <View>
-                            <Text style={styles.googleReviewStats}>
-                                130 Reviews ⭐ 4.2
-                            </Text>
-                            <Text style={styles.reviewNote}>
-                                *Ratings and reviews gathered from online sources*
-                            </Text>
-                            {/* Ratings Breakdown */}
-                            <View style={styles.ratingsBreakdown}>
-                                {[5, 4, 3, 2, 1].map((stars) => (
-                                    <View key={stars} style={styles.ratingRow}>
-                                        <Text style={styles.ratingText}>{stars} Stars</Text>
-                                        <View style={styles.ratingBar}>
-                                            <View style={[styles.filledRatingBar, { width: `${stars * 20}%` }]} />
-                                        </View>
-                                        <Text style={styles.ratingCount}>{stars * 20}</Text>
-                                    </View>
-                                ))}
-                            </View>
-                            {/* Individual Reviews */}
-                            {['Vlog KAHDI', 'Vlog KAHDI', 'Vlog KAHDI'].map((reviewer, index) => (
-                                <View key={index} style={styles.googleReview}>
-                                    <Text style={styles.reviewerName}>{reviewer}</Text>
-                                    <Text style={styles.reviewText}>
-                                        ⭐ 5.0 - Excellent service. Highly recommended!
-                                    </Text>
-                                </View>
-                            ))}
-                        </View>
-                    )}
-                </View>)}
-
-            {/* Contact Button */}
-            <TouchableOpacity style={styles.contactButton} onPress={() => router.push('/message')}>
-                <Text style={styles.contactButtonText}>Contact Now</Text>
-            </TouchableOpacity>
-        </ScrollView>
+        {/* Contact Button */}
+        <TouchableOpacity
+          style={styles.contactButton}
+          onPress={() => router.push("/message")}
+        >
+          <Text style={styles.contactButtonText}>Contact Now</Text>
+        </TouchableOpacity>
+      </ScrollView>
     );
 };
 
