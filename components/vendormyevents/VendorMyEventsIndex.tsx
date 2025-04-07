@@ -6,10 +6,12 @@ import {
     TouchableOpacity,
     FlatList,
     Image,
+    Dimensions,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+const { width } = Dimensions.get('window');
 
 const MyEventsScreen = () => {
     const [selectedDate, setSelectedDate] = useState<string>("2024-12-03");
@@ -233,13 +235,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        height: 80,
+        height: 70,
         backgroundColor: '#fff',
         borderTopWidth: 1,
         borderTopColor: '#E0E0E0',
+        width: width,
         position: 'absolute',
         bottom: 0,
-        width: '100%',
+        left: 0,
+        right: 0,
+        paddingBottom: 10,
     },
     navItem: {
         alignItems: 'center',
