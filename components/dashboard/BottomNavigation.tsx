@@ -91,8 +91,8 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     id: '1',
-    name: 'Dashboard',
-    icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+    name: 'My Events',
+    icon: '/Users/alisajjad/Desktop/FYP/fyp-frontend/assets/images/myevent.png',
   },
   {
     id: '2',
@@ -135,7 +135,7 @@ const BottomNavigation: React.FC = () => {
       {/* Center Home Button */}
       <TouchableOpacity
         style={[styles.navItem, styles.homeButton]}
-        onPress={() => router.push('/vendordashboard')}
+        onPress={() => router.push('/dashboard')}
       >
         <View style={styles.iconContainer}>
           <Image
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   homeButton: {
-    transform: [{ translateY: -10 }], // Slightly elevated
+    transform: [{ translateY: -20 }], // Slightly elevated
   },
   iconContainer: {
     backgroundColor: '#F8EAF2',

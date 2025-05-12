@@ -92,7 +92,7 @@ export default function RootLayout() {
         <Stack.Screen name="vendormyevents" options={{ headerShown: false }} />
         <Stack.Screen name="vendorfaqs" options={{ headerShown: false }} />
         <Stack.Screen name="customizeyourown" options={{ headerShown: false }} />
-        <Stack.Screen name="cart" options={{ headerShown: false }} />
+        <Stack.Screen name="e-card" options={{ headerShown: false }} />
 
 
 
