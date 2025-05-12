@@ -72,12 +72,37 @@ const SummaryScreen = () => {
                 <Text style={styles.totalValue}>Rs.{total.toLocaleString()}/-</Text>
             </View>
 
-            {/* Pay Now Button */}
+            {/* Pay Now Button
             <TouchableOpacity
                 style={styles.payButton}
                 onPress={() => router.push('/paymentmethod')}
             >
                 <Text style={styles.payButtonText}>Pay Now</Text>
+            </TouchableOpacity> */}
+
+            {/* Vendor Message Section */}
+            <View style={styles.vendorMessageBox}>
+                <Text style={styles.vendorMessageText}>
+                    ✅ Thank you! The vendor will call you shortly, and payment will be made directly to the vendor.
+                </Text>
+            </View>
+
+            {/* Save Receipt Button */}
+            <TouchableOpacity
+                style={styles.saveButton}
+                onPress={() => {
+                    // Placeholder: Add logic to save receipt here
+                    alert('Receipt saved successfully!');
+                }}
+            >
+                <Text style={styles.saveButtonText}>Save Receipt</Text>
+            </TouchableOpacity>
+            {/* Go to Dashboard Button */}
+            <TouchableOpacity
+                style={styles.dashboardButton}
+                onPress={() => router.push('/dashboard')} // Replace with your actual dashboard route
+            >
+                <Text style={styles.dashboardButtonText}>Go to Dashboard</Text>
             </TouchableOpacity>
         </ScrollView>
     );
@@ -191,6 +216,47 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
     },
+    vendorMessageBox: {
+        backgroundColor: '#E8F5E9', // light green background
+        padding: 15,
+        borderRadius: 8,
+        marginBottom: 30,
+        alignItems: 'center',
+    },
+    vendorMessageText: {
+        color: '#2E7D32', // dark green text
+        fontSize: 14,
+        fontWeight: '500',
+        textAlign: 'center',
+    },
+    saveButton: {
+        backgroundColor: '#780C60', // dark purple
+        borderRadius: 5,
+        paddingVertical: 12,
+        alignItems: 'center',
+        marginBottom: 30,
+    },
+    saveButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
+    dashboardButton: {
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderColor: '#780C60', // dark purple border
+        borderRadius: 5,
+        paddingVertical: 12,
+        alignItems: 'center',
+        marginBottom: 30,
+    },
+    dashboardButtonText: {
+        color: '#780C60',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
 });
 
 export default SummaryScreen;

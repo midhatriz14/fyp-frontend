@@ -70,10 +70,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  // title: {
+  //   fontSize: 18,
+  //   fontWeight: '500',
+  //   color: '#000000',
+  // },
   title: {
     fontSize: 18,
     fontWeight: '500',
-    color: '#000000',
+    color: '#000',
+    marginBottom: 10,
+    alignSelf: 'flex-start',
+    paddingRight: 15,
   },
   seeAll: {
     fontSize: 15,

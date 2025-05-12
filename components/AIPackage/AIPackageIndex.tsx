@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     },
     row: {
         justifyContent: "space-between",
-        marginBottom: 15,
+        marginBottom: 10,
     },
     card: {
         backgroundColor: "#FFF",
@@ -151,15 +151,15 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 5,
         overflow: "hidden",
-        paddingBottom: 10, // Added space for text
+        paddingBottom: 6, // Added space for text
     },
     cardImage: {
         width: "100%",
-        height: 120, // Adjusted for better visual balance
+        height: 90, // Adjusted for better visual balance
     },
     cardContent: {
         paddingHorizontal: 10,
-        paddingVertical: 5,
+        paddingVertical: 4,
     },
     category: {
         fontSize: 14,

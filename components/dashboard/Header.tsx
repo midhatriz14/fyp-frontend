@@ -26,9 +26,16 @@ const Header: React.FC = () => {
           <Text style={styles.locationText}>House 30, ISB</Text>
           <Ionicons name="chevron-down-outline" size={16} color="#7B2869" />
         </View>
+        {/* Cart Icon */}
+        <TouchableOpacity
+          onPress={() => router.push('/AIPackage')}
+          style={styles.cartIconButton}
+        >
+          <Ionicons name="cart-outline" size={24} color="#7B2869" />
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.notificationIcon}
-          onPress={() => router.push('/bdphotographer')}>
+          onPress={() => router.push('/vendornotifications')}>
           <Ionicons name="notifications" size={24} color="#000" />
         </TouchableOpacity>
       </View>
@@ -134,6 +141,10 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 14,
     color: '#000',
+  },
+  cartIconButton: {
+    padding: 8,
+    marginRight: 4,
   },
 });
 
