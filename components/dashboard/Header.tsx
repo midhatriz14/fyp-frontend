@@ -28,7 +28,7 @@ const Header: React.FC = () => {
         </View>
         {/* Cart Icon */}
         <TouchableOpacity
-          onPress={() => router.push('/AIPackage')}
+          onPress={() => router.push('/cartmanagment')}
           style={styles.cartIconButton}
         >
           <Ionicons name="cart-outline" size={24} color="#7B2869" />

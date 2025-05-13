@@ -24,7 +24,6 @@ const CustomizeYourOwnIndex = () => {
     // };
     const getCategories = async () => {
         const response = await getAllCategories();
-        console.log(response, selectedServicesArray);
         const filtered = response.filter((cat: ICategory) =>
             selectedServicesArray.includes(cat.name)
 

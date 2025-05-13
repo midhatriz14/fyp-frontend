@@ -1,10 +1,12 @@
 
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { Calendar } from 'react-native-calendars';
-import { router, useGlobalSearchParams } from 'expo-router';
-import axios from 'axios';
+import { getSecureData, saveSecureData } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
+import { router, useGlobalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Calendar } from 'react-native-calendars';
+import Toast from 'react-native-toast-message';
 
 
 const PhotographerDetailsScreen: React.FC = () => {
@@ -14,6 +16,50 @@ const PhotographerDetailsScreen: React.FC = () => {
   const [vendorData, setVendorData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { id } = useGlobalSearchParams();
+
+  const handleAddToCart = async (pkg: any) => {
+    try {
+      // Step 1: Get the existing cart data (if any)
+      const existingCartData = await getSecureData('cartData');
+      let cart = existingCartData ? JSON.parse(existingCartData) : { vendors: [] };
+
+      // Step 2: Check if the vendor already exists in the cart
+      const vendorIndex = cart.vendors.findIndex((vendor: any) => vendor.vendor._id === vendorData._id);
+
+      // If the vendor exists, we need to update the selected package
+      if (vendorIndex !== -1) {
+        // Update the selected package for the existing vendor
+        cart.vendors[vendorIndex].packages.push(pkg); // Add package to this vendor's list
+      } else {
+        // If the vendor doesn't exist in the cart, create a new vendor entry
+        const vendorPackageData = {
+          vendor: vendorData, // Saving all vendor data
+          packages: [pkg],    // Saving the selected package data
+        };
+        cart.vendors.push(vendorPackageData); // Add new vendor with package
+      }
+
+      // Step 3: Save the updated cart data back
+      await saveSecureData('cartData', JSON.stringify(cart));
+
+      // Step 4: Show a success toast message
+      Toast.show({
+        type: 'success',
+        text1: 'Added to Cart',
+        text2: `${pkg.packageName} has been added to your cart!`,
+        position: 'bottom',
+      });
+    } catch (error) {
+      console.error('Error handling add to cart:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Failed to add to cart. Please try again.',
+        position: 'bottom',
+      });
+    }
+  };
+
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -61,6 +107,7 @@ const PhotographerDetailsScreen: React.FC = () => {
 
   return (
     <ScrollView style={styles.container}>
+      <Toast />
       {/* Header
          Add test Id */}
       {/* <View style={styles.header}>
@@ -82,7 +129,7 @@ const PhotographerDetailsScreen: React.FC = () => {
 
         {/* Cart Icon */}
         <TouchableOpacity
-          onPress={() => router.push('/AIPackage')}
+          onPress={() => router.push('/cartmanagment')}
           style={styles.cartIconButton}
         >
           <Ionicons name="cart-outline" size={24} color="#7B2869" />
@@ -293,7 +340,7 @@ const PhotographerDetailsScreen: React.FC = () => {
                 <TouchableOpacity
                   testID={`add-to-cart-${pkg._id}`}
                   style={styles.cartButton}
-                  onPress={() => console.log("Add to cart pressed for:", pkg._id)}
+                  onPress={() => handleAddToCart(pkg)}
                 >
                   <Text style={styles.cartButtonText}>Add to Cart</Text>
                 </TouchableOpacity>

@@ -1,17 +1,17 @@
+import postCateringBusinessDetails from '@/services/postCateringBusinessDetails';
+import { getSecureData } from "@/store";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-    View,
+    Alert,
+    ScrollView,
+    StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet,
-    ScrollView,
-    Alert,
+    View,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { router } from "expo-router";
-import postCateringBusinessDetails from '@/services/postCateringBusinessDetails';
-import { getSecureData } from "@/store";
 
 const BusinessDetailsForm = () => {
     const [expertise, setExpertise] = useState('');
@@ -34,8 +34,8 @@ const BusinessDetailsForm = () => {
     const [covidCompliant, setCovidCompliant] = useState('');
 
     const submit = async () => {
-        console.log(foodTesting, decoration, soundSystem, seatingArrangement, waiters, cutlery, covidCompliant,
-            cancellationPolicy, staffGender, travelsToClientHome);
+        // console.log(foodTesting, decoration, soundSystem, seatingArrangement, waiters, cutlery, covidCompliant,
+        //     cancellationPolicy, staffGender, travelsToClientHome);
         if (!foodTesting || !decoration || !soundSystem || !seatingArrangement || !waiters || !cutlery || !covidCompliant ||
             !cancellationPolicy || !staffGender || !travelsToClientHome || parseFloat(downPayment) === 0 || !selectedCity) {
             Alert.alert("Error", "Please fill in all the required fields marked with *.");
@@ -45,7 +45,7 @@ const BusinessDetailsForm = () => {
         try {
 
             const user = JSON.parse(await getSecureData("user") || "");
-            console.log(user);
+            // console.log(user);
             await postCateringBusinessDetails(user._id, {
                 expertise,
                 travelsToClientHome: true,

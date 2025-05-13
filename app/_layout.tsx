@@ -93,9 +93,7 @@ export default function RootLayout() {
         <Stack.Screen name="vendorfaqs" options={{ headerShown: false }} />
         <Stack.Screen name="customizeyourown" options={{ headerShown: false }} />
         <Stack.Screen name="e-card" options={{ headerShown: false }} />
-
-
-
+        <Stack.Screen name="cartmanagement" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>

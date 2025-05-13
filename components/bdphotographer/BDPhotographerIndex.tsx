@@ -1,19 +1,18 @@
 
+import postPhotographyBusinessDetails from '@/services/postPhotographyBusinessDetails';
+import { getSecureData } from '@/store';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    View,
+    Alert,
+    ScrollView,
+    StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet,
-    ScrollView,
-    Alert,
+    View,
 } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
-import { router } from 'expo-router';
-import postPhotographyBusinessDetails from '@/services/postPhotographyBusinessDetails';
-import { getSecureData } from '@/store';
 
 const BusinessDetailsScreen: React.FC = () => {
     const [selectedCity, setSelectedCity] = useState<string>("");
@@ -33,7 +32,6 @@ const BusinessDetailsScreen: React.FC = () => {
 
         try {
             const user = JSON.parse(await getSecureData("user") || "");
-            console.log(user);
             await postPhotographyBusinessDetails(user._id, {
                 cityCovered: selectedCity,
                 staff: selectedStaff,

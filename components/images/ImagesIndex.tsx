@@ -1,11 +1,10 @@
 import { router } from "expo-router";
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const ImageUploadScreen: React.FC = () => {
     const handleFileUpload = () => {
         // Handle file selection logic here
-        console.log("Choose file button pressed");
     };
 
     return (

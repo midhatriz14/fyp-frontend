@@ -1,18 +1,18 @@
 
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import getAllVendorsByCategoryId from "@/services/getAllVendorsByCategoryId";
 import { getSecureData } from "@/store";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function App() {
   const [data, setData] = useState<any>([]);
@@ -27,7 +27,6 @@ export default function App() {
   const fetchData = async () => {
     const categoryId = (await getSecureData("categoryId")) || "";
     const data = await getAllVendorsByCategoryId(categoryId);
-    console.log(data[0].BusinessDetails);
     setData(data);
   };
 
@@ -35,7 +34,7 @@ export default function App() {
     const categoryName = (await getSecureData("categoryName")) || "Category";
     setHeaderTitle(categoryName);
   };
-  
+
   const renderItem = ({ item }: any) => (
     <View style={styles.card}>
       <Image

@@ -35,7 +35,6 @@ const PackageScreen = () => {
 
     const confirmDelete = () => {
         setModalVisible(false);
-        console.log('Package Deleted!');
         router.push('/vendordashboard'); // Redirect after confirming delete
     };
 
@@ -136,7 +135,6 @@ const PackageScreen = () => {
             <TouchableOpacity
                 style={styles.saveButton}
                 onPress={() => {
-                    console.log("Package updated!", packageDetails);
                     setIsEditing(false);
                     router.push('/vendorpackages');
                 }}

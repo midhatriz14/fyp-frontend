@@ -267,19 +267,6 @@ const PhotographerDetailsScreen: React.FC = () => {
                             </View>
                         ))}
 
-                    {/* Calendar */}
-                    {/* <Text style={styles.sectionTitle}>Select Your Event Date</Text>
-                    <Calendar
-                        onDayPress={(day) => console.log('Selected day:', day.dateString)}
-                        markedDates={{
-                            '2024-12-03': { selected: true, selectedColor: '#7B2869' },
-                        }}
-                        theme={{
-                            selectedDayBackgroundColor: '#7B2869',
-                            todayTextColor: '#7B2869',
-                        }}
-                    /> */}
-
                     {/* Check Availability Button */}
                     <TouchableOpacity style={styles.checkAvailabilityButton}>
                         <Text style={styles.checkAvailabilityButtonText}>Check Availability</Text>

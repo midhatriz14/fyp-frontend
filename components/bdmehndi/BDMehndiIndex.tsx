@@ -235,20 +235,20 @@
 // });
 
 // export default BusinessDetailsScreen;
+import postSalonBusinessDetails from '@/services/postSalonBusinessDetails';
+import { getSecureData } from "@/store";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-    View,
+    Alert,
+    ScrollView,
+    StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet,
-    ScrollView,
-    Alert,
+    View,
 } from "react-native";
-import postSalonBusinessDetails from '@/services/postSalonBusinessDetails';
-import { getSecureData } from "@/store";
 
 const BusinessDetailsForm = () => {
     const [staffType, setStaffType] = useState<string>("");
@@ -265,17 +265,17 @@ const BusinessDetailsForm = () => {
     const [cancellationPolicy, setCancellationPolicy] = useState<"REFUNDABLE" | "NON-REFUNDABLE" | "PARTIALLY REFUNDABLE" | null>(null);
 
     const submit = async () => {
-        console.log("staffType", staffType);
-        console.log("expertise", expertise);
-        console.log("travelsToClientHome", travelsToClientHome);
-        console.log("cityCovered", staffType);
-        console.log("staffGender", expertise);
-        console.log("minimumPrice", minimumPrice);
-        console.log("description", description);
-        console.log("downPaymentType", downPaymentType);
-        console.log("downPayment", downPayment);
-        console.log("covidCompliant", covidCompliant);
-        console.log("cancellationPolicy", cancellationPolicy);
+        // console.log("staffType", staffType);
+        // console.log("expertise", expertise);
+        // console.log("travelsToClientHome", travelsToClientHome);
+        // console.log("cityCovered", staffType);
+        // console.log("staffGender", expertise);
+        // console.log("minimumPrice", minimumPrice);
+        // console.log("description", description);
+        // console.log("downPaymentType", downPaymentType);
+        // console.log("downPayment", downPayment);
+        // console.log("covidCompliant", covidCompliant);
+        // console.log("cancellationPolicy", cancellationPolicy);
         if (
             staffType && staffType.length === 0 ||
             !expertise ||
@@ -296,7 +296,6 @@ const BusinessDetailsForm = () => {
 
         try {
             const user = JSON.parse(await getSecureData("user") || "");
-            console.log(user);
             await postSalonBusinessDetails(user._id, {
                 staffType,
                 expertise,

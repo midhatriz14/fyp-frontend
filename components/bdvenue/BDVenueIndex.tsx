@@ -1,17 +1,17 @@
+import postVenueBusinessDetails from "@/services/postVenueBusinessDetails";
+import { getSecureData } from "@/store";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-    View,
+    Alert,
+    ScrollView,
+    StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet,
-    ScrollView,
-    Alert,
+    View,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { router } from "expo-router";
-import postVenueBusinessDetails from "@/services/postVenueBusinessDetails";
-import { getSecureData } from "@/store";
 
 const BusinessDetailsForm = () => {
     // States
@@ -49,7 +49,6 @@ const BusinessDetailsForm = () => {
 
         try {
             const user = JSON.parse(await getSecureData("user") || "");
-            console.log(user);
             await postVenueBusinessDetails(user._id, {
                 typeOfVenue: venueType,
                 expertise: expertise,

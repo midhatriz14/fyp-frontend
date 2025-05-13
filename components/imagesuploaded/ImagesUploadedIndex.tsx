@@ -1,20 +1,20 @@
 // ImageUploadScreen.tsx
-import React, { useState, useEffect } from "react";
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    StyleSheet,
-    Image,
-    ScrollView,
-    Modal,
-    Alert
-} from "react-native";
-import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
 import { uploadMultipleImages } from "@/services/uploadMultipleImages";
 import { getSecureData } from "@/store";
+import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+    Alert,
+    Image,
+    Modal,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 
 const ImageUploadScreen: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -68,7 +68,6 @@ const ImageUploadScreen: React.FC = () => {
         try {
             setUploading(true);
             const user = JSON.parse(await getSecureData("user") || "");
-            console.log(user);
             await uploadMultipleImages(user._id, images);
             // Retrieve the token from AsyncStorage
             // const token = await AsyncStorage.getItem('access_token');
@@ -79,7 +78,6 @@ const ImageUploadScreen: React.FC = () => {
 
             // // Call the API to upload contact details and images
             // const response = await postContactDetails(contactDetails, images, token);
-            // console.log("Contact details successfully created:", response);
             router.push("/vendorreview");
             // // Navigate to the next screen   
             // navigation.navigate("/VendorReview"); // Adjust the route name as per your navigation setup
