@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 export interface GetOrdersResponse {
+    totalAmount: string;
     orderId: string;
     eventName: string;
     clientName: string;
@@ -8,6 +9,8 @@ export interface GetOrdersResponse {
     package: string;
     price: number;
     status: string;
+    organizerId: any;
+    vendorOrders: any;
 }
 
 export default async function getVendorOrders(status?: string, limit = 10, skip = 0): Promise<GetOrdersResponse[]> {
