@@ -34,13 +34,13 @@ const BusinessDetailsForm = () => {
     const [covidCompliant, setCovidCompliant] = useState('');
 
     const submit = async () => {
-        // console.log(foodTesting, decoration, soundSystem, seatingArrangement, waiters, cutlery, covidCompliant,
-        //     cancellationPolicy, staffGender, travelsToClientHome);
-        if (!foodTesting || !decoration || !soundSystem || !seatingArrangement || !waiters || !cutlery || !covidCompliant ||
-            !cancellationPolicy || !staffGender || !travelsToClientHome || parseFloat(downPayment) === 0 || !selectedCity) {
-            Alert.alert("Error", "Please fill in all the required fields marked with *.");
-            return;
-        }
+        console.log(foodTesting, decoration, soundSystem, seatingArrangement, waiters, cutlery, covidCompliant,
+             cancellationPolicy, staffGender, travelsToClientHome);
+        // if (!foodTesting || !decoration || !soundSystem || !seatingArrangement || !waiters || !cutlery || !covidCompliant ||
+        //     !cancellationPolicy || !staffGender || !travelsToClientHome || parseFloat(downPayment) === 0) {
+        //     Alert.alert("Error", "Please fill in all the required fields marked with *.");
+        //     return;
+        // }
 
         try {
 

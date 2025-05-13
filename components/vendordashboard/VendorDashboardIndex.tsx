@@ -3,7 +3,7 @@ import { getSecureData } from "@/store";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 
 const screenWidth = Dimensions.get("window").width;
@@ -13,15 +13,26 @@ const screenWidth = Dimensions.get("window").width;
 const DashboardScreen = () => {
 
     const [username, setUsername] = useState<string>(""); // State for username
+    const [vendorId, setVendorId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchUsername(); // Fetch username on component mount
     }, []);
 
+    // const fetchUsername = async () => {
+    //     const storedUsername = (await getSecureData("user")) || "Guest"; // Retrieve username or set default
+    //     setUsername(JSON.parse(storedUsername).name);
+    // };
     const fetchUsername = async () => {
-        const storedUsername = (await getSecureData("user")) || "Guest"; // Retrieve username or set default
-        setUsername(JSON.parse(storedUsername).name);
-    };
+        const storedUser = await getSecureData("user");
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          setUsername(user.name);
+          setVendorId(user._id); // ✅ Save vendor ID
+        } else {
+          setUsername("Guest");
+        }
+      };
 
     return (
         <View style={styles.container}>
@@ -166,7 +177,19 @@ const DashboardScreen = () => {
                 {/* Vendor Profile Button */}
                 <TouchableOpacity
                     style={styles.vendorProfileButton}
-                    onPress={() => router.push('/vendorprofiledetails')} // Replace with the correct route to the Vendor Profile page
+                    // onPress={() => router.push('/vendorprofiledetails')}
+                     // Replace with the correct route to the Vendor Profile page
+                     onPress={() => {
+                        if (vendorId) {
+                          router.push({
+                            pathname: '/vendorprofiledetails',
+                            params: { id: vendorId },
+                          });
+                        } else {
+                          Alert.alert("Error", "Vendor ID not found.");
+                        }
+                      }}
+                      
                 >
                     <Text style={styles.vendorProfileButtonText}>View Vendor Profile</Text>
                 </TouchableOpacity>

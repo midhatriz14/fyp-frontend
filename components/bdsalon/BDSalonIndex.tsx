@@ -16,7 +16,7 @@ import {
 const BusinessDetailsForm = () => {
     const [staffType, setStaffType] = useState<string>("");
     const [expertise, setExpertise] = useState<string>("");
-    const [travelsToClientHome, setTravelsToClientHome] = useState<boolean>(false);
+    const [travelsToClientHome, setTravelsToClientHome] = useState<"YES" | "NO" | null>(null);
     const [cityCovered, setCityCovered] = useState<string>("");
     const [staffGender, setStaffGender] = useState<string>("");
     const [minimumPrice, setMinimumPrice] = useState<string>("");
@@ -56,13 +56,13 @@ const BusinessDetailsForm = () => {
             return;
         }
 
-
+        const travel = travelsToClientHome === "YES" ? true : false
         try {
             const user = JSON.parse(await getSecureData("user") || "");
             await postSalonBusinessDetails(user._id, {
                 staffType,
                 expertise,
-                travelsToClientHome,
+                travelsToClientHome: travel ,
                 cityCovered,
                 staffGender,
                 minimumPrice: Number(minimumPrice),
@@ -84,6 +84,8 @@ const BusinessDetailsForm = () => {
     function setSelectedCity(text: string): void {
         throw new Error("Function not implemented.");
     }
+
+    console.log("travelsToClientHome", travelsToClientHome);
 
     return (
         <ScrollView style={styles.container}>
@@ -149,14 +151,14 @@ const BusinessDetailsForm = () => {
                         key={option}
                         style={[
                             styles.covidOption,
-                            travelsToClientHome && styles.covidSelected,
+                            travelsToClientHome === option && styles.covidSelected,
                         ]}
-                        onPress={() => setTravelsToClientHome(true)}
+                        onPress={() => {console.log(option); setTravelsToClientHome(option as "YES" || "NO")}}
                     >
                         <Text
                             style={[
                                 styles.covidText,
-                                travelsToClientHome && styles.covidSelectedText,
+                                travelsToClientHome === option && styles.covidSelectedText,
                             ]}
                         >
                             {option}
