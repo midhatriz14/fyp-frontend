@@ -14,6 +14,7 @@ export default function SignupScreen() {
   const facebook = Asset.fromModule(require('@/assets/images/facebook-icon.png')).uri;
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<string>('');
   const [buisnessCategory, setBuisnessCategory] = useState<string>('');
@@ -24,13 +25,13 @@ export default function SignupScreen() {
   }, []);
 
   useEffect(() => {
-    if (name.length > 0 && email.length > 0 && password.length > 0) {
+    if (name && email && password && phone) {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);
     }
-  }, [name, email, password])
-
+  }, [name, email, password, phone]);
+  
   const getRole = async () => {
     const roleData = await getSecureData("role");
     setRole(roleData || "");
@@ -55,8 +56,8 @@ export default function SignupScreen() {
       console.log('Register pressed!');
       setIsLoading(true);
       setIsDisabled(true);
-      console.log(email, password, name, role, buisnessCategory);
-      const response = await Register(email, password, name, role, buisnessCategory);
+      console.log(email, password, name, phone, role, buisnessCategory);
+      const response = await Register(email, password, name, role, buisnessCategory, phone);
       saveSecureData("token", response.token);
       saveSecureData("user", JSON.stringify(response.user));
       setIsLoading(false);
@@ -85,6 +86,7 @@ export default function SignupScreen() {
     setEmail("");
     setPassword("");
     setName("");
+    setPhone(""); // new
   }
 
   return (
@@ -136,6 +138,15 @@ export default function SignupScreen() {
         keyboardType="email-address"
         autoCapitalize="none"
       />
+      <Text style={styles.label}>Phone Number</Text>
+<TextInput
+  style={styles.input}
+  placeholder="Enter phone number"
+  placeholderTextColor="#999"
+  value={phone}
+  onChangeText={setPhone}
+  keyboardType="phone-pad"
+/>
       <Text style={styles.label}>Password</Text>
       <View style={styles.passwordContainer}>
         <TextInput

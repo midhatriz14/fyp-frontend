@@ -1,16 +1,16 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Modal,
   Alert,
+  Image,
+  Linking,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Linking } from 'react-native';
 
 const AccountScreen: React.FC = () => {
   const router = useRouter();
@@ -198,13 +198,7 @@ const AccountScreen: React.FC = () => {
               >
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
-              {/* <TouchableOpacity
-                style={styles.confirmButton}
-                onPress={confirmLogout}
-                router.push('/intro');
-              >
-              <Text style={styles.confirmButtonText}>Log Out</Text>
-            </TouchableOpacity> */}
+              
               <TouchableOpacity
                 style={styles.confirmButton}
                 onPress={() => {
