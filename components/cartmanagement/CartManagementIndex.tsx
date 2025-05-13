@@ -1,6 +1,6 @@
-import postPlaceOrder from '@/services/postPlaceOrder';
 import { getSecureData, saveSecureData } from '@/store';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Toast from 'react-native-toast-message'; // Import Toast
@@ -8,56 +8,9 @@ import Toast from 'react-native-toast-message'; // Import Toast
 const CartManagementIndexScreen: React.FC = () => {
     const [cartData, setCartData] = useState<any>(null);
     const navigation = useNavigation();
-
+    // saveSecureData('cartData', JSON.stringify({ vendors: [] }));
     const handleCheckout = async () => {
-        try {
-            const storedCart = await getSecureData('cartData');
-            const cart = JSON.parse(storedCart || "");
-
-            if (cart.vendors.length === 0) {
-                Toast.show({
-                    type: 'error',
-                    text1: 'Empty Cart',
-                    text2: 'Your cart is empty. Please add items to proceed.',
-                    position: 'bottom',
-                });
-                return;
-            }
-            const user = await getSecureData("user");
-            const eventDate = '2025-12-31'; // Replace with your actual selected date
-            const eventTime = '18:00'; // Replace with your actual selected time
-            const organizerId = '123456'; // Replace with the actual organizer ID
-
-            const services = cart.vendors.flatMap((vendor: any) =>
-                vendor.packages.map((pkg: any) => ({
-                    vendorId: vendor.vendor._id,
-                    serviceName: pkg.packageName,
-                    price: pkg.price,
-                }))
-            );
-            const response = await postPlaceOrder({ organizerId, eventDate, eventTime, services });
-            console.log("response", response);
-            if (response) {
-                Toast.show({
-                    type: 'success',
-                    text1: 'Order Placed',
-                    text2: 'Your order has been successfully placed!',
-                    position: 'bottom',
-                });
-                // Optionally, clear the cart after order is placed
-                saveSecureData('cartData', JSON.stringify({ vendors: [] }));
-            } else {
-                throw new Error('Failed to place order');
-            }
-        } catch (error) {
-            console.error('Error placing order:', error);
-            Toast.show({
-                type: 'error',
-                text1: 'Error',
-                text2: 'Failed to place order. Please try again.',
-                position: 'bottom',
-            });
-        }
+        router.push("/OrderReview");
     };
 
     useEffect(() => {

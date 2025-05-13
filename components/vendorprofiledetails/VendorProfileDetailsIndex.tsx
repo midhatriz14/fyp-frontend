@@ -22,10 +22,11 @@ const PhotographerDetailsScreen: React.FC = () => {
       // Step 1: Get the existing cart data (if any)
       const existingCartData = await getSecureData('cartData');
       let cart = existingCartData ? JSON.parse(existingCartData) : { vendors: [] };
-
+      // console.log("cart.vendors", cart.vendors, "vendorData", vendorData)
+      console.log("vendorData", vendorData._id)
       // Step 2: Check if the vendor already exists in the cart
       const vendorIndex = cart.vendors.findIndex((vendor: any) => vendor.vendor._id === vendorData._id);
-
+      console.log("existingCartData", existingCartData)
       // If the vendor exists, we need to update the selected package
       if (vendorIndex !== -1) {
         // Update the selected package for the existing vendor

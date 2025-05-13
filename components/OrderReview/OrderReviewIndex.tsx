@@ -1,50 +1,124 @@
-import { router } from "expo-router";
-import React from "react";
-import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import postPlaceOrder from '@/services/postPlaceOrder';
+import { getSecureData } from '@/store'; // Assuming you have this function to get data from local storage
+import { router } from 'expo-router';
+import React, { useEffect, useState } from "react";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Toast from "react-native-toast-message"; // Import Toast
 
 const MyOrdersScreen = () => {
-    const items = [
-        {
-            id: 1,
-            name: "Hanif Rajput Catering",
-            price: 59000,
-            details: "Guests: 30\nMenu: Chicken 1 dish\nDate/Time: Nov 20, 2024, 3pm",
-            image: require("@/assets/images/GetStarted.png"), // Replace with your image path
-        },
-        {
-            id: 2,
-            name: "Fortress",
-            price: 90000,
-            details: "Guests: 30\nDate/Time: Nov 20, 2024, 3pm",
-            image: require("@/assets/images/GetStarted.png"), // Replace with your image path
-        },
-        {
-            id: 3,
-            name: "Allure Beauty",
-            price: 70000,
-            details: "Signature Makeup\nDate/Time: Nov 20, 2024, 3pm",
-            image: require("@/assets/images/GetStarted.png"), // Replace with your image path
-        },
-        {
-            id: 4,
-            name: "Maha Photography",
-            price: 70000,
-            details: "Package 1\nDate/Time: Nov 20, 2024, 3pm",
-            image: require("@/assets/images/GetStarted.png"), // Replace with your image path
-        },
-    ];
+    const [cartData, setCartData] = useState<any>(null);
+    const [totalAmount, setTotalAmount] = useState<number>();
+    const [discount, setDiscount] = useState<number>();
+    const [discountedTotal, setDiscountedTotal] = useState<number>();
 
-    const totalAmount = 499090;
-    const discount = (totalAmount * 10) / 100;
-    const discountedTotal = totalAmount - discount;
+    useEffect(() => {
+        const fetchCartData = async () => {
+            try {
+                const storedCart = await getSecureData('cartData');
+                console.log("storedCart", storedCart);
+                if (storedCart) {
+                    setCartData(JSON.parse(storedCart));
+                } else {
+                    setCartData({ vendors: [] });
+                }
+            } catch (error) {
+                console.error("Error fetching cart data:", error);
+                Toast.show({
+                    type: "error",
+                    text1: "Error",
+                    text2: "Failed to load cart data. Please try again.",
+                    position: "bottom",
+                });
+            }
+        };
 
+        fetchCartData();
+    }, []);
+
+    useEffect(() => {
+        if (cartData && cartData.vendors.length > 0) {
+            const totalAmount = calculateTotalAmount();
+            setTotalAmount(totalAmount);
+            const discount = (totalAmount * 10) / 100;
+            setDiscount(discount);
+            const discountedTotal = totalAmount - discount;
+            setDiscountedTotal(discountedTotal);
+        }
+    }, [cartData])
+
+    // Calculate total amount
+    const calculateTotalAmount = () => {
+        console.log(cartData);
+        let totalAmount = 0;
+        cartData.vendors.forEach((vendor: any) => {
+            vendor.packages.forEach((pkg: any) => {
+                totalAmount += pkg.price;
+            });
+        });
+        return totalAmount;
+    };
+
+    // Handle Proceed to Checkout
+    const handleCheckout = async () => {
+        try {
+            const storedCart = await getSecureData('cartData');
+            const cart = JSON.parse(storedCart || "");
+
+            if (cart.vendors.length === 0) {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Empty Cart',
+                    text2: 'Your cart is empty. Please add items to proceed.',
+                    position: 'bottom',
+                });
+                return;
+            }
+            const user = await getSecureData("user");
+            const eventDate = '2025-12-31'; // Replace with your actual selected date
+            const eventTime = '18:00'; // Replace with your actual selected time
+            const organizerId = '123456'; // Replace with the actual organizer ID
+
+            const services = cart.vendors.flatMap((vendor: any) =>
+                vendor.packages.map((pkg: any) => ({
+                    vendorId: vendor.vendor._id,
+                    serviceName: pkg.packageName,
+                    price: pkg.price,
+                }))
+            );
+            const response = await postPlaceOrder({ organizerId, eventDate, eventTime, services });
+            console.log("response", response);
+            if (response) {
+                Toast.show({
+                    type: 'success',
+                    text1: 'Order Placed',
+                    text2: 'Your order has been successfully placed!',
+                    position: 'bottom',
+                });
+                // Optionally, clear the cart after order is placed
+                // saveSecureData('cartData', JSON.stringify({ vendors: [] }));
+
+                router.push("/OrderSummary");
+            } else {
+                throw new Error('Failed to place order');
+            }
+        } catch (error) {
+            console.error('Error placing order:', error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Failed to place order. Please try again.',
+                position: 'bottom',
+            });
+        }
+    };
+
+    if (!cartData) {
+        return (
+            <View style={styles.loadingContainer}>
+                <Text>Loading cart data...</Text>
+            </View>
+        );
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -59,40 +133,47 @@ const MyOrdersScreen = () => {
                 </View>
             </View>
 
-            {items.map((item) => (
-                <View key={item.id} style={styles.card}>
-                    <Image source={item.image} style={styles.cardImage} />
-                    <View style={styles.cardContent}>
-                        <Text style={styles.name}>{item.name}</Text>
-                        <Text style={styles.price}>Rs.{item.price.toLocaleString()}/-</Text>
-                        <Text style={styles.details}>{item.details}</Text>
-                    </View>
-                    <TouchableOpacity style={styles.editButton}>
-                        <Text style={styles.editText}>Edit</Text>
-                    </TouchableOpacity>
+            {cartData.vendors.length === 0 ? (
+                <View style={styles.emptyCartContainer}>
+                    <Text style={styles.emptyCartText}>Your cart is empty</Text>
                 </View>
-            ))}
+            ) : (
+                cartData.vendors.map((vendor: any, vendorIndex: number) => (
+                    <View key={vendorIndex} style={styles.card}>
+                        <Image source={{ uri: vendor.vendor.coverImage }} style={styles.cardImage} />
+                        <View style={styles.cardContent}>
+                            <Text style={styles.name}>{vendor.vendor.name}</Text>
+                            {vendor.packages.map((pkg: any, packageIndex: number) => (
+                                <View key={packageIndex} style={styles.packageContainer}>
+                                    <Text style={styles.packageName}>{pkg.packageName}</Text>
+                                    <Text style={styles.packagePrice}>Rs. {pkg.price.toLocaleString()}/-</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                ))
+            )}
 
             <View style={styles.divider} />
 
             <View style={styles.summary}>
                 <Text style={styles.summaryText}>Total Amount</Text>
-                <Text style={styles.summaryPrice}>Rs.{totalAmount.toLocaleString()}/-</Text>
+                <Text style={styles.summaryPrice}>Rs.{totalAmount?.toLocaleString()}/-</Text>
             </View>
             <View style={styles.summary}>
                 <Text style={styles.summaryText}>Eventify Hub Discount 10%</Text>
                 <Text style={styles.discountPrice}>
-                    -Rs.{discount.toLocaleString()}/-
+                    -Rs.{discount?.toLocaleString()}/-
                 </Text>
             </View>
             <View style={styles.summary}>
                 <Text style={styles.summaryText}>New Total Amount</Text>
-                <Text style={styles.summaryPrice}>Rs.{discountedTotal.toLocaleString()}/-</Text>
+                <Text style={styles.summaryPrice}>Rs.{discountedTotal?.toLocaleString()}/-</Text>
             </View>
 
             <TouchableOpacity
                 style={styles.bookButton}
-                onPress={() => router.push('/OrderSummary')}
+                onPress={handleCheckout}
             >
                 <Text style={styles.bookButtonText}>Book Now</Text>
             </TouchableOpacity>
@@ -161,26 +242,16 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "#333",
     },
-    price: {
-        fontSize: 14,
-        color: '#780C60', // Dark purple color
-        fontWeight: "bold",
-        marginVertical: 2,
+    packageContainer: {
+        marginTop: 10,
     },
-    details: {
-        fontSize: 12,
-        color: "#666",
+    packageName: {
+        fontSize: 16,
+        color: '#7A7A7A',
     },
-    editButton: {
-        backgroundColor: "#F6E5F6",
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        alignSelf: "center",
-    },
-    editText: {
-        fontSize: 12,
-        color: '#780C60', // Dark purple color
+    packagePrice: {
+        fontSize: 16,
+        color: '#7B2869', // Dark purple color
         fontWeight: "bold",
     },
     divider: {
@@ -219,6 +290,22 @@ const styles = StyleSheet.create({
         color: "#FFF",
         fontSize: 16,
         fontWeight: "bold",
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    emptyCartContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    emptyCartText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#7A7A7A',
     },
 });
 
