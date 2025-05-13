@@ -73,10 +73,13 @@ const MyOrdersScreen = () => {
                 });
                 return;
             }
-            const user = await getSecureData("user");
-            const eventDate = '2025-12-31'; // Replace with your actual selected date
+            const eventDetails = JSON.parse(await getSecureData("eventDetails") || "");
+            const user = JSON.parse(await getSecureData("user") || "");
+            const eventDate = eventDetails?.eventDate; // Replace with your actual selected date
             const eventTime = '18:00'; // Replace with your actual selected time
-            const organizerId = '123456'; // Replace with the actual organizer ID
+            const organizerId = user?._id
+            const guests = eventDetails?.guests;
+            const eventName = eventDate?.eventName;
 
             const services = cart.vendors.flatMap((vendor: any) =>
                 vendor.packages.map((pkg: any) => ({
@@ -85,7 +88,7 @@ const MyOrdersScreen = () => {
                     price: pkg.price,
                 }))
             );
-            const response = await postPlaceOrder({ organizerId, eventDate, eventTime, services });
+            const response = await postPlaceOrder({ organizerId, eventDate, eventTime, services, guests, eventName });
             console.log("response", response);
             if (response) {
                 Toast.show({

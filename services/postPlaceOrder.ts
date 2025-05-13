@@ -11,6 +11,8 @@ interface PlaceOrderPayload {
     eventDate: string; // in ISO format
     eventTime: string;
     services: ServiceItem[];
+    eventName: string;
+    guests: string;
 }
 
 export default async function postPlaceOrder(orderData: PlaceOrderPayload) {
