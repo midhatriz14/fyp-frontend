@@ -1,3 +1,4 @@
+import { deleteSecureData } from '@/store';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -56,10 +57,12 @@ const AccountScreen: React.FC = () => {
             .catch((err) => console.error('An error occurred', err));
     };
 
-    const confirmLogout = () => {
+    const confirmLogout = async () => {
         setModalVisible(false);
+        await deleteSecureData("user");
+        await deleteSecureData("cartData");
         console.log('Signing out...');
-        router.push('/account');
+        router.push('/intro');
     };
 
     const cancelLogout = () => {

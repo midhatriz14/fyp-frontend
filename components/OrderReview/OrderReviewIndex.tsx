@@ -79,7 +79,7 @@ const MyOrdersScreen = () => {
             const eventTime = '18:00'; // Replace with your actual selected time
             const organizerId = user?._id
             const guests = eventDetails?.guests;
-            const eventName = eventDate?.eventName;
+            const eventName = eventDetails?.eventName;
 
             const services = cart.vendors.flatMap((vendor: any) =>
                 vendor.packages.map((pkg: any) => ({
@@ -88,6 +88,7 @@ const MyOrdersScreen = () => {
                     price: pkg.price,
                 }))
             );
+            console.log(organizerId, guests, eventName,);
             const response = await postPlaceOrder({ organizerId, eventDate, eventTime, services, guests, eventName });
             console.log("response", response);
             if (response) {
