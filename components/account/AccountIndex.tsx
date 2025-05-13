@@ -1,3 +1,4 @@
+import { deleteSecureData } from '@/store';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -56,11 +57,23 @@ const AccountScreen: React.FC = () => {
       .catch((err) => console.error('An error occurred', err));
   };
 
-  const confirmLogout = () => {
+  // const confirmLogout = () => {
+  //   setModalVisible(false);
+  //   console.log('Signing out...');
+  //   router.push('/account');
+  // };
+  const confirmLogout = async () => {
     setModalVisible(false);
-    console.log('Signing out...');
-    router.push('/account');
+    try {
+      await deleteSecureData("user");
+      await deleteSecureData("cartData");
+      console.log("Secure data deleted");
+    } catch (error) {
+      console.error("Failed to delete secure data:", error);
+    }
+    router.push('/intro'); // Navigate to login/intro page
   };
+  
 
   const cancelLogout = () => {
     setModalVisible(false);
@@ -199,7 +212,7 @@ const AccountScreen: React.FC = () => {
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
               
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.confirmButton}
                 onPress={() => {
                   confirmLogout();
@@ -207,7 +220,14 @@ const AccountScreen: React.FC = () => {
                 }}
               >
                 <Text style={styles.confirmButtonText}>Log Out</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              <TouchableOpacity
+  style={styles.confirmButton}
+  onPress={confirmLogout}
+>
+  <Text style={styles.confirmButtonText}>Log Out</Text>
+</TouchableOpacity>
+
             </View>
           </View>
         </View>

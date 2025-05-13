@@ -29,10 +29,11 @@ import WelcomeImageDisplay from './WelcomeImageDisplay';
 const WelcomeIndex: React.FC = () => {
   useEffect(() => {
     const redirectUser = async () => {
+      console.log("welcome")
       const userData = await getSecureData('user');
-      console.log("userdata", JSON.parse(userData || ""));
-      if (!JSON.parse(userData || "")) {
-        router.push('/login');
+      console.log("userdata", userData);
+      if (!userData || !JSON.parse(userData || "")) {
+        router.push('/intro');
       } else {
         try {
           const user = JSON.parse(userData || "");
