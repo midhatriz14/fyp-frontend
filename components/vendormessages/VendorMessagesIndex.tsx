@@ -1,60 +1,84 @@
+import getConversationList from '@/services/getConversationList';
+import { getSecureData, saveSecureData } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-const messages = [
-    {
-        id: '1',
-        avatar: 'https://randomuser.me/api/portraits/thumb/men/1.jpg',
-        title: 'Have a great day with my amazing..',
-        subtitle: 'Hi there!',
-        time: '9:56 AM',
-        unreadCount: 2,
-    },
-    {
-        id: '2',
-        avatar: 'https://randomuser.me/api/portraits/thumb/men/2.jpg',
-        title: 'Have a great day with my amazing..',
-        subtitle: 'Hi there!',
-        time: '9:56 AM',
-        unreadCount: 2,
-    },
-    {
-        id: '3',
-        avatar: 'https://randomuser.me/api/portraits/thumb/men/3.jpg',
-        title: 'Have a great day with my amazing..',
-        subtitle: 'Hi there!',
-        time: '9:56 AM',
-        unreadCount: 0,
-    },
-    {
-        id: '4',
-        avatar: 'https://randomuser.me/api/portraits/thumb/men/4.jpg',
-        title: 'Have a great day with my amazing..',
-        subtitle: 'Hi there!',
-        time: '9:56 AM',
-        unreadCount: 0,
-    },
-];
+import { io } from 'socket.io-client';
 
 const MessagesScreen: React.FC = () => {
-    const renderMessage = ({ item }: { item: typeof messages[0] }) => (
-        <View style={styles.messageContainer}>
-            <Image source={{ uri: item.avatar }} style={styles.avatar} />
+    const [conversations, setConversations] = useState<any[]>([]);
+    const [socket, setSocket] = useState<any>(null);
+    // const [loggedIn]
+
+    useEffect(() => {
+        // Establish socket connection to backend
+        const socketConnection = io('http://65.2.137.194:3000'); // Use the actual backend URL
+        setSocket(socketConnection);
+
+        // Fetch conversation list from backend when component mounts
+        fetchConversations();
+
+        // Listen for new messages
+        socketConnection.on('newMessage', (message) => {
+            // Update the conversations or show a notification for the new message
+            console.log('Received new message:', message);
+            // You can update the state of conversations here
+        });
+
+        // Cleanup on component unmount
+        return () => {
+            socketConnection.disconnect();
+        };
+    }, []);
+
+    const fetchConversations = async () => {
+        try {
+            // Assuming you have an API endpoint to get conversations for the current user
+            const user = JSON.parse(await getSecureData("user") || "");
+            if (!user) {
+                throw "user not found";
+            }
+            const data = await getConversationList(user._id);
+            setConversations(data);
+        } catch (error) {
+            console.error('Error fetching conversations:', error);
+        }
+    };
+
+    useEffect(() => {
+        console.log(conversations)
+    }, [conversations]);
+
+    const handleConversationClick = async (chatId: string) => {
+        // Navigate to the conversation detail screen (or load messages)
+        await saveSecureData("chatId", chatId);
+        router.push(`/message`);
+        socket.emit('joinConversation', chatId); // Join the conversation room
+    };
+
+    const renderMessage = ({ item }: { item: typeof conversations[0] }) => (
+        <TouchableOpacity
+            key={item.chatId}
+            style={styles.messageContainer}
+            onPress={() => handleConversationClick(item.chatId)}
+        >
+            {/* <Image source={{ uri: item.avatar }} style={styles.avatar} />*/}
+            <Image source={{ uri: "https://img.freepik.com/premium-vector/man-avatar-profile-picture-isolated-background-avatar-profile-picture-man_1293239-4841.jpg" }} style={styles.avatar} />
+
             <View style={styles.textContainer}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.subtitle}>{item.subtitle}</Text>
+                <Text style={styles.title}>{item.participants[0].name}</Text>
+                <Text style={styles.subtitle}>{item.lastMessage ? item.lastMessage.message : "No Message"}</Text>
             </View>
             <View style={styles.rightContainer}>
-                <Text style={styles.time}>{item.time}</Text>
+                <Text style={styles.time}>{item.lastMessage ? new Date(item.lastMessage.timestamp).toDateString() : ""}</Text>
                 {item.unreadCount > 0 && (
                     <View style={styles.unreadBadge}>
                         <Text style={styles.unreadText}>{item.unreadCount}</Text>
                     </View>
                 )}
             </View>
-        </View>
+        </TouchableOpacity>
     );
 
     return (
@@ -72,84 +96,15 @@ const MessagesScreen: React.FC = () => {
 
             {/* Messages List */}
             <FlatList
-                data={messages}
+                data={conversations}
                 renderItem={renderMessage}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.chatId}
                 contentContainerStyle={styles.list}
             />
 
             {/* Bottom Navigation */}
-
             <View style={styles.bottomNavigation}>
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendorordersummary')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/myorder.png')}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>My Orders</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendormessages')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a614f1d9-eba9-4f54-b7ec-c93132dcb1a9?placeholderIfAbsent=true&apiKey=b95bf478340c44448a2ab0604562a117',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Messages</Text>
-                </TouchableOpacity>
-
-                {/* Home Button */}
-                <TouchableOpacity
-                    style={[styles.navItem, styles.homeButton]} // Apply the custom homeButton style
-                    onPress={() => router.push('/vendordashboard')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/home.png')} // Replace with actual home image path
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Home</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendormyevents')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/myevent.png')}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>My Events</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendoraccount')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Account</Text>
-                </TouchableOpacity>
+                {/* Your bottom navigation buttons */}
             </View>
         </View>
     );
@@ -222,7 +177,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: 'bold',
     },
-
     bottomNavigation: {
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -234,32 +188,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: '100%',
-    },
-    navItem: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    iconContainer: {
-        backgroundColor: '#780C60',
-        width: 30,
-        height: 30,
-        borderRadius: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 5,
-    },
-    iconImage: {
-        width: 37,
-        height: 37,
-        marginBottom: 5,
-    },
-    navText: {
-        fontSize: 10,
-        color: '#000000',
-    },
-    homeButton: {
-        // marginBottom: 30, // Moves the Home button slightly upward
-        transform: [{ translateY: -10 }], // Alternatively, use translateY to lift it
     },
 });
 

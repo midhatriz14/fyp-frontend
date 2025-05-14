@@ -1,34 +1,126 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import getConversationMessages from "@/services/getConversationMessages";
+import { getSecureData } from "@/store";
 import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { io } from "socket.io-client"; // Import socket.io client
 
 const ChatScreen: React.FC = () => {
     const [message, setMessage] = useState<string>("");
+    const [messages, setMessages] = useState<any[]>([]);
+    const [loggedInUser, setLoggedInUser] = useState<any>();
+    const [chatId, setChatId] = useState<string>("chatId_here"); // Get chatId dynamically
+    const [socketObj, setSocketObj] = useState<any>();
     const router = useRouter();
 
-    const handleSendMessage = () => {
-        // Logic to send the message
-        console.log("Message sent:", message);
-        setMessage("");
+    useEffect(() => {
+        // Fetch the messages for the conversation when the component mounts
+        const fetchMessages = async () => {
+            try {
+                const user = JSON.parse(await getSecureData("user") || "");
+                if (!user) {
+                    throw "user not found";
+                }
+                setLoggedInUser(user);
+                const chatIdValue = await getSecureData("chatId") || "";
+                const messagesData = await getConversationMessages(chatIdValue); // API to fetch messages
+                console.log("messagesData", messagesData);
+                setChatId(chatIdValue);
+                setMessages(messagesData);
+            } catch (error) {
+                console.error("Error fetching messages:", error);
+            }
+        };
+
+        fetchMessages();
+
+        // Initialize WebSocket connection
+        const socket = io("http://65.2.137.194:3000"); // Replace with your server URL
+        socket.emit("joinConversation", chatId); // Join the conversation room
+
+        // Listen for incoming messages
+        socket.on("newMessage", (newMessage) => {
+            setMessages((prevMessages) => [newMessage, ...prevMessages]);
+        });
+
+        setSocketObj(socket);
+
+        // Cleanup on component unmount
+        return () => {
+            socket.disconnect();
+        };
+    }, [chatId]);
+
+    const handleSendMessage = async () => {
+        if (message.trim()) {
+            const user = JSON.parse(await getSecureData("user") || "");
+            if (!user) {
+                throw "user not found";
+            }
+            const userId = user._id; // Replace with actual userId
+            console.log("userId", userId, "chatId", chatId, "message", message);
+
+            // Send the message via WebSocket to the server
+            socketObj.emit("sendMessage", {
+                user: userId,
+                chatId,
+                content: message,
+            });
+
+            // Optionally, add the sent message to the local state immediately for instant feedback
+            setMessages((prevMessages) => [...prevMessages, { message, senderId: userId }]);
+
+            setMessage(""); // Clear the input field
+        }
+    };
+
+    const renderMessage = ({ item }: { item: any }) => {
+        // Determine if the message is from the sender or the receiver
+        const isSender = item.senderId === loggedInUser._id; // Replace with the actual userId
+
+        return (
+            <View
+                style={[
+                    styles.messageContainer,
+                    isSender ? styles.senderMessageContainer : styles.receiverMessageContainer,
+                ]}
+            >
+                <Text
+                    style={[
+                        styles.messageText,
+                        isSender ? styles.senderMessageText : styles.receiverMessageText,
+                    ]}
+                >
+                    {item.message}
+                </Text>
+            </View>
+        );
     };
 
     return (
-        <View style={styles.container}>
-            {/* Header */}
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === "ios" ? "padding" : "height"} // Adjust for iOS and Android
+        >
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.back()}>
                     <Text style={styles.backArrow}>{"<"}</Text>
                 </TouchableOpacity>
-                <Text style={styles.title}>Arfa Hussain</Text>
+                <Text style={styles.title}>Conversation</Text>
                 <TouchableOpacity>
                     <Text style={styles.optionsMenu}>{"⋮"}</Text>
                 </TouchableOpacity>
             </View>
 
             {/* Chat Area */}
-            <View style={styles.chatArea}>
-                {/* Messages will go here */}
-            </View>
+            <FlatList
+                data={messages}
+                renderItem={renderMessage}
+                keyExtractor={(item, index) => item._id || index.toString()} // Use _id or index as the key
+                style={styles.chatArea}
+                contentContainerStyle={styles.chatContent}
+                inverted // To display the most recent message at the bottom
+            />
 
             {/* Footer */}
             <View style={styles.footer}>
@@ -44,7 +136,7 @@ const ChatScreen: React.FC = () => {
                 </TouchableOpacity>
             </View>
             <Text style={styles.footerText}>Messages are sent to each guest privately.</Text>
-        </View>
+        </KeyboardAvoidingView>
     );
 };
 
@@ -81,6 +173,33 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#F8EAF2",
         padding: 16,
+    },
+    chatContent: {
+        paddingBottom: 16,
+    },
+    messageContainer: {
+        padding: 10,
+        borderRadius: 10,
+        marginBottom: 10,
+        maxWidth: "80%",
+    },
+    senderMessageContainer: {
+        backgroundColor: "#7B2869", // Sender message background color
+        alignSelf: "flex-end", // Align sender messages to the right
+    },
+    receiverMessageContainer: {
+        backgroundColor: "#FFFFFF", // Receiver message background color
+        alignSelf: "flex-start", // Align receiver messages to the left
+    },
+    messageText: {
+        fontSize: 16,
+        color: "#000",
+    },
+    senderMessageText: {
+        color: "#fff", // White text for the sender's message
+    },
+    receiverMessageText: {
+        color: "#000", // Black text for the receiver's message
     },
     footer: {
         flexDirection: "row",

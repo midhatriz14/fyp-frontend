@@ -1,11 +1,13 @@
+import createConversation from "@/services/createConversation";
 import getVendorOrderStats from "@/services/getVendorOrderStats";
 import getVendorOrders, { GetOrdersResponse } from "@/services/getVendorOrders";
-import { getSecureData } from "@/store";
+import { getSecureData, saveSecureData } from "@/store";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+// Order interface
 interface Order {
     id: string;
     event: string;
@@ -46,7 +48,6 @@ const OrderSummary = () => {
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            // case "Pending": return "#D9534F";
             case "Processing": return "#337AB7";
             case "Completed": return "#5CB85C";
             default: return "#999";
@@ -70,6 +71,25 @@ const OrderSummary = () => {
         setSelectedFilter(filterType);
     };
 
+    // Create or get existing conversation/chat
+    const handleMessageButtonClick = async (vendorId: string) => {
+        try {
+            const user = JSON.parse(await getSecureData("user") || "");
+            if (!user) {
+                throw "User not found";
+            }
+
+            // Call backend to check for an existing conversation or create a new one
+            const { chatId } = await createConversation(user._id, vendorId);
+            await saveSecureData("chatId", chatId);
+            router.push(`/message`);
+            // Navigate to the conversation screen
+            // router.push(`/conversation/${chatId}`);
+        } catch (error) {
+            console.error('Error initiating conversation:', error);
+        }
+    };
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
@@ -84,7 +104,7 @@ const OrderSummary = () => {
                     </TouchableOpacity>
                 </View>
 
-                {/* Order Status Summary - Made Clickable */}
+                {/* Order Status Summary */}
                 <View style={styles.summaryContainer}>
                     <TouchableOpacity
                         style={styles.summaryCardWrapper}
@@ -98,19 +118,6 @@ const OrderSummary = () => {
                             isActive={selectedFilter === "All"}
                         />
                     </TouchableOpacity>
-
-                    {/* <TouchableOpacity
-                        style={styles.summaryCardWrapper}
-                        onPress={() => handleSummaryCardClick("Pending")}
-                        activeOpacity={0.7}
-                    >
-                        <SummaryCard
-                            label="Pending"
-                            value={orderStats.pending}
-                            color="#D9534F"
-                            isActive={selectedFilter === "Pending"}
-                        />
-                    </TouchableOpacity> */}
 
                     <TouchableOpacity
                         style={styles.summaryCardWrapper}
@@ -139,17 +146,6 @@ const OrderSummary = () => {
                     </TouchableOpacity>
                 </View>
 
-                {/* Filters
-                <View style={styles.filterContainer}>
-                    {["All", "Processing", "Completed"].map(filter => (
-                        <TouchableOpacity key={filter} onPress={() => setSelectedFilter(filter as any)}>
-                            <Text style={[styles.filterText, selectedFilter === filter && styles.activeFilter]}>
-                                {filter}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </View> */}
-
                 {/* Orders List */}
                 <FlatList
                     style={styles.ordersList}
@@ -162,10 +158,8 @@ const OrderSummary = () => {
                             <View style={styles.orderInfo}>
                                 <Text style={styles.eventTitle}>Event: <Text style={styles.bold}>{item.eventName}</Text></Text>
                                 <Text>Name: <Text style={styles.bold}>{item.organizerId.name}</Text></Text>
-                                <Text>Date: {item.eventDate}</Text>
-                                <Text>Package: {item.vendorOrders.map((orderName: any) => {
-                                    return (orderName.serviceName)
-                                })}{item.organizerId.vendorOrders}</Text>
+                                <Text>Date: {new Date(item.eventDate).toDateString()}</Text>
+                                <Text>Package: {item.vendorOrders.map((orderName: any) => orderName.serviceName)}</Text>
                                 <Text>Price: {item.totalAmount}</Text>
                                 <Text>Status: {item.status}</Text>
                                 <View style={styles.actionButtons}>
@@ -175,83 +169,14 @@ const OrderSummary = () => {
                                     <TouchableOpacity style={styles.completeButton} onPress={() => markAsCompleted(item.orderId)}>
                                         <Text style={styles.buttonText}>Mark As Completed</Text>
                                     </TouchableOpacity>
+                                    <TouchableOpacity style={styles.messageButton} onPress={() => handleMessageButtonClick(item.organizerId._id)}>
+                                        <Text style={styles.buttonText}>Message</Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
                     )}
                 />
-            </View>
-
-            <View style={styles.bottomNavigation}>
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendorordersummary')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/myorder.png')}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>My Orders</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendormessages')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a614f1d9-eba9-4f54-b7ec-c93132dcb1a9?placeholderIfAbsent=true&apiKey=b95bf478340c44448a2ab0604562a117',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Messages</Text>
-                </TouchableOpacity>
-
-                {/* Home Button */}
-                <TouchableOpacity
-                    style={[styles.navItem, styles.homeButton]} // Apply the custom homeButton style
-                    onPress={() => router.push('/vendordashboard')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/home.png')} // Replace with actual home image path
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Home</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendormyevents')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/myevent.png')}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>My Events</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendoraccount')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Account</Text>
-                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -289,7 +214,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 15,
         paddingTop: 50,
-        paddingBottom: 80, // Add padding to the bottom to make space for navigation
+        paddingBottom: 80,
     },
     header: {
         flexDirection: "row",
@@ -349,19 +274,6 @@ const styles = StyleSheet.create({
         fontSize: 9,
         color: "white"
     },
-    filterContainer: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-        marginBottom: 10
-    },
-    filterText: {
-        fontSize: 16,
-        color: "#555"
-    },
-    activeFilter: {
-        borderBottomWidth: 2,
-        borderBottomColor: "#780C60"
-    },
     ordersList: {
         flex: 1,
     },
@@ -408,6 +320,11 @@ const styles = StyleSheet.create({
         padding: 5,
         borderRadius: 5
     },
+    messageButton: {
+        backgroundColor: "#4CAF50",
+        padding: 5,
+        borderRadius: 5
+    },
     buttonText: {
         color: "white",
         fontSize: 12
@@ -440,20 +357,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 5,
-    },
-    homeIconContainer: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: '#780C60',
-        transform: [{ translateY: -10 }],
-    },
-    navText: {
-        fontSize: 10,
-        color: '#000000',
-    },
-    homeButton: {
-        transform: [{ translateY: -5 }],
     },
 });
 

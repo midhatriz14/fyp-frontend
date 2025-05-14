@@ -1,5 +1,6 @@
+import createConversation from '@/services/createConversation';
 import getVendorOrders from '@/services/getVendorOrders';
-import { getSecureData } from '@/store';
+import { getSecureData, saveSecureData } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -84,9 +85,34 @@ const MyEventsScreen = () => {
               {event.vendorOrders.map((vendor: any, index: number) => (
                 <View key={index} style={styles.vendorBox}>
                   <Text style={styles.vendorText}>{vendor?.vendorId?.name}</Text>
-                  <Text style={styles.packageText}>   Package: {vendor.serviceName} - Rs. {vendor.price}</Text>
+                  <Text style={styles.packageText}>
+                    Package: {vendor.serviceName} - Rs. {vendor.price}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.messageButton}
+                    onPress={async () => {
+                      try {
+                        const user = JSON.parse(await getSecureData("user") || "");
+                        if (!user) {
+                          throw "User not found";
+                        }
+
+                        // Call backend to check for an existing conversation or create a new one
+                        const { chatId } = await createConversation(user._id, vendor?.vendorId?._id);
+                        await saveSecureData("chatId", chatId);
+                        router.push(`/message`);
+                        // Navigate to the conversation screen
+                        // router.push(`/conversation/${chatId}`);
+                      } catch (error) {
+                        console.error('Error initiating conversation:', error);
+                      }
+                    }}
+                  >
+                    <Text style={styles.messageButtonText}>Message</Text>
+                  </TouchableOpacity>
                 </View>
               ))}
+
               <Text style={styles.totalPrice}>Total Event Price: Rs. {event.totalAmount}</Text>
             </View>
           );
@@ -142,6 +168,19 @@ const MyEventsScreen = () => {
 export default MyEventsScreen;
 
 const styles = StyleSheet.create({
+  messageButton: {
+    marginTop: 6,
+    backgroundColor: '#7B2869',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    alignSelf: 'flex-start',
+  },
+  messageButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
   container: {
     flex: 1,
     paddingTop: 50,

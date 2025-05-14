@@ -116,7 +116,7 @@ const NavItemComponent: React.FC<{ item: NavItem }> = ({ item }) => (
     style={styles.navItem}
     onPress={() => {
       if (item.id === '1') router.push('/myevents');
-      else if (item.id === '2') router.push('/bottommessages');
+      else if (item.id === '2') router.push('/vendormessages');
       else if (item.id === '3') router.push('/packages');
       else if (item.id === '4') router.push('/account');
     }}
