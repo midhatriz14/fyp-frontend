@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   categoryName: {
-    fontSize: 10,
+    fontSize: 9.8,
     fontWeight: '500',
     color: '#000000',
     textAlign: 'center',

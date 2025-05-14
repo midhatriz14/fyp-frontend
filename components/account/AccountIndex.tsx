@@ -1,6 +1,7 @@
-import { deleteSecureData } from '@/store';
+import { deleteSecureData, getSecureData } from '@/store';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Image,
@@ -16,6 +17,20 @@ import {
 const AccountScreen: React.FC = () => {
   const router = useRouter();
   const [isModalVisible, setModalVisible] = useState(false);
+
+  const [username, setUsername] = useState(""); // State for username
+  const [email, setEmail] = useState(""); 
+
+  useEffect(() => {
+    fetchUserDetails(); // Fetch username and email on component mount
+  }, []);
+
+  const fetchUserDetails = async () => {
+    const storedUser = (await getSecureData("user")) || "Guest"; // Retrieve user data
+    const parsedUser = JSON.parse(storedUser);
+    setUsername(parsedUser.name);
+    setEmail(parsedUser.email); // Set the email fetched from the stored data
+  };
 
   const handleMenuPress = (menuTitle: string) => {
     switch (menuTitle) {
@@ -87,17 +102,20 @@ const AccountScreen: React.FC = () => {
     { title: 'Sign Out' },
   ];
 
+  // Get the first letter of the username for the avatar
+  const avatarInitial = username ? username.charAt(0).toUpperCase() : "N/A"; 
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         {/* Profile Section */}
         <View style={styles.profileContainer}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>MR</Text>
+            <Text style={styles.avatarText}>{avatarInitial}</Text>
           </View>
           <View style={styles.textContainer}>
-            <Text style={styles.profileName}>Midhat Rizvi</Text>
-            <Text style={styles.profileEmail}>midhatrizvi@gmail.com</Text>
+            <Text style={styles.profileName}>{username}</Text>
+            <Text style={styles.profileEmail}>{email}</Text>
           </View>
         </View>
 
@@ -131,17 +149,15 @@ const AccountScreen: React.FC = () => {
       <View style={styles.bottomNavigation}>
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push("/dashboard")}
+          onPress={() => router.push("/myevents")}
         >
           <View style={styles.iconContainer}>
-            <Image
-              source={{
-                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
-              }}
-              style={styles.iconImage}
-            />
-          </View>
-          <Text style={styles.navText}>Dashboard</Text>
+                        <Image
+                            source={require('@/assets/images/myevent.png')}
+                            style={styles.iconImage}
+                        />
+                    </View>
+          <Text style={styles.navText}>My Events</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -158,6 +174,33 @@ const AccountScreen: React.FC = () => {
           </View>
           <Text style={styles.navText}>Messages</Text>
         </TouchableOpacity>
+
+        {/* Home Button */}
+        {/* <TouchableOpacity
+  style={[styles.navItem, styles.homeButton]}
+  onPress={() => router.push('/dashboard')}
+>
+  <View style={styles.homeButtonIconContainer}>
+    <Image
+      source={{
+        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true",
+      }}
+      style={styles.homeButtonIconImage}
+    />
+  </View>
+  <Text style={styles.navText}>Home</Text>
+</TouchableOpacity> */}
+<TouchableOpacity
+  style={[styles.navItem, styles.homeButton]}
+  onPress={() => router.push('/dashboard')}
+>
+  <View style={styles.homeButtonIconContainer}>
+    <Ionicons name="home" size={40} color="#fff" />
+  </View>
+  <Text style={styles.navText}>Home</Text>
+</TouchableOpacity>
+
+
 
         <TouchableOpacity
           style={styles.navItem}
@@ -262,7 +305,7 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     color: '#fff',
-    fontSize: 34,
+    fontSize: 60,
     fontWeight: 'bold',
   },
   textContainer: {
@@ -401,6 +444,30 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     color: '#fff',
   },
+  homeButtonIconContainer: {
+    backgroundColor: '#780C60',
+    width: 55,   // bigger than 30
+    height: 55,  // bigger than 30
+    borderRadius: 27.5, // half of width/height for perfect circle
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+
+  // Increase size of home button's icon image
+  homeButtonIconImage: {
+    width: 55,  // bigger than 37
+    height: 55, // bigger than 37
+    marginBottom: 0, // remove bottom margin if you want it more centered vertically
+  },
+
+  homeButton: {
+    transform: [{ translateY: -20 }], // move it more upward (from -10 to -15)
+  
+},
 });
 
 export default AccountScreen;
+function fetchUserDetails() {
+  throw new Error('Function not implemented.');
+}

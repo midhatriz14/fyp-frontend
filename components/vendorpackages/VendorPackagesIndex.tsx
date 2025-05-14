@@ -1,14 +1,42 @@
 
 
 import { Ionicons } from '@expo/vector-icons'; // For icons
+import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 
 
 
 const PackageScreen = () => {
     const [isModalVisible, setModalVisible] = useState(false);
+    const [packageDetails, setPackageDetails] = useState<any>(null);
+    const [vendorId, setVendorId] = useState<string | null>(null);
+  
+    // Use useRoute to access route params
+    const route = useRoute();
+    const { packageId } = route.params as { packageId: string };  // Get packageId from route parameters
+  
+    
+    useEffect(() => {
+        if (packageId && vendorId) {
+          fetchPackageDetails(packageId);  // Fetch package details if packageId is available
+        }
+      }, [packageId, vendorId]);
+    
+      const fetchPackageDetails = async (packageId: string) => {
+        try {
+          // Fetch the details of the selected package (you can customize this API request based on your backend)
+          const response = await axios.get(`/vendor/packages/${vendorId}/${packageId}`);
+          setPackageDetails(response.data);  // Set the fetched package data to the state
+        } catch (error) {
+          console.error("Error fetching package details:", error);
+          Alert.alert("Error", "Unable to fetch package details.");
+        }
+      };
+
 
     const confirmLogout = () => {
         setModalVisible(false);
@@ -72,6 +100,8 @@ const PackageScreen = () => {
                 <Text style={styles.priceText}>Rs. 50,000/-</Text>
             </View>
 
+          
+                                   
             {/* Bottom Navigation */}
 
             <View style={styles.bottomNavigation}>
@@ -351,6 +381,7 @@ const styles = StyleSheet.create({
         fontSize: 10,
         color: '#000000',
     },
+    
 });
 
 export default PackageScreen;

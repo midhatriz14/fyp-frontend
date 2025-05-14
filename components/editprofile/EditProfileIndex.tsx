@@ -1,6 +1,11 @@
 
+import patchUpdateProfile from '@/services/patchUpdateProfile'; // import your API function
+import { getSecureData, saveSecureData } from '@/store';
+//import Ionicons from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -15,114 +20,175 @@ import {
 const EditProfileScreen: React.FC = () => {
   const router = useRouter();
 
+  // State for form fields
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
+
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
+
+  const fetchUserDetails = async () => {
+    try {
+      const userStr = await getSecureData('user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        setName(user.name || '');
+        setEmail(user.email || '');
+        setPhoneNumber(user.phoneNumber || user.phone || user.phone_number || '');
+        setAddress(user.address || '');
+      }
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+    }
+  };
+
+  const saveUserDetails = async () => {
+    try {
+      const userStr = await getSecureData('user');
+      if (!userStr) {
+        alert('User not found locally');
+        return;
+      }
+      const user = JSON.parse(userStr);
+      const userId = user.userId || user._id;
+
+      if (!userId) {
+        alert('User ID not available');
+        return;
+      }
+
+      const updateData = {
+        name,
+        email,
+        phoneNumber,
+        address,
+        userId,
+      };
+
+      const updatedUser = await patchUpdateProfile(userId, updateData);
+      await saveSecureData('user', JSON.stringify(updatedUser));
+      alert('Profile updated successfully');
+    } catch (error) {
+      console.error('Failed to save user data:', error);
+      alert('Failed to save profile. Please try again.');
+    }
+  };
+
   return (
     <View style={styles.container} testID="screen-container">
-      /* ✅ Added testID here */
-      {/* Set Status Bar */}
-      <StatusBar
-        backgroundColor="#F8E9F0" // Match the pink background color
-        barStyle="dark-content" // Ensure icons and text are visible
-      />
+      <StatusBar backgroundColor="#F8E9F0" barStyle="dark-content" />
+
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Text style={styles.backButton}>{"<"} Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Edit Profile</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={saveUserDetails}>
           <Text style={styles.saveButton}>SAVE</Text>
         </TouchableOpacity>
       </View>
+
       {/* Content */}
-      <ScrollView contentContainerStyle={styles.content}>
-        {/* Avatar Section */}
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <View style={styles.avatarContainer}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>MR</Text>
+            <Text style={styles.avatarText}>
+              {name ? name.charAt(0).toUpperCase() : 'N/A'}
+            </Text>
           </View>
-          <TouchableOpacity style={styles.cameraIcon}>
-            <Image
-              source={{
-                uri: "https://cdn-icons-png.flaticon.com/512/149/149852.png", // Camera Icon
-              }}
-              style={styles.cameraImage}
-            />
-          </TouchableOpacity>
         </View>
 
-        {/* Input Fields */}
         <View style={styles.form}>
-          <View style={styles.row}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>First Name</Text>
-              <TextInput style={styles.input} placeholder="Midhat" />
-            </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Last Name</Text>
-              <TextInput style={styles.input} placeholder="Rizvi" />
-            </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your name"
+              value={name}
+              onChangeText={setName}
+            />
           </View>
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>E-mail</Text>
             <TextInput
               style={styles.input}
-              placeholder="midhatrizvi@gmail.com"
+              placeholder="Enter your email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Country</Text>
-            <TextInput style={styles.input} placeholder="Pakistan" />
+            <TextInput
+              style={styles.input}
+              placeholder="Pakistan"
+              placeholderTextColor="#000000"
+              editable={false}
+            />
           </View>
 
           <View style={styles.row}>
             <View style={[styles.inputContainer, { flex: 0.3 }]}>
-              <Text style={styles.label}>Phone Number</Text>
-              <View style={styles.phoneRow}>
+              <Text style={styles.label}>+92</Text>
+              <View style={[styles.input, styles.flagContainer]}>
                 <Image
                   source={{
                     uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Flag_of_Pakistan.svg/1024px-Flag_of_Pakistan.svg.png",
                   }}
                   style={styles.flagIcon}
                 />
-                <Text style={styles.countryCode}>+92</Text>
               </View>
             </View>
-            <View style={[styles.inputContainer, { flex: 0.7 }]}>
+            <View style={[styles.inputContainer, { flex: 0.7, marginLeft: 10 }]}>
+              <Text style={styles.label}>Phone Number</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Enter phone number"
+                keyboardType="phone-pad"
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
               />
             </View>
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Address</Text>
-            <TextInput style={styles.input} placeholder="" />
+            <Text style={styles.label}>Address (Optional)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your address"
+              value={address}
+              onChangeText={setAddress}
+            />
           </View>
         </View>
       </ScrollView>
+
       {/* Bottom Navigation */}
       <View style={styles.bottomNavigation}>
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push("/dashboard")}
+          onPress={() => router.push("/myevents")}
         >
           <View style={styles.iconContainer}>
             <Image
-              source={{
-                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/037c15c0-3bc9-4416-8c18-69934587461a?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
-              }}
+              source={require('@/assets/images/myevent.png')}
               style={styles.iconImage}
             />
           </View>
-          <Text style={styles.navText}>Dashboard</Text>
+          <Text style={styles.navText}>My Events</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push("/dashboard")}
+          onPress={() => router.push("/bottommessages")}
         >
           <View style={styles.iconContainer}>
             <Image
@@ -136,8 +202,18 @@ const EditProfileScreen: React.FC = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
+          style={[styles.navItem, styles.homeButton]}
+          onPress={() => router.push('/dashboard')}
+        >
+          <View style={styles.homeButtonIconContainer}>
+            <Ionicons name="home" size={40} color="#fff" />
+          </View>
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push("/dashboard")}
+          onPress={() => router.push("/bottomnotification")}
         >
           <View style={styles.iconContainer}>
             <Image
@@ -212,23 +288,8 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     color: '#fff',
-    fontSize: 34,
+    fontSize: 60,
     fontWeight: 'bold',
-  },
-  cameraIcon: {
-    position: 'absolute',
-    bottom: 0,
-    right: 130,
-    width: 30,
-    height: 30,
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cameraImage: {
-    width: 20,
-    height: 20,
   },
   form: {
     marginBottom: 20,
@@ -252,19 +313,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#fff',
   },
-  phoneRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 5,
-  },
-  flagIcon: {
-    width: 20,
-    height: 15,
-    marginRight: 5,
-  },
-  countryCode: {
-    fontSize: 14,
-  },
   bottomNavigation: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -276,7 +324,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    paddingHorizontal: 10, // Ensure spacing around items
+    paddingHorizontal: 10,
   },
   navItem: {
     alignItems: 'center',
@@ -289,12 +337,9 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 5, // Space between icon and text
+    marginBottom: 5,
   },
   iconImage: {
-    // width: 24,
-    // height: 24,
-    // tintColor: '#fff',
     width: 37,
     height: 37,
     marginBottom: 5,
@@ -302,9 +347,55 @@ const styles = StyleSheet.create({
   navText: {
     fontSize: 10,
     color: '#000000',
-    // fontWeight: '500',
-    // textAlign: 'center', // Center-align text
   },
+  flagContainer: {
+    backgroundColor: '#fff',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    width: 50,
+  },
+  flagIcon: {
+    width: 30,
+    height: 20,
+    resizeMode: 'contain',
+  },
+  // homeButtonIconContainer: {
+  //   backgroundColor: '#780C60',
+  //   width: 40,
+  //   height: 40,
+  //   borderRadius: 20,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   marginBottom: 5,
+  // },
+  // homeButton: {
+  //   // Optional additional styling
+  // },
+  homeButtonIconContainer: {
+    backgroundColor: '#780C60',
+    width: 55,   // bigger than 30
+    height: 55,  // bigger than 30
+    borderRadius: 27.5, // half of width/height for perfect circle
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+
+  // Increase size of home button's icon image
+  homeButtonIconImage: {
+    width: 55,  // bigger than 37
+    height: 55, // bigger than 37
+    marginBottom: 0, // remove bottom margin if you want it more centered vertically
+  },
+
+  homeButton: {
+    transform: [{ translateY: -20 }], // move it more upward (from -10 to -15)
+  
+},
 });
 
 export default EditProfileScreen;
