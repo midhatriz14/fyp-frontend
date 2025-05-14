@@ -1,4 +1,5 @@
 import getVendorOrders from '@/services/getVendorOrders';
+import { getSecureData } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -19,8 +20,12 @@ const MyEventsScreen = () => {
     // Fetch events from the API when the component mounts
     const fetchData = async () => {
       try {
-        const fetchedEvents = await getVendorOrders();  // Fetch events using the getOrders function
-        console.log(fetchedEvents[0].vendorOrders);
+        const user = JSON.parse(await getSecureData("user") || "");
+        if (!user) {
+          throw "user not found";
+        }
+        const fetchedEvents = await getVendorOrders("Organizer", user._id);  // Fetch events using the getOrders function
+        console.log(fetchedEvents);
         setEvents(fetchedEvents);  // Update state with fetched events
       } catch (error) {
         console.error('Error fetching events:', error);

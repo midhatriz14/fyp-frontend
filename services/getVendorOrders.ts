@@ -13,10 +13,12 @@ export interface GetOrdersResponse {
     vendorOrders: any;
 }
 
-export default async function getVendorOrders(status?: string, limit = 10, skip = 0): Promise<GetOrdersResponse[]> {
-    // const url = `http://65.2.137.194:3000/orders`;
-    const url = `http://192.168.100.15:3000/orders`;
+export default async function getVendorOrders(type: string, userId: string, status?: string, limit = 10, skip = 0): Promise<GetOrdersResponse[]> {
+    const url = `http://65.2.137.194:3000/orders`;
+    // const url = `http://192.168.100.15:3000/orders`;
     const params = {
+        type,
+        userId,
         status,
         limit,
         skip,

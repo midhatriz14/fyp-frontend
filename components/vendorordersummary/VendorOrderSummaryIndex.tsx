@@ -1,5 +1,6 @@
 import getVendorOrderStats from "@/services/getVendorOrderStats";
 import getVendorOrders, { GetOrdersResponse } from "@/services/getVendorOrders";
+import { getSecureData } from "@/store";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -27,8 +28,12 @@ const OrderSummary = () => {
         // Fetch orders and stats on component mount
         const fetchData = async () => {
             try {
-                const ordersData = await getVendorOrders();  // Fetch all orders
-                const statsData = await getVendorOrderStats();  // Fetch order stats
+                const user = JSON.parse(await getSecureData("user") || "");
+                if (!user) {
+                    throw "user not found";
+                }
+                const ordersData = await getVendorOrders("Vendor", user._id);  // Fetch all orders
+                const statsData = await getVendorOrderStats("Vendor", user._id);  // Fetch order stats
                 console.log(ordersData);
                 setOrders(ordersData);
                 setOrderStats(statsData);
