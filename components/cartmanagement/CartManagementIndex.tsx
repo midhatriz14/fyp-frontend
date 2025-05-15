@@ -7,6 +7,8 @@ import Toast from 'react-native-toast-message'; // Import Toast
 
 const CartManagementIndexScreen: React.FC = () => {
     const [cartData, setCartData] = useState<any>(null);
+    const [cateringCategory, setCateringCategory] = useState<any>();
+    const [guests, setGuests] = useState<number>(0);
     const navigation = useNavigation();
     // saveSecureData('cartData', JSON.stringify({ vendors: [] }));
     const handleCheckout = async () => {
@@ -22,6 +24,11 @@ const CartManagementIndexScreen: React.FC = () => {
         const fetchCartData = async () => {
             try {
                 const storedCart = await getSecureData('cartData');
+                const eventDetails = JSON.parse(await getSecureData("eventDetails") || "");
+                setGuests(parseInt(eventDetails.guests.toString()));
+                const categories = JSON.parse(await getSecureData("categories") || "");
+                const cateringCategory = categories.find((x: any) => x.name.toLowerCase() === "caterings");
+                setCateringCategory(cateringCategory);
                 if (storedCart) {
                     setCartData(JSON.parse(storedCart));
                 } else {
@@ -83,7 +90,11 @@ const CartManagementIndexScreen: React.FC = () => {
         let totalAmount = 0;
         cartData.vendors.forEach((vendor: any) => {
             vendor.packages.forEach((pkg: any) => {
-                totalAmount += pkg.price;
+                if (cateringCategory._id === vendor.vendor.buisnessCategory) {
+                    totalAmount += (guests * pkg.price);
+                } else {
+                    totalAmount += pkg.price;
+                }
             });
         });
         return totalAmount;
@@ -118,7 +129,7 @@ const CartManagementIndexScreen: React.FC = () => {
                             {vendor.packages.map((pkg: any, packageIndex: number) => (
                                 <View key={packageIndex} style={styles.packageContainer}>
                                     <Text style={styles.packageName}>{pkg.packageName}</Text>
-                                    <Text style={styles.packagePrice}>Rs. {pkg.price}/-</Text>
+                                    <Text style={styles.packagePrice}>Rs. {cateringCategory && cateringCategory._id === vendor.vendor.buisnessCategory ? pkg.price * guests : pkg.price}/-</Text>
                                     {/* Delete Button */}
                                     <TouchableOpacity
                                         style={styles.deleteButton}

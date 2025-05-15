@@ -1,5 +1,5 @@
 import postPlaceOrder from '@/services/postPlaceOrder';
-import { getSecureData } from '@/store'; // Assuming you have this function to get data from local storage
+import { deleteSecureData, getSecureData } from '@/store'; // Assuming you have this function to get data from local storage
 import { router } from 'expo-router';
 import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -10,12 +10,18 @@ const MyOrdersScreen = () => {
     const [totalAmount, setTotalAmount] = useState<number>();
     const [discount, setDiscount] = useState<number>();
     const [discountedTotal, setDiscountedTotal] = useState<number>();
+    const [cateringCategory, setCateringCategory] = useState<any>();
+    const [guests, setGuests] = useState<number>(0);
 
     useEffect(() => {
         const fetchCartData = async () => {
             try {
                 const storedCart = await getSecureData('cartData');
-                console.log("storedCart", storedCart);
+                const eventDetails = JSON.parse(await getSecureData("eventDetails") || "");
+                setGuests(parseInt(eventDetails.guests.toString()));
+                const categories = JSON.parse(await getSecureData("categories") || "");
+                const cateringCategory = categories.find((x: any) => x.name.toLowerCase() === "caterings");
+                setCateringCategory(cateringCategory);
                 if (storedCart) {
                     setCartData(JSON.parse(storedCart));
                 } else {
@@ -48,11 +54,14 @@ const MyOrdersScreen = () => {
 
     // Calculate total amount
     const calculateTotalAmount = () => {
-        console.log(cartData);
         let totalAmount = 0;
         cartData.vendors.forEach((vendor: any) => {
             vendor.packages.forEach((pkg: any) => {
-                totalAmount += pkg.price;
+                if (cateringCategory._id === vendor.vendor.buisnessCategory) {
+                    totalAmount += (guests * pkg.price);
+                } else {
+                    totalAmount += pkg.price;
+                }
             });
         });
         return totalAmount;
@@ -80,7 +89,6 @@ const MyOrdersScreen = () => {
             const organizerId = user?._id
             const guests = eventDetails?.guests;
             const eventName = eventDetails?.eventName;
-
             const services = cart.vendors.flatMap((vendor: any) =>
                 vendor.packages.map((pkg: any) => ({
                     vendorId: vendor.vendor._id,
@@ -88,9 +96,7 @@ const MyOrdersScreen = () => {
                     price: pkg.price,
                 }))
             );
-            console.log(organizerId, guests, eventName,);
             const response = await postPlaceOrder({ organizerId, eventDate, eventTime, services, guests, eventName });
-            console.log("response", response);
             if (response) {
                 Toast.show({
                     type: 'success',
@@ -100,7 +106,8 @@ const MyOrdersScreen = () => {
                 });
                 // Optionally, clear the cart after order is placed
                 // saveSecureData('cartData', JSON.stringify({ vendors: [] }));
-
+                await deleteSecureData("cartData");
+                await deleteSecureData("eventDetails");
                 router.push("/OrderSummary");
             } else {
                 throw new Error('Failed to place order');
@@ -150,7 +157,7 @@ const MyOrdersScreen = () => {
                             {vendor.packages.map((pkg: any, packageIndex: number) => (
                                 <View key={packageIndex} style={styles.packageContainer}>
                                     <Text style={styles.packageName}>{pkg.packageName}</Text>
-                                    <Text style={styles.packagePrice}>Rs. {pkg.price.toLocaleString()}/-</Text>
+                                    <Text style={styles.packagePrice}>Rs. {cateringCategory && cateringCategory._id === vendor.vendor.buisnessCategory ? (pkg.price * guests).toLocaleString() : pkg.price.toLocaleString()}/-</Text>
                                 </View>
                             ))}
                         </View>

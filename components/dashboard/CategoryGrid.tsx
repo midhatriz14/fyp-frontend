@@ -2,7 +2,7 @@ import getAllCategories from '@/services/getAllCategories';
 import { saveSecureData } from '@/store';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export interface ICategory {
   _id: string
@@ -37,6 +37,7 @@ const CategoryGrid: React.FC = () => {
   }, []);
   const getCategories = async () => {
     const response = await getAllCategories();
+    await saveSecureData("categories", JSON.stringify(response));
     setCategories(response);
   }
   return (

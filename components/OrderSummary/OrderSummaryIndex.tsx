@@ -151,9 +151,7 @@ const SummaryScreen = () => {
 
             {/* Receipt Section */}
             <View style={styles.receiptContainer}>
-                {/* Receipt Content */}
-                <Text style={styles.receiptText}>Receipt Details</Text>
-                {/* Format the receipt data to display here */}
+                {/* <Text style={styles.receiptText}>Receipt Details</Text>
                 {cartData?.vendors?.map((vendor: any, vendorIndex: number) => (
                     <View key={vendorIndex}>
                         <Text style={styles.vendorName}>{vendor.vendor.name}</Text>
@@ -167,7 +165,7 @@ const SummaryScreen = () => {
 
                 <Text style={styles.totalText}>Total Amount: Rs. {totalAmount}</Text>
                 <Text style={styles.discountText}>Discount: Rs. {discount}</Text>
-                <Text style={styles.discountedTotalText}>Final Amount: Rs. {discountedTotal}</Text>
+                <Text style={styles.discountedTotalText}>Final Amount: Rs. {discountedTotal}</Text> */}
             </View>
 
             {/* Button Section */}
@@ -275,7 +273,7 @@ const styles = StyleSheet.create({
     },
     receiptContainer: {
         padding: 20,
-        backgroundColor: '#FFF',
+        // backgroundColor: '#FFF',
         borderRadius: 10,
         marginBottom: 30,
     },

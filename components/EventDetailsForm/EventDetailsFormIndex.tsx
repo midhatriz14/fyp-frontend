@@ -10,6 +10,7 @@ const PersonalizedExperienceScreen: React.FC = () => {
     const [eventName, setEventName] = useState('');
     const [eventType, setEventType] = useState('');
     const [eventDate, setEventDate] = useState<Date | null>(null);
+    const [budget, setBudget] = useState<string>('');
     const [guests, setGuests] = useState('');
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [selectedServices, setSelectedServices] = useState<string[]>([]);
@@ -22,6 +23,7 @@ const PersonalizedExperienceScreen: React.FC = () => {
         eventDate: '',
         guests: '',
         selectedServices: '',
+        budget: '',
     });
 
     useEffect(() => {
@@ -38,6 +40,7 @@ const PersonalizedExperienceScreen: React.FC = () => {
             eventName: eventName ? '' : 'Event name is required',
             eventType: eventType ? '' : 'Event type is required',
             eventDate: eventDate ? '' : 'Event date is required',
+            budget: budget ? '' : 'Budget is required',
             guests: guests ? '' : 'Guest count is required',
             selectedServices: selectedServices.length > 0 ? '' : 'Select at least one service',
         };
@@ -111,6 +114,17 @@ const PersonalizedExperienceScreen: React.FC = () => {
             />
             {errors.guests ? <Text style={styles.errorText}>{errors.guests}</Text> : null}
 
+            <Text style={styles.label}>Your Budget</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Your Budget"
+                placeholderTextColor="#aaa"
+                keyboardType="numeric"
+                value={budget}
+                onChangeText={setBudget}
+            />
+            {errors.budget ? <Text style={styles.errorText}>{errors.budget}</Text> : null}
+
             <Text style={styles.label}>Desired Services</Text>
             <View style={styles.checkboxContainer}>
                 {categories.map((service) => (
@@ -128,9 +142,9 @@ const PersonalizedExperienceScreen: React.FC = () => {
             {errors.selectedServices ? <Text style={styles.errorText}>{errors.selectedServices}</Text> : null}
 
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.aiPlanButton} onPress={() => {
+                <TouchableOpacity style={styles.aiPlanButton} onPress={async () => {
                     if (validateFields()) {
-                        saveSecureData("eventDetails", JSON.stringify({ eventName, eventType, eventDate, guests, selectedServices }))
+                        await saveSecureData("eventDetails", JSON.stringify({ eventName, eventType, eventDate, guests, selectedServices, budget }))
                         router.push('/AI');
                     }
                 }}>

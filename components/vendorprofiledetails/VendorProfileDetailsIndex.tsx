@@ -65,9 +65,7 @@ const PhotographerDetailsScreen: React.FC = () => {
   useEffect(() => {
     const fetchVendorDetails = async () => {
       try {
-        console.log("Idsddddd", id)
         const response = await axios.get(`http://65.2.137.194:3000/vendor?userId=${id}`);
-        console.log(response.data);
         setVendorData(response.data);
         setActivePackage(response.data.packages?.[0]?._id || null); // Set the first package as active by default
       } catch (error) {

@@ -1,9 +1,12 @@
+import postGenerateAiPackage from '@/services/postGenerateAiPackage';
+import { getSecureData, saveSecureData } from '@/store';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 const AIPackageScreen: React.FC = () => {
     const [stage, setStage] = useState(0);
+    const [proceed, setProceed] = useState<boolean>(false);
     const messages = [
         "Please hold on a moment...",
         "Analyzing data requirements...",
@@ -15,26 +18,27 @@ const AIPackageScreen: React.FC = () => {
         const interval = setInterval(() => {
             setStage((prevStage) => (prevStage < messages.length - 1 ? prevStage + 1 : prevStage));
         }, 2000); // 2 seconds per stage
+        const run = async () => {
+            const eventDetailsObj = JSON.parse(await getSecureData("eventDetails") || "");
+            const response = await postGenerateAiPackage({ eventDate: eventDetailsObj.eventDate || new Date(), eventName: eventDetailsObj.eventName, services: eventDetailsObj.selectedServices, guests: parseInt(eventDetailsObj.guests), budget: parseInt(eventDetailsObj.budget) })
+            console.log("AI Response", response);
+            await saveSecureData("aiPackage", JSON.stringify(response));
+            setProceed(true);
+        };
+        run();
         return () => clearInterval(interval);
     }, []);
 
-    // Navigate to the next screen after the last stage
-    if (stage === messages.length - 1) {
-        setTimeout(() => {
-            router.push("/AIPackage"); // Navigate to the next screen
-        }, 1000); // Delay before navigation
-    }
+    useEffect(() => {
+        // Navigate to the next screen after the last stage
+        if (stage === messages.length - 1 && proceed) {
+            setTimeout(() => {
+                router.push("/AIPackage"); // Navigate to the next screen
+            }, 1000); // Delay before navigation
+        }
+    }, [stage, proceed]);
 
     return (
-        // <View style={styles.container}>
-        //     <Text style={styles.heading}>Generating Your AI Package</Text>
-        //     <Image
-        //         source={{ uri: "https://via.placeholder.com/200" }} // Replace with your image link
-        //         style={styles.image}
-        //     />
-        //     <Text style={styles.subheading}>Generating the Best AI Package for You...</Text>
-        //     <Text style={styles.message}>{messages[stage]}</Text>
-        // </View>
         <View style={styles.container}>
             <Text style={styles.heading}>Generating Your AI Package</Text>
             <Image
