@@ -2,10 +2,9 @@
 
 import { Ionicons } from '@expo/vector-icons'; // For icons
 import { useRoute } from '@react-navigation/native';
-import axios from 'axios';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 
 
@@ -13,29 +12,30 @@ import { Alert, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'r
 const PackageScreen = () => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [packageDetails, setPackageDetails] = useState<any>(null);
-    const [vendorId, setVendorId] = useState<string | null>(null);
+    const [vendor_Id, setVendorId] = useState<string | null>(null);
   
-    // Use useRoute to access route params
+    
     const route = useRoute();
-    const { packageId } = route.params as { packageId: string };  // Get packageId from route parameters
+const { packageId, vendorId } = route.params as { packageId: string; vendorId: string };  // Get both packageId and vendorId from route params
+
+useEffect(() => {
+  if (packageId && vendorId) {
+    setVendorId(vendorId); // Save vendorId to state
+    fetchPackageDetails(packageId);  // Then fetch package details
+  }
+}, [packageId, vendorId]);
+
+    
+const fetchPackageDetails = async (packageId: string) => {
+    try {
+      const response = await fetch(`http://65.2.137.194:3000/vendor/packages/${vendor_Id}/${packageId}`);
+      const data = await response.json();
+      setPackageDetails(data);
+    } catch (error) {
+      console.error('Error fetching package details:', error);
+    }
+  };
   
-    
-    useEffect(() => {
-        if (packageId && vendorId) {
-          fetchPackageDetails(packageId);  // Fetch package details if packageId is available
-        }
-      }, [packageId, vendorId]);
-    
-      const fetchPackageDetails = async (packageId: string) => {
-        try {
-          // Fetch the details of the selected package (you can customize this API request based on your backend)
-          const response = await axios.get(`/vendor/packages/${vendorId}/${packageId}`);
-          setPackageDetails(response.data);  // Set the fetched package data to the state
-        } catch (error) {
-          console.error("Error fetching package details:", error);
-          Alert.alert("Error", "Unable to fetch package details.");
-        }
-      };
 
 
     const confirmLogout = () => {
@@ -79,7 +79,7 @@ const PackageScreen = () => {
             </View>
 
             {/* Content */}
-            <View style={styles.content}>
+            {/* <View style={styles.content}>
                 <Text style={styles.sectionHeader}>Deliverables</Text>
                 <Text style={styles.sectionText}>
                     Including Photography Videography Master Video + Highlights Couple Photoshoot Family shoot One digital
@@ -98,7 +98,33 @@ const PackageScreen = () => {
                 </Text>
 
                 <Text style={styles.priceText}>Rs. 50,000/-</Text>
-            </View>
+            </View> */}
+
+<View style={styles.content}>
+  {packageDetails ? (
+    <>
+      <Text style={styles.sectionHeader}>Package Name</Text>
+      <Text style={styles.sectionText}>{packageDetails.packageName}</Text>
+
+      <Text style={styles.sectionHeader}>Deliverables</Text>
+      <Text style={styles.sectionText}>{packageDetails.deliverables || 'N/A'}</Text>
+
+      <Text style={styles.sectionHeader}>Photography</Text>
+      <Text style={styles.sectionText}>{packageDetails.photography || 'N/A'}</Text>
+
+      <Text style={styles.sectionHeader}>Team</Text>
+      <Text style={styles.sectionText}>{packageDetails.team || 'N/A'}</Text>
+
+      <Text style={styles.sectionHeader}>Videography</Text>
+      <Text style={styles.sectionText}>{packageDetails.videography || 'N/A'}</Text>
+
+      <Text style={styles.priceText}>Rs. {packageDetails.price || 'N/A'}/-</Text>
+    </>
+  ) : (
+    <Text style={styles.sectionText}>Loading package details...</Text>
+  )}
+</View>
+
 
           
                                    
@@ -107,49 +133,7 @@ const PackageScreen = () => {
             <View style={styles.bottomNavigation}>
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => router.push('/vendorordersummary')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/myorder.png')}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>My Orders</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendormessages')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a614f1d9-eba9-4f54-b7ec-c93132dcb1a9?placeholderIfAbsent=true&apiKey=b95bf478340c44448a2ab0604562a117',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Messages</Text>
-                </TouchableOpacity>
-
-                {/* Home Button */}
-                <TouchableOpacity
-                    style={[styles.navItem, styles.homeButton]} // Apply the custom homeButton style
-                    onPress={() => router.push('/vendordashboard')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/home.png')} // Replace with actual home image path
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Home</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendormyevents')}
+                    onPress={() => router.push("/vendormyevents")}
                 >
                     <View style={styles.iconContainer}>
                         <Image
@@ -162,12 +146,52 @@ const PackageScreen = () => {
 
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => router.push('/vendoraccount')}
+                    onPress={() => router.push("/bottommessages")}
                 >
                     <View style={styles.iconContainer}>
                         <Image
                             source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/549e73c4-da91-40a5-a5c8-fd173b0e2a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+                            }}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>Messages</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[styles.navItem, styles.homeButton]}
+                    onPress={() => router.push('/vendordashboard')}
+                >
+                    <View style={styles.homeButtonIconContainer}>
+                        <Ionicons name="home" size={40} color="#fff" />
+                    </View>
+                    <Text style={styles.navText}>Home</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push("/vendorordersummary")}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={{
+                                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+                            }}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>My Orders</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push("/account")}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={{
+                                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
                             }}
                             style={styles.iconImage}
                         />
@@ -380,6 +404,15 @@ const styles = StyleSheet.create({
     navText: {
         fontSize: 10,
         color: '#000000',
+    },
+    homeButtonIconContainer: {
+        backgroundColor: '#780C60',
+        width: 55,
+        height: 55,
+        borderRadius: 27.5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 5,
     },
     
 });

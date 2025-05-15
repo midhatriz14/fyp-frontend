@@ -90,49 +90,7 @@ const MyEventsScreen = () => {
             <View style={styles.bottomNavigation}>
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => router.push('/vendorordersummary')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/myorder.png')}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>My Orders</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendormessages')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a614f1d9-eba9-4f54-b7ec-c93132dcb1a9?placeholderIfAbsent=true&apiKey=b95bf478340c44448a2ab0604562a117',
-                            }}
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Messages</Text>
-                </TouchableOpacity>
-
-                {/* Home Button */}
-                <TouchableOpacity
-                    style={[styles.navItem, styles.homeButton]} // Apply the custom homeButton style
-                    onPress={() => router.push('/vendordashboard')}
-                >
-                    <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/home.png')} // Replace with actual home image path
-                            style={styles.iconImage}
-                        />
-                    </View>
-                    <Text style={styles.navText}>Home</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.navItem}
-                    onPress={() => router.push('/vendormyevents')}
+                    onPress={() => router.push("/vendormyevents")}
                 >
                     <View style={styles.iconContainer}>
                         <Image
@@ -145,12 +103,52 @@ const MyEventsScreen = () => {
 
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => router.push('/vendoraccount')}
+                    onPress={() => router.push("/bottommessages")}
                 >
                     <View style={styles.iconContainer}>
                         <Image
                             source={{
-                                uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a',
+                                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/549e73c4-da91-40a5-a5c8-fd173b0e2a62?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+                            }}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>Messages</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[styles.navItem, styles.homeButton]}
+                    onPress={() => router.push('/vendordashboard')}
+                >
+                    <View style={styles.homeButtonIconContainer}>
+                        <Ionicons name="home" size={40} color="#fff" />
+                    </View>
+                    <Text style={styles.navText}>Home</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push("/vendorordersummary")}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={{
+                                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/198f4cc8-49ff-4ccc-b97b-619e572143d4?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
+                            }}
+                            style={styles.iconImage}
+                        />
+                    </View>
+                    <Text style={styles.navText}>My Orders</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.navItem}
+                    onPress={() => router.push("/account")}
+                >
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={{
+                                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/73089a6f-a9a6-4c94-9fd1-4cdd5923a137?placeholderIfAbsent=true&apiKey=0a92af3bc6e24da3a9ef8b1ae693931a",
                             }}
                             style={styles.iconImage}
                         />
@@ -271,6 +269,15 @@ const styles = StyleSheet.create({
     homeButton: {
         // marginBottom: 30, // Moves the Home button slightly upward
         transform: [{ translateY: -10 }], // Alternatively, use translateY to lift it
+    },
+    homeButtonIconContainer: {
+        backgroundColor: '#780C60',
+        width: 55,
+        height: 55,
+        borderRadius: 27.5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 5,
     },
 
 });

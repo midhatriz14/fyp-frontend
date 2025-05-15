@@ -586,10 +586,8 @@ const DashboardScreen = () => {
                 <View style={styles.header}>
                     <View style={styles.profileContainer}>
                         <View style={styles.profileDetails}>
-                            <Image
-                                source={{ uri: "https://example.com/profile-pic.png" }}
-                                style={styles.profileImage}
-                            />
+                             
+                            <Text style={styles.welcomeText}>Welcome , </Text>
                             <Text style={styles.username}>{username}</Text>
                         </View>
                         <TouchableOpacity
@@ -931,7 +929,16 @@ const styles = StyleSheet.create({
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: 10,}
+                marginBottom: 10,},
+                welcomeText: {
+                    fontSize: 20,
+                   // fontWeight: '500',
+                    color: '#000',
+                    paddingLeft: 10,
+                    fontWeight: "bold",
+                  },
+                  
+                
 });
 
 export default DashboardScreen;
