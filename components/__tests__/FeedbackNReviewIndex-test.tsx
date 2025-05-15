@@ -158,11 +158,15 @@ it("does not allow rating to exceed 5", () => {
   const { getAllByRole } = render(<FeedbackNReviewpIndex />);
   const stars = getAllByRole("button");
 
-  fireEvent.press(stars[4]); // Press 5th star
-  fireEvent.press(stars[5]); // Try pressing a 6th star (out of range)
+  // Try pressing all available stars to ensure only 5 are rendered
+  for (let i = 0; i < stars.length; i++) {
+    fireEvent.press(stars[i]);
+  }
 
-  expect(stars.length).toBe(5); // There should be only 5 stars
+  expect(stars.length).toBe(5); // Confirm only 5 stars exist
 });
+
+
 it("does not allow empty review submission", () => {
   const { getByPlaceholderText, getByText } = render(<FeedbackNReviewpIndex />);
   const textInput = getByPlaceholderText("Start writing here");

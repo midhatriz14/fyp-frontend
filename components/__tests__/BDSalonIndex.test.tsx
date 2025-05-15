@@ -1,11 +1,12 @@
-import React from "react";
-import renderer from "react-test-renderer"; // Import this for snapshot testing
-import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
-import BusinessDetailsForm from "../bdsalon/BDSalonIndex";
-import { Alert } from "react-native";
 import postSalonBusinessDetails from "@/services/postSalonBusinessDetails";
-import { getSecureData } from "@/store";
+import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import React from "react";
+import { Alert } from "react-native";
+import {act} from "react-test-renderer"; // Import this for snapshot testing
+import BusinessDetailsForm from "../bdsalon/BDSalonIndex";
+//import { getSecureData } from "@/store";
 import { router } from "expo-router";
+
 
 // Mock dependencies
 jest.mock("@/store", () => ({
@@ -29,13 +30,14 @@ jest.mock("@expo/vector-icons", () => ({
   FontAwesome5: "IconMock",
 }));
 
-test("SNAPSHOT-01: BusinessDetailsForm renders correctly", () => {
-  const tree = renderer.create(<BusinessDetailsForm />).toJSON();
-  expect(tree).toMatchSnapshot();
+test("SNAPSHOT-01: BusinessDetailsForm renders correctly", async () => {
+  const { toJSON, findByText } = render(<BusinessDetailsForm />);
+  await findByText("Business Details"); // Ensure at least 1 node is rendered
+  expect(toJSON()).toMatchSnapshot();
 });
 
 test("SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting inputs", async () => {
-  const { getByText, getByPlaceholderText, getAllByText } = render(
+  const { getByText, getByPlaceholderText, getAllByText, toJSON } = render(
     <BusinessDetailsForm />
   );
 
@@ -46,27 +48,25 @@ test("SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting inputs",
   );
   fireEvent.changeText(getByPlaceholderText("Select Cities"), "Islamabad");
   fireEvent.changeText(getByPlaceholderText("Enter Down Payment"), "1000");
+  fireEvent.changeText(
+    getByPlaceholderText("Enter Description"),
+    "Party makeup services"
+  );
+
   fireEvent.press(getByText("FEMALE"));
   fireEvent.press(getByText("PERCENTAGE"));
-
-  // Get all "YES" buttons
   const yesButtons = getAllByText("YES");
-
-  // Ensure there are at least two "YES" buttons
-  expect(yesButtons.length).toBeGreaterThan(1);
-
-  fireEvent.press(yesButtons[0]); // Travels to Client Home
-  fireEvent.press(yesButtons[1]); // COVID compliant
+  fireEvent.press(yesButtons[0]);
+  fireEvent.press(yesButtons[1]);
   fireEvent.press(getByText("REFUNDABLE"));
 
-  const tree = renderer.create(<BusinessDetailsForm />).toJSON();
-  expect(tree).toMatchSnapshot();
+  await waitFor(() => expect(toJSON()).not.toBeNull());
+  expect(toJSON()).toMatchSnapshot();
 });
 
 test("SNAPSHOT-03: BusinessDetailsForm displays error when submitting empty fields", async () => {
   const alertMock = jest.spyOn(Alert, "alert").mockImplementation(() => {});
-
-  const { getByText } = render(<BusinessDetailsForm />);
+  const { getByText, toJSON } = render(<BusinessDetailsForm />);
   fireEvent.press(getByText("Save & Continue"));
 
   await waitFor(() => {
@@ -76,8 +76,8 @@ test("SNAPSHOT-03: BusinessDetailsForm displays error when submitting empty fiel
     );
   });
 
-  const tree = renderer.create(<BusinessDetailsForm />).toJSON();
-  expect(tree).toMatchSnapshot();
+  expect(toJSON()).not.toBeNull();
+  expect(toJSON()).toMatchSnapshot();
 
   alertMock.mockRestore();
 });
@@ -123,8 +123,8 @@ describe("BusinessDetailsForm Component (Pakistan - Islamabad)", () => {
     const backButton = getByText("Back");
 
     fireEvent.press(backButton);
-
-    expect(require("expo-router").router.back).toHaveBeenCalledTimes(1);
+    // expect(require("expo-router").router.back).toHaveBeenCalledTimes(1);
+    expect(router.back).toHaveBeenCalledTimes(1);
   });
 
   test("UI-05: Staff gender selection buttons are properly displayed", () => {
@@ -273,43 +273,40 @@ describe("BusinessDetailsForm Component (Pakistan - Islamabad)", () => {
     });
   });
 
-   test("FT-05: Updates state correctly when user interacts with form elements", async () => {
-     const { getByPlaceholderText, getByText } = render(
-       <BusinessDetailsForm />
-     );
+  test("FT-05: Updates state correctly when user interacts with form elements", async () => {
+    const { getByPlaceholderText, getByText } = render(<BusinessDetailsForm />);
 
-     // Expertise field
-     const expertiseInput = getByPlaceholderText("Enter expertise");
-     fireEvent.changeText(expertiseInput, "Hair Styling");
+    // Expertise field
+    const expertiseInput = getByPlaceholderText("Enter expertise");
+    fireEvent.changeText(expertiseInput, "Hair Styling");
 
-     // Staff Type selection
-     const soloOption = getByText("SOLO");
-     fireEvent.press(soloOption);
+    // Staff Type selection
+    const soloOption = getByText("SOLO");
+    fireEvent.press(soloOption);
 
-     // Minimum Price field
-     const priceInput = getByPlaceholderText("Enter Description");
-     fireEvent.changeText(priceInput, "Professional salon services");
+    // Minimum Price field
+    const priceInput = getByPlaceholderText("Enter Description");
+    fireEvent.changeText(priceInput, "Professional salon services");
 
-     // Verify Save button is pressable
-     const saveButton = getByText("Save & Continue");
-     expect(saveButton).toBeTruthy();
-   });
+    // Verify Save button is pressable
+    const saveButton = getByText("Save & Continue");
+    expect(saveButton).toBeTruthy();
+  });
 
+  test("FT-06: Form correctly handles and displays validation errors", async () => {
+    const { getByText } = render(<BusinessDetailsForm />);
 
-   test("FT-06: Form correctly handles and displays validation errors", async () => {
-     const { getByText } = render(<BusinessDetailsForm />);
+    // Attempt to submit form without filling required fields
+    fireEvent.press(getByText("Save & Continue"));
 
-     // Attempt to submit form without filling required fields
-     fireEvent.press(getByText("Save & Continue"));
-
-     // Verify alert was shown
-     await waitFor(() => {
-       expect(Alert.alert).toHaveBeenCalledWith(
-         "Error",
-         "Please fill in all required fields marked with *."
-       );
-     });
-   });
+    // Verify alert was shown
+    await waitFor(() => {
+      expect(Alert.alert).toHaveBeenCalledWith(
+        "Error",
+        "Please fill in all required fields marked with *."
+      );
+    });
+  });
 
   test("SEC-01: Prevents excessively long inputs", () => {
     const { getByPlaceholderText } = render(<BusinessDetailsForm />);
@@ -352,7 +349,7 @@ describe("BusinessDetailsForm Component (Pakistan - Islamabad)", () => {
     expect(downPaymentInput.props.value).toBe("abc");
   });
 
- test("SEC-04: Input fields properly handle special characters", async () => {
+  test("SEC-04: Input fields properly handle special characters", async () => {
     const { getByPlaceholderText, getByDisplayValue } = render(
       <BusinessDetailsForm />
     );
@@ -367,7 +364,6 @@ describe("BusinessDetailsForm Component (Pakistan - Islamabad)", () => {
       expect(getByDisplayValue(specialChars)).toBeTruthy();
     });
   });
-
 
   test("SEC-05: Numeric input field accepts decimal values", () => {
     const { getByPlaceholderText } = render(<BusinessDetailsForm />);
@@ -453,35 +449,35 @@ describe("BusinessDetailsForm Component (Pakistan - Islamabad)", () => {
     expect(endTime - startTime).toBeLessThan(200);
   });
 
-   test("PERF-06: Form renders and initializes quickly", async () => {
-     const startTime = performance.now();
+  test("PERF-06: Form renders and initializes quickly", async () => {
+    const startTime = performance.now();
 
-     render(<BusinessDetailsForm />);
+    render(<BusinessDetailsForm />);
 
-     const endTime = performance.now();
-     const renderTime = endTime - startTime;
+    const endTime = performance.now();
+    const renderTime = endTime - startTime;
 
-     expect(renderTime).toBeLessThan(500); // Should render in less than 500ms
-   });
+    expect(renderTime).toBeLessThan(500); // Should render in less than 500ms
+  });
 
-   test("PERF-07: Form handles rapid input changes efficiently", async () => {
-     const { getByPlaceholderText } = render(<BusinessDetailsForm />);
-     const input = getByPlaceholderText("Enter expertise");
+  test("PERF-07: Form handles rapid input changes efficiently", async () => {
+    const { getByPlaceholderText } = render(<BusinessDetailsForm />);
+    const input = getByPlaceholderText("Enter expertise");
 
-     const startTime = performance.now();
+    const startTime = performance.now();
 
-     // Simulate rapid typing
-     await act(async () => {
-       for (let i = 0; i < 20; i++) {
-         fireEvent.changeText(input, `Test input ${i}`);
-       }
-     });
+    // Simulate rapid typing
+    await act(async () => {
+      for (let i = 0; i < 20; i++) {
+        fireEvent.changeText(input, `Test input ${i}`);
+      }
+    });
 
-     const endTime = performance.now();
-     expect(endTime - startTime).toBeLessThan(200); // Should handle 20 inputs in under 200ms
-   });
+    const endTime = performance.now();
+    expect(endTime - startTime).toBeLessThan(200); // Should handle 20 inputs in under 200ms
+  });
 
-   //ACCURACY 
+  //ACCURACY
   test("ACC-01: Form fields maintain correct values after updates", async () => {
     const { getByPlaceholderText } = render(<BusinessDetailsForm />);
     const testValue = "Professional Makeup Artist";
@@ -517,39 +513,40 @@ describe("BusinessDetailsForm Component (Pakistan - Islamabad)", () => {
     expect(cityInput.props.value).toBe(cities);
   });
   //integration testing
- test("INT-01: Form validation works with incomplete data", async () => {
-   const alertMock = jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  test("INT-01: Form validation works with incomplete data", async () => {
+    const alertMock = jest.spyOn(Alert, "alert").mockImplementation(() => {});
 
-   const { getByText } = render(<BusinessDetailsForm />);
-   const submitButton = getByText("Save & Continue");
-
-   // Only submit with incomplete data
-   await act(async () => {
-     fireEvent.press(submitButton);
-   });
-
-   expect(alertMock).toHaveBeenCalledWith(
-     "Error",
-     "Please fill in all required fields marked with *."
-   );
-
-   alertMock.mockRestore();
- });
-
- test("INT-02: Back button navigation works properly", () => {
-   const { getByText } = render(<BusinessDetailsForm />);
-   const backButton = getByText("Back");
-
-   fireEvent.press(backButton);
-
-   expect(require("expo-router").router.back).toHaveBeenCalledTimes(1);
- });
-
-  test('INT-03: Form correctly integrates with router for navigation', async () => {
     const { getByText } = render(<BusinessDetailsForm />);
-    
+    const submitButton = getByText("Save & Continue");
+
+    // Only submit with incomplete data
+    await act(async () => {
+      fireEvent.press(submitButton);
+    });
+
+    expect(alertMock).toHaveBeenCalledWith(
+      "Error",
+      "Please fill in all required fields marked with *."
+    );
+
+    alertMock.mockRestore();
+  });
+
+  test("INT-02: Back button navigation works properly", () => {
+    const { getByText } = render(<BusinessDetailsForm />);
+    const backButton = getByText("Back");
+
+    fireEvent.press(backButton);
+
+    //expect(require("expo-router").router.back).toHaveBeenCalledTimes(1);
+    expect(router.back).toHaveBeenCalledTimes(1);
+  });
+
+  test("INT-03: Form correctly integrates with router for navigation", async () => {
+    const { getByText } = render(<BusinessDetailsForm />);
+
     // Test back button integration
-    fireEvent.press(getByText('Back'));
+    fireEvent.press(getByText("Back"));
     expect(router.back).toHaveBeenCalled();
   });
 
@@ -570,31 +567,31 @@ describe("BusinessDetailsForm Component (Pakistan - Islamabad)", () => {
     expect(getByText("Refund Policy*")).toBeTruthy();
   });
 
-  test('Access-03: Form elements have appropriate contrast', () => {
+  test("Access-03: Form elements have appropriate contrast", () => {
     const { getByText } = render(<BusinessDetailsForm />);
-    
+
     // Check button text contrast
-    const saveButtonText = getByText('Save & Continue');
+    const saveButtonText = getByText("Save & Continue");
     expect(saveButtonText.props.style).toEqual(
       expect.objectContaining({
-        color: '#FFF', // White text on dark background = good contrast
+        color: "#FFF", // White text on dark background = good contrast
       })
     );
   });
 
-  test('Access-04: Fields have helpful placeholder text', () => {
+  test("Access-04: Fields have helpful placeholder text", () => {
     const { getByPlaceholderText } = render(<BusinessDetailsForm />);
-    
+
     // Verify descriptive placeholders
-    expect(getByPlaceholderText('Enter expertise')).toBeTruthy();
-    expect(getByPlaceholderText('Select Cities')).toBeTruthy();
-    expect(getByPlaceholderText('Enter Description')).toBeTruthy();
-    expect(getByPlaceholderText('Enter Down Payment')).toBeTruthy();
+    expect(getByPlaceholderText("Enter expertise")).toBeTruthy();
+    expect(getByPlaceholderText("Select Cities")).toBeTruthy();
+    expect(getByPlaceholderText("Enter Description")).toBeTruthy();
+    expect(getByPlaceholderText("Enter Down Payment")).toBeTruthy();
   });
 
-  test('Access-05: Required fields are clearly marked', () => {
+  test("Access-05: Required fields are clearly marked", () => {
     const { getAllByText } = render(<BusinessDetailsForm />);
-    
+
     // Check for asterisk marking required fields
     const requiredMarkers = getAllByText(/\*/);
     expect(requiredMarkers.length).toBeGreaterThan(0);

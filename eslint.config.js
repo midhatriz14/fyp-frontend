@@ -6,5 +6,12 @@ module.exports = defineConfig([
   expoConfig,
   {
     ignores: ['dist/*'],
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json', // Adjust if your tsconfig is elsewhere
+        },
+      },
+    },
   },
 ]);

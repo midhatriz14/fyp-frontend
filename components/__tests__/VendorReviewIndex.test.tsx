@@ -204,7 +204,6 @@ describe("ReviewScreen Component Tests", () => {
     render(<ReviewScreen />);
     await waitFor(() => screen.getByTestId("photo-list"));
 
-    const images = screen.getAllByTestId("vendor-image");
 
     // Instead of trying to open an image modal (which is commented out in the component),
     // let's mock the behavior by using the save button modal instead
@@ -218,7 +217,6 @@ describe("ReviewScreen Component Tests", () => {
     render(<ReviewScreen />);
     await waitFor(() => screen.getByTestId("photo-list"));
 
-    const images = screen.getAllByTestId("vendor-image");
 
     // Use the save button modal instead of the image modal (which is commented out)
     fireEvent.press(screen.getByTestId("save-button"));
@@ -272,6 +270,7 @@ describe("ReviewScreen Component Tests", () => {
 
   test("SEC-03: Ensures no hardcoded credentials exist", () => {
     const fileContent =
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       require("../vendorreview/VendorReviewIndex").default.toString();
     expect(fileContent).not.toMatch(/API_KEY|TOKEN|SECRET/i);
   });

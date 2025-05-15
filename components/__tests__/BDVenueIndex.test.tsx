@@ -25,10 +25,6 @@ jest.mock("@expo/vector-icons", () => {
 
 jest.mock("@/services/postVenueBusinessDetails", () => jest.fn());
 
-const mockPostVenueBusinessDetails =
-  postVenueBusinessDetails as jest.MockedFunction<
-    typeof postVenueBusinessDetails
-  >;
 
 jest.mock("@/store", () => ({
   getSecureData: jest.fn().mockResolvedValue(JSON.stringify({ _id: "12345" })),
@@ -384,6 +380,7 @@ it("ensures input fields have consistent padding", () => {
   it("renders efficiently with all form elements", () => {
     const startTime = performance.now();
     const { getByText } = render(<BusinessDetailsForm />);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const renderTime = performance.now() - startTime;
 
     // Check if rendering completed successfully
@@ -546,10 +543,10 @@ it("ensures input fields have consistent padding", () => {
 });
 
 describe("BusinessDetailsForm - Snapshot Tests", () => {
-  it("matches snapshot for initial render", () => {
-    const tree = renderer.create(<BusinessDetailsForm />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
+ it("matches snapshot for initial render", () => {
+   const tree = renderer.create(<BusinessDetailsForm />).toJSON();
+   expect(tree).toMatchSnapshot();
+ });
 
   it("matches snapshot after venue type selection", async () => {
     const { getByText, toJSON } = render(<BusinessDetailsForm />);

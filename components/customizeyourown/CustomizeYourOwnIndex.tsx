@@ -36,20 +36,31 @@ const CustomizeYourOwnIndex = () => {
 
 
 
-    const renderItem = ({ item }: { item: typeof categories[0] }) => (
-        <TouchableOpacity
-            style={styles.itemContainer}
-            onPress={async () => {
-                await saveSecureData("categoryId", item._id);
-                router.push("/categoryvendorlisting");
-            }}
-        >
-            <Image source={{ uri: item.image }} style={styles.itemImage} />
-            <View style={styles.itemTextContainer}>
-                <Text style={styles.itemTitle}>{item.name}</Text>
-                <Text style={styles.itemDescription}>{item.description}</Text>
-            </View>
-        </TouchableOpacity>
+    const renderItem = ({ item }: { item: (typeof categories)[0] }) => (
+      <TouchableOpacity
+        style={styles.itemContainer}
+        onPress={async () => {
+          await saveSecureData("categoryId", item._id);
+          router.push("/categoryvendorlisting");
+        }}
+        testID={`category-item-${item._id}`} // ✅ Touchable for interaction
+      >
+        <Image source={{ uri: item.image }} style={styles.itemImage} />
+        <View style={styles.itemTextContainer}>
+          <Text
+            style={styles.itemTitle}
+            testID={`category-name-${item.name}`} // ✅ For name match
+          >
+            {item.name}
+          </Text>
+          <Text
+            style={styles.itemDescription}
+            testID={`category-desc-${item._id}`} // ✅ For description match
+          >
+            {item.description}
+          </Text>
+        </View>
+      </TouchableOpacity>
     );
 
     return (

@@ -1,8 +1,8 @@
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import AccountScreen from "../account/AccountIndex";
 import { Linking } from "react-native";
-
+import AccountScreen from "../account/AccountIndex";
 
 const mockPush = jest.fn(); // ✅ Use a shared mock function for router
 
@@ -11,11 +11,6 @@ jest.mock("expo-router", () => ({
     push: mockPush,
     back: jest.fn(),
   }),
-}));
-
-jest.mock("react-native/Libraries/Linking/Linking", () => ({
-  canOpenURL: jest.fn(() => Promise.resolve(true)),
-  openURL: jest.fn(() => Promise.resolve(true)),
 }));
 
 
@@ -164,7 +159,5 @@ it("closes logout modal when back is pressed", async () => {
   fireEvent.press(getByText("Cancel")); // Simulate pressing back
   await waitFor(() => expect(queryByTestId("logout-modal")).toBeNull()); // ✅ Modal disappears
 });
-
-
 
 });
