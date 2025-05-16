@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 
 export default async function Login(email: string, password: string) {
     try {
-        const url = `http://65.2.137.194:3000/auth/login`;
+        const url = `http://13.233.214.252:3000/auth/login`;
         const config: AxiosRequestConfig = {
             maxBodyLength: Infinity,
             method: "POST",

@@ -20,7 +20,7 @@
 // };
 
 // export default WelcomeIndex;
-import { getSecureData } from '@/store'; // your secure storage utility
+import { getSecureData } from '@/store';
 import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
@@ -53,6 +53,7 @@ const WelcomeIndex: React.FC = () => {
 
     setTimeout(() => {
       redirectUser();
+      // router.push("/vendorcontactdetails");
     }, 1000);
   }, []);
 

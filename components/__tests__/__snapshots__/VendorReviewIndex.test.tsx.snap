@@ -399,7 +399,7 @@ exports[`ReviewScreen Component Tests SNAPSHOT-01: Matches the snapshot 1`] = `
           <Image
             source={
               {
-                "uri": "http://65.2.137.194:3000/uploads/test-image.jpg",
+                "uri": "http://13.233.214.252:3000/uploads/test-image.jpg",
               }
             }
             style={

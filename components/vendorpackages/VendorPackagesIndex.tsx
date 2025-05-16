@@ -13,29 +13,29 @@ const PackageScreen = () => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [packageDetails, setPackageDetails] = useState<any>(null);
     const [vendor_Id, setVendorId] = useState<string | null>(null);
-  
-    
+
+
     const route = useRoute();
-const { packageId, vendorId } = route.params as { packageId: string; vendorId: string };  // Get both packageId and vendorId from route params
+    const { packageId, vendorId } = route.params as { packageId: string; vendorId: string };  // Get both packageId and vendorId from route params
 
-useEffect(() => {
-  if (packageId && vendorId) {
-    setVendorId(vendorId); // Save vendorId to state
-    fetchPackageDetails(packageId);  // Then fetch package details
-  }
-}, [packageId, vendorId]);
+    useEffect(() => {
+        if (packageId && vendorId) {
+            setVendorId(vendorId); // Save vendorId to state
+            fetchPackageDetails(packageId);  // Then fetch package details
+        }
+    }, [packageId, vendorId]);
 
-    
-const fetchPackageDetails = async (packageId: string) => {
-    try {
-      const response = await fetch(`http://65.2.137.194:3000/vendor/packages/${vendor_Id}/${packageId}`);
-      const data = await response.json();
-      setPackageDetails(data);
-    } catch (error) {
-      console.error('Error fetching package details:', error);
-    }
-  };
-  
+
+    const fetchPackageDetails = async (packageId: string) => {
+        try {
+            const response = await fetch(`http://13.233.214.252:3000/vendor/packages/${vendor_Id}/${packageId}`);
+            const data = await response.json();
+            setPackageDetails(data);
+        } catch (error) {
+            console.error('Error fetching package details:', error);
+        }
+    };
+
 
 
     const confirmLogout = () => {
@@ -100,34 +100,34 @@ const fetchPackageDetails = async (packageId: string) => {
                 <Text style={styles.priceText}>Rs. 50,000/-</Text>
             </View> */}
 
-<View style={styles.content}>
-  {packageDetails ? (
-    <>
-      <Text style={styles.sectionHeader}>Package Name</Text>
-      <Text style={styles.sectionText}>{packageDetails.packageName}</Text>
+            <View style={styles.content}>
+                {packageDetails ? (
+                    <>
+                        <Text style={styles.sectionHeader}>Package Name</Text>
+                        <Text style={styles.sectionText}>{packageDetails.packageName}</Text>
 
-      <Text style={styles.sectionHeader}>Deliverables</Text>
-      <Text style={styles.sectionText}>{packageDetails.deliverables || 'N/A'}</Text>
+                        <Text style={styles.sectionHeader}>Deliverables</Text>
+                        <Text style={styles.sectionText}>{packageDetails.deliverables || 'N/A'}</Text>
 
-      <Text style={styles.sectionHeader}>Photography</Text>
-      <Text style={styles.sectionText}>{packageDetails.photography || 'N/A'}</Text>
+                        <Text style={styles.sectionHeader}>Photography</Text>
+                        <Text style={styles.sectionText}>{packageDetails.photography || 'N/A'}</Text>
 
-      <Text style={styles.sectionHeader}>Team</Text>
-      <Text style={styles.sectionText}>{packageDetails.team || 'N/A'}</Text>
+                        <Text style={styles.sectionHeader}>Team</Text>
+                        <Text style={styles.sectionText}>{packageDetails.team || 'N/A'}</Text>
 
-      <Text style={styles.sectionHeader}>Videography</Text>
-      <Text style={styles.sectionText}>{packageDetails.videography || 'N/A'}</Text>
+                        <Text style={styles.sectionHeader}>Videography</Text>
+                        <Text style={styles.sectionText}>{packageDetails.videography || 'N/A'}</Text>
 
-      <Text style={styles.priceText}>Rs. {packageDetails.price || 'N/A'}/-</Text>
-    </>
-  ) : (
-    <Text style={styles.sectionText}>Loading package details...</Text>
-  )}
-</View>
+                        <Text style={styles.priceText}>Rs. {packageDetails.price || 'N/A'}/-</Text>
+                    </>
+                ) : (
+                    <Text style={styles.sectionText}>Loading package details...</Text>
+                )}
+            </View>
 
 
-          
-                                   
+
+
             {/* Bottom Navigation */}
 
             <View style={styles.bottomNavigation}>
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 5,
     },
-    
+
 });
 
 export default PackageScreen;

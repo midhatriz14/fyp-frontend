@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 export default async function patchCompleteVendorOrder(vendorOrderId: string) {
-    const url = `http://65.2.137.194:3000/orders/complete-vendor/${vendorOrderId}`;
+    const url = `http://13.233.214.252:3000/orders/complete-vendor/${vendorOrderId}`;
     const config: AxiosRequestConfig = {
         method: "PATCH",
         url,

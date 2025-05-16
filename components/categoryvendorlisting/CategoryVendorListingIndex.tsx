@@ -39,7 +39,7 @@ export default function App() {
     <View style={styles.card}>
       <Image
         source={{
-          uri: "https://t3.ftcdn.net/jpg/05/28/01/42/360_F_528014283_FMTbnoxTAtLJkVzuYiRT9gI94EAXUoJY.jpg",
+          uri: item.coverImage,
         }}
         style={styles.image}
       />

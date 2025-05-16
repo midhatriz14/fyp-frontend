@@ -3,7 +3,7 @@ import { CreateCateringBusinessDetailsDto } from "@/dto/CreateCateringBusinessDe
 import axios, { AxiosRequestConfig } from "axios";
 
 export default async function postCateringBusinessDetails(userId: string, cateringBusinessDetails: CreateCateringBusinessDetailsDto) {
-    const url = `http://65.2.137.194:3000/vendor/buisnessDetails?userId=${userId}`;
+    const url = `http://13.233.214.252:3000/vendor/buisnessDetails?userId=${userId}`;
     const config: AxiosRequestConfig = {
         maxBodyLength: Infinity,
         method: "POST",

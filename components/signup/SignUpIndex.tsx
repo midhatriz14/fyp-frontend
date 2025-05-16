@@ -31,9 +31,10 @@ export default function SignupScreen() {
       setIsDisabled(true);
     }
   }, [name, email, password, phone]);
-  
+
   const getRole = async () => {
     const roleData = await getSecureData("role");
+    console.log("Role Data", roleData);
     setRole(roleData || "");
   }
 
@@ -139,14 +140,14 @@ export default function SignupScreen() {
         autoCapitalize="none"
       />
       <Text style={styles.label}>Phone Number</Text>
-<TextInput
-  style={styles.input}
-  placeholder="Enter phone number"
-  placeholderTextColor="#999"
-  value={phone}
-  onChangeText={setPhone}
-  keyboardType="phone-pad"
-/>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter phone number"
+        placeholderTextColor="#999"
+        value={phone}
+        onChangeText={setPhone}
+        keyboardType="phone-pad"
+      />
       <Text style={styles.label}>Password</Text>
       <View style={styles.passwordContainer}>
         <TextInput

@@ -1,13 +1,16 @@
-import { CreateContactDetailsDto } from "@/dto/CreateContactDetails.dto";
 import axios, { AxiosRequestConfig } from "axios";
 
-export default async function postContactDetails(userId: string, contactDetails: CreateContactDetailsDto) {
-    const url = `http://65.2.137.194:3000/vendor/contactDetails?userId=${userId}`;
+export default async function postContactDetails(userId: string, contactDetails: FormData) {
+    console.log(userId, contactDetails)
+    const url = `http://13.233.214.252:3000/vendor/contactDetails?userId=${userId}`;
     const config: AxiosRequestConfig = {
         maxBodyLength: Infinity,
         method: "POST",
         url,
         data: contactDetails,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
     };
 
     try {

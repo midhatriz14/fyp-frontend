@@ -1,6 +1,7 @@
 
 import postContactDetails from '@/services/postContactDetails';
 import { getSecureData } from '@/store';
+import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -25,6 +26,28 @@ const ContactDetailsScreen = () => {
   const [address, setAddress] = useState<string>("");
   const [googleLink, setGoogleLink] = useState<string>("");
 
+  const [logoUri, setLogoUri] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissionResult.status !== 'granted') {
+      Alert.alert("Permission Denied", "Please allow access to media library to select logo.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled && result.assets.length > 0) {
+      setLogoUri(result.assets[0].uri);
+    }
+  };
+
+
   const submit = async () => {
     if (!brandName || !contactNumber || !instagramLink || !bookingEmail || !city) {
       Alert.alert("Error", "Please fill in all the required fields marked with *.");
@@ -32,19 +55,30 @@ const ContactDetailsScreen = () => {
     }
     try {
       const user = JSON.parse(await getSecureData("user") || "");
-      console.log(user);
-      await postContactDetails(user._id, {
-        brandName,
-        brandLogo: 'logo',
-        contactNumber,
-        instagramLink,
-        facebookLink,
-        bookingEmail,
-        city,
-        website,
-        officialAddress: address, // Renamed to match DTO
-        officialGoogleLink: googleLink,
-      });
+      const formData = new FormData();
+      formData.append('userId', user._id);
+      formData.append('brandName', brandName);
+      formData.append('contactNumber', contactNumber);
+      formData.append('instagramLink', instagramLink);
+      formData.append('facebookLink', facebookLink);
+      formData.append('bookingEmail', bookingEmail);
+      formData.append('city', city);
+      formData.append('website', website);
+      formData.append('officialAddress', address);
+      formData.append('officialGoogleLink', googleLink);
+
+      if (logoUri) {
+        const filename = logoUri.split('/').pop()!;
+        const match = /\.(\w+)$/.exec(filename);
+        const type = match ? `image/${match[1]}` : `image`;
+
+        formData.append('file', {
+          uri: logoUri,
+          name: filename,
+          type,
+        } as any); // `as any` to suppress TypeScript error
+      }
+      await postContactDetails(user._id, formData);
       const categoryName = await getSecureData("buisnessName");
       console.log(categoryName);
       if (categoryName === "Venues") {
@@ -78,6 +112,7 @@ const ContactDetailsScreen = () => {
       Alert.alert("Success", "Contact details saved successfully!");
       // router.push("/bdphotographer");
     } catch (error) {
+      console.log(error);
       Alert.alert("Error", "Something went wrong. Please try again.");
     }
   };
@@ -86,13 +121,13 @@ const ContactDetailsScreen = () => {
     <ScrollView contentContainerStyle={styles.container} testID="scrollView">
       {/* Added testID for testing ScrollView accessibility in UI tests */}
       <Text style={styles.title}>Contact Details</Text>
-      <View style={styles.logoContainer}>
+      <TouchableOpacity style={styles.logoContainer} onPress={pickImage} >
         <Image
-          source={require("@/assets/images/GetStarted.png")}
+          source={logoUri ? { uri: logoUri } : require("@/assets/images/GetStarted.png")}
           style={styles.logo}
         />
         <Text style={styles.logoText}>Drag a logo here</Text>
-      </View>
+      </TouchableOpacity>
 
       <TextInput
         style={styles.input}

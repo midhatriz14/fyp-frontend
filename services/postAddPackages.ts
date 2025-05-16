@@ -3,7 +3,7 @@ import { CreatePackagesDto } from "@/dto/CreatePackage.dto";
 import axios, { AxiosRequestConfig } from "axios";
 
 export default async function postAddPackages(userId: string, packages: CreatePackagesDto) {
-    const url = `http://65.2.137.194:3000/vendor/packages?userId=${userId}`;
+    const url = `http://13.233.214.252:3000/vendor/packages?userId=${userId}`;
     const config: AxiosRequestConfig = {
         maxBodyLength: Infinity,
         method: "POST",

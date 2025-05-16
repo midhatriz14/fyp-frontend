@@ -6,7 +6,7 @@ interface VendorResponsePayload {
 }
 
 export default async function patchVendorResponse(vendorOrderId: string, data: VendorResponsePayload) {
-    const url = `http://65.2.137.194:3000/orders/vendor-response/${vendorOrderId}`;
+    const url = `http://13.233.214.252:3000/orders/vendor-response/${vendorOrderId}`;
     const config: AxiosRequestConfig = {
         method: "PATCH",
         url,

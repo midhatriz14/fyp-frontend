@@ -85,11 +85,10 @@
 // });
 
 // export default PhotosScreen;
-import { router } from 'expo-router';
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import axios from 'axios';
-import { getSecureData } from '@/store';
+import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const PhotosScreen: React.FC = () => {
     const [images, setImages] = useState<string[]>([]);
@@ -100,8 +99,8 @@ const PhotosScreen: React.FC = () => {
     const fetchImages = async () => {
 
         try {
-            const response = await axios.get('http://65.2.137.194:3000/api/vendor/6767fd771413582eafc4688c'); // Replace with your API endpoint
-            setImages(response.data.images.map((image: string) => `http://65.2.137.194:3000${image}`));
+            const response = await axios.get('http://13.233.214.252:3000/api/vendor/6767fd771413582eafc4688c'); // Replace with your API endpoint
+            setImages(response.data.images.map((image: string) => `http://13.233.214.252:3000${image}`));
         } catch (error) {
             console.error('Error fetching images:', error);
         } finally {
@@ -153,7 +152,7 @@ const PhotosScreen: React.FC = () => {
                         <Image
                             key={index}
                             source={{
-                                uri: `http://65.2.137.194:3000${image}`,
+                                uri: `http://13.233.214.252:3000${image}`,
                             }}
                             style={styles.photo}
                         />

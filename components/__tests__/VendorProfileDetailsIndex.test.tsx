@@ -1,17 +1,17 @@
-import React from "react";
+import "@testing-library/jest-native/extend-expect"; // Required for extended matchers
 import {
-  render,
-  fireEvent,
-  waitFor,
   act,
+  fireEvent,
+  render,
+  waitFor,
   waitForElementToBeRemoved,
 } from "@testing-library/react-native";
-import PhotographerDetailsScreen from "../vendorprofiledetails/VendorProfileDetailsIndex";
-import { router } from "expo-router";
 import axios from "axios";
+import { router } from "expo-router";
+import React from "react";
 import { StyleSheet } from "react-native";
-import "@testing-library/jest-native/extend-expect"; // Required for extended matchers
 import renderer from "react-test-renderer"; // Snapshot testing library
+import PhotographerDetailsScreen from "../vendorprofiledetails/VendorProfileDetailsIndex";
 
 // Mock dependencies
 jest.mock("expo-router", () => ({
@@ -227,7 +227,7 @@ describe("PhotographerDetailsScreen Component Tests", () => {
     expect(getByText("Contact Now").props.style.color).toBe("#FFF");
   });
 
-  
+
   // FUNCTIONAL TESTING
   it("Test-Func-10: Changes tab when tab buttons are clicked", async () => {
     const { getByTestId, queryByText } = render(<PhotographerDetailsScreen />);
@@ -555,7 +555,7 @@ describe("PhotographerDetailsScreen Component Tests", () => {
 
     // Verify that API was called with correct parameters
     expect(mockedAxios.get).toHaveBeenCalledWith(
-      "http://65.2.137.194:3000/vendor?userId=123"
+      "http://13.233.214.252:3000/vendor?userId=123"
     );
     expect(
       queryByText(
@@ -617,7 +617,7 @@ describe("PhotographerDetailsScreen Component Tests", () => {
 
     await waitFor(() => {
       expect(mockedAxios.get).toHaveBeenCalledWith(
-        "http://65.2.137.194:3000/vendor?userId=123"
+        "http://13.233.214.252:3000/vendor?userId=123"
       );
     });
   });
@@ -705,7 +705,7 @@ describe("PhotographerDetailsScreen Component Tests", () => {
 
     const coverImage = getByTestId("vendor-cover-image");
     expect(coverImage.props.source.uri).toBe(
-      "http://65.2.137.194:3000/images/cover.jpg"
+      "http://13.233.214.252:3000/images/cover.jpg"
     );
   });
 
@@ -1379,7 +1379,7 @@ describe("PhotographerDetailsScreen Component Tests", () => {
       "/-",
     ]);
   });
-  
+
 });
 
 

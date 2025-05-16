@@ -9,12 +9,13 @@ interface UpdateProfileDto {
 }
 
 export default async function patchUpdateProfile(userId: string, data: UpdateProfileDto) {
-  const url = `http://65.2.137.194:3000/auth/update`; // Your backend update profile endpoint
+  const url = `http://13.233.214.252:3000/auth/update`; // Your backend update profile endpoint
 
   const config: AxiosRequestConfig = {
     method: "PATCH",
     url,
-    data,  };
+    data,
+  };
 
   try {
     const response = await axios(config);

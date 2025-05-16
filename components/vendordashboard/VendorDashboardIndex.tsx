@@ -214,7 +214,7 @@
 //                           Alert.alert("Error", "Vendor ID not found.");
 //                         }
 //                       }}
-                      
+
 //                 >
 //                     <Text style={styles.vendorProfileButtonText}>View Vendor Profile</Text>
 //                 </TouchableOpacity>
@@ -586,7 +586,7 @@ const DashboardScreen = () => {
                 <View style={styles.header}>
                     <View style={styles.profileContainer}>
                         <View style={styles.profileDetails}>
-                             
+
                             <Text style={styles.welcomeText}>Welcome , </Text>
                             <Text style={styles.username}>{username}</Text>
                         </View>
@@ -698,7 +698,7 @@ const DashboardScreen = () => {
                     onPress={() => {
                         if (vendorId) {
                             router.push({
-                                pathname: '/vendorprofiledetails',
+                                pathname: '/VPD',
                                 params: { id: vendorId },
                             });
                         } else {
@@ -926,19 +926,20 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     statisticsHeader: {
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: 10,},
-                welcomeText: {
-                    fontSize: 20,
-                   // fontWeight: '500',
-                    color: '#000',
-                    paddingLeft: 10,
-                    fontWeight: "bold",
-                  },
-                  
-                
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    welcomeText: {
+        fontSize: 20,
+        // fontWeight: '500',
+        color: '#000',
+        paddingLeft: 10,
+        fontWeight: "bold",
+    },
+
+
 });
 
 export default DashboardScreen;

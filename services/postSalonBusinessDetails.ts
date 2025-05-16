@@ -2,7 +2,7 @@ import { CreateSalonBusinessDetailsDto } from "@/dto/CreateSalonBusinessDetails.
 import axios, { AxiosRequestConfig } from "axios";
 
 export default async function postSalonBusinessDetails(userId: string, salonBusinessDetails: CreateSalonBusinessDetailsDto) {
-    const url = `http://65.2.137.194:3000/vendor/buisnessDetails?userId=${userId}`;
+    const url = `http://13.233.214.252:3000/vendor/buisnessDetails?userId=${userId}`;
     const config: AxiosRequestConfig = {
         maxBodyLength: Infinity,
         method: "POST",

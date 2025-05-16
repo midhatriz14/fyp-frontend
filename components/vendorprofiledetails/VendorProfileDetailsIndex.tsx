@@ -65,7 +65,7 @@ const PhotographerDetailsScreen: React.FC = () => {
   useEffect(() => {
     const fetchVendorDetails = async () => {
       try {
-        const response = await axios.get(`http://65.2.137.194:3000/vendor?userId=${id}`);
+        const response = await axios.get(`http://13.233.214.252:3000/vendor?userId=${id}`);
         setVendorData(response.data);
         setActivePackage(response.data.packages?.[0]?._id || null); // Set the first package as active by default
       } catch (error) {
@@ -145,7 +145,7 @@ const PhotographerDetailsScreen: React.FC = () => {
         testID="vendor-cover-image" // ✅ Added testID
         source={{
           uri: vendorData?.coverImage
-            ? `http://65.2.137.194:3000${vendorData.coverImage}`
+            ? `${vendorData.coverImage}`
             : "https://via.placeholder.com/200",
         }}
         style={styles.mainImage}
@@ -255,7 +255,7 @@ const PhotographerDetailsScreen: React.FC = () => {
                 <Image
                   key={index}
                   source={{
-                    uri: `http://65.2.137.194:3000${image}`,
+                    uri: `${image}`,
                   }}
                   style={styles.photo}
                 />

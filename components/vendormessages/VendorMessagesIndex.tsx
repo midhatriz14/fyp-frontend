@@ -13,7 +13,7 @@ const MessagesScreen: React.FC = () => {
 
     useEffect(() => {
         // Establish socket connection to backend
-        const socketConnection = io('http://65.2.137.194:3000'); // Use the actual backend URL
+        const socketConnection = io('http://13.233.214.252:3000'); // Use the actual backend URL
         setSocket(socketConnection);
 
         // Fetch conversation list from backend when component mounts

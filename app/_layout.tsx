@@ -94,6 +94,8 @@ export default function RootLayout() {
         <Stack.Screen name="customizeyourown" options={{ headerShown: false }} />
         <Stack.Screen name="e-card" options={{ headerShown: false }} />
         <Stack.Screen name="myevents" options={{ headerShown: false }} />
+        <Stack.Screen name="VPD" options={{ headerShown: false }} />
+
 
 
 
