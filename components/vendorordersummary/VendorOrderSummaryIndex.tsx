@@ -157,9 +157,9 @@ const OrderSummary = () => {
                     style={styles.ordersList}
                     contentContainerStyle={styles.ordersListContent}
                     data={filteredOrders}
-                    keyExtractor={(item) => item.orderId}
+                    keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
-                        <View style={styles.orderCard}>
+                        <View key={item._id} style={styles.orderCard}>
                             <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(item.status) }]} />
                             <View style={styles.orderInfo}>
                                 <Text style={styles.eventTitle}>Event: <Text style={styles.bold}>{item.eventName}</Text></Text>

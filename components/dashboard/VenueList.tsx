@@ -1,77 +1,54 @@
 
-import getAllVendorsByCategoryId from '@/services/getAllVendorsByCategoryId';
-import { getSecureData } from '@/store';
+import getPopularVendors, { TopVendor } from '@/services/getPopularVendors';
+import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, Image, FlatList } from 'react-native';
-
-interface Item {
-  id: string;
-  name: string;
-  image: string;
-  location: string;
-  price: string;
-  capacity: string;
-}
-
-// Data for each category
-const venues: Item[] = [
-  {
-    id: '1',
-    name: 'Seasons-24',
-    image: 'https://example.com/venue1.jpg',
-    location: 'F6, Islamabad',
-    price: 'Rs.2200/plate',
-    capacity: '50-500 person',
-  },
-  {
-    id: '2',
-    name: 'Event Palace',
-    image: 'https://example.com/venue2.jpg',
-    location: 'F7, Islamabad',
-    price: 'Rs.2500/plate',
-    capacity: '100-700 person',
-  },
-];
-
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 
 // Reusable component
-const ItemList: React.FC<{ title: string; data: Item[] }> = ({ title, data }) => (
+const ItemList: React.FC<{ title: string; data: TopVendor[] }> = ({ title, data }) => (
   <View style={styles.container}>
     <Text style={styles.title}>{title}</Text>
     <FlatList
       data={data}
       renderItem={({ item }) => <ItemCard item={item} />}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.vendor._id}
       horizontal
       showsHorizontalScrollIndicator={false}
     />
   </View>
 );
 
-const ItemCard: React.FC<{ item: Item }> = ({ item }) => (
-  <View style={styles.card}>
+const ItemCard: React.FC<{ item: TopVendor }> = ({ item }) => (
+  <TouchableOpacity style={styles.card} onPress={() => { router.push(`/vendorprofiledetails?id=${item.vendorId}`) }}>
     <Image
       resizeMode="cover"
-      source={{ uri: item.image }}
+      source={{ uri: item.vendor.coverImage }}
       style={styles.image}
     />
-    <Text style={styles.name}>{item.name}</Text>
+    <Text style={styles.name}>{item.vendor.name}</Text>
     <View style={styles.infoContainer}>
-      <Text style={styles.location}>{item.location}</Text>
-      <Text style={styles.price}>{item.price}</Text>
+      <Text style={styles.location}>Total Reviews:{item.totalReviews}</Text>
+      <Text style={styles.price}>Rating: {item.averageRating}</Text>
     </View>
-    <Text style={styles.capacity}>{item.capacity}</Text>
-  </View>
+    {/* <Text style={styles.capacity}>Packages: {item.vendor.}</Text> */}
+  </TouchableOpacity>
 );
 
 const App: React.FC = () => {
-
+  const [vendors, setVendors] = useState<any[]>([]);
+  useEffect(() => {
+    const fetch = async () => {
+      const vendors = await getPopularVendors(5);
+      console.log(vendors);
+      setVendors(vendors);
+    }
+    fetch();
+  }, []);
 
   return (
     <View>
-      <ItemList title="Popular Vendors" data={venues} />
-
+      <ItemList title="Popular Vendors" data={vendors} />
     </View>
   );
 };
@@ -141,6 +118,10 @@ const styles = StyleSheet.create({
 
 export default App;
 function setData(data: any) {
+  throw new Error('Function not implemented.');
+}
+
+function getTopVendors(arg0: number) {
   throw new Error('Function not implemented.');
 }
 

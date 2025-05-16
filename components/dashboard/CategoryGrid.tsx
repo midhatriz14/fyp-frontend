@@ -51,7 +51,7 @@ const CategoryGrid: React.FC = () => {
       </View>
       <FlatList
         data={categories}
-        renderItem={({ item, index }) => <CategoryItem item={item} key={index} />}
+        renderItem={({ item, index }) => <CategoryItem item={item} key={item._id} />}
         keyExtractor={(item) => item._id}
         numColumns={4}
         columnWrapperStyle={styles.row}

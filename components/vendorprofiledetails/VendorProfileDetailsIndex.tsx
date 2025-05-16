@@ -1,10 +1,12 @@
 
+import getVendorReviews from '@/services/getAllReviewsForVendor';
+import postVendorReview from '@/services/postVendorReview';
 import { getSecureData, saveSecureData } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { router, useGlobalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Toast from 'react-native-toast-message';
 
@@ -16,6 +18,62 @@ const PhotographerDetailsScreen: React.FC = () => {
   const [vendorData, setVendorData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { id } = useGlobalSearchParams();
+
+  const [rating, setRating] = useState<number | null>(null);
+
+  const [newReview, setNewReview] = useState('');
+
+  const handleSubmitReview = async () => {
+    if (!newReview.trim()) {
+      alert('Please write something before submitting.')
+      return;
+    }
+
+    if (!rating) {
+      alert('Please select a rating from 1 to 5.')
+    }
+
+    try {
+      const user = await getSecureData('user');
+      const userId = JSON.parse(user || "")?.['_id'];
+      if (!userId) throw new Error('User ID missing');
+
+      await postVendorReview(userId, {
+        vendorId: vendorData._id,
+        reviewText: newReview,
+        rating: rating || 0,
+        reviewerName: JSON.parse(user || "")?.['name']
+      });
+
+      alert('success')
+
+      setNewReview('');
+      setRating(null);
+      await getVendorReviews(userId);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('Failed to submit review. Please try again.')
+    }
+  };
+
+  const [reviews, setReviews] = useState<any[]>([]);
+
+  const fetchReviews = async () => {
+    try {
+      const data = await getVendorReviews(vendorData._id);
+      setReviews(data);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
+
+  // ✅ Call fetchReviews after vendorData loads
+  useEffect(() => {
+    if (vendorData?._id) {
+      fetchReviews();
+    }
+  }, [vendorData]);
+
 
   const handleAddToCart = async (pkg: any) => {
     try {
@@ -373,107 +431,67 @@ const PhotographerDetailsScreen: React.FC = () => {
         <View style={styles.tabContent}>
           {/* Tab Navigation for Reviews 
              add test id  */}
-          <View style={styles.reviewTabContainer}>
-            <TouchableOpacity
-              testID="review-tab-eventify"
-              style={[
-                styles.reviewTab,
-                activeReviewTab === "Eventify" && styles.activeReviewTab,
-              ]}
-              onPress={() => setActiveReviewTab("Eventify")}
-            >
-              <Text
-                style={[
-                  styles.reviewTabText,
-                  activeReviewTab === "Eventify" &&
-                  styles.activeReviewTabText,
-                ]}
-              >
-                Eventify Hub's Reviews
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.reviewTab,
-                activeReviewTab === "Google" && styles.activeReviewTab,
-              ]}
-              onPress={() => setActiveReviewTab("Google")}
-            >
-              <Text
-                style={[
-                  styles.reviewTabText,
-                  activeReviewTab === "Google" && styles.activeReviewTabText,
-                ]}
-              >
-                Google Reviews
-              </Text>
-            </TouchableOpacity>
-          </View>
 
           {/* Eventify Reviews */}
           {activeReviewTab === "Eventify" && (
             <View>
-              <Text style={styles.sectionTitle}>1 Review</Text>
-              <View style={styles.eventifyReview}>
-                <Text style={styles.reviewerName}>Imran</Text>
-                <Text style={styles.reviewDate}>April 12, 2023</Text>
-                <Text style={styles.reviewText}>
-                  Venue was good but location is not up to the mark.
-                </Text>
+              {reviews.map((review, index) => (
+                <View key={index} style={styles.eventifyReview}>
+                  <Text style={styles.reviewerName}>{review.reviewerName || 'Anonymous'}</Text>
+                  <Text style={styles.reviewDate}>{new Date(review.createdAt).toDateString()}</Text>
+                  <Text style={styles.reviewText}>{review.reviewText}</Text>
+                  <View style={{ flexDirection: 'row', marginTop: 4 }}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Ionicons
+                        key={star}
+                        name={review.rating >= star ? 'star' : 'star-outline'}
+                        size={16}
+                        color="#FFD700"
+                      />
+                    ))}
+                  </View>
+                </View>
+              ))}
+
+              {/* Add Review Form */}
+              <View style={styles.addReviewContainer}>
+                <Text style={{ fontWeight: 'bold', marginBottom: 6 }}>Rate this vendor:</Text>
+                <View style={{ flexDirection: 'row', marginBottom: 12 }}>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <TouchableOpacity key={star} onPress={() => setRating(star)}>
+                      <Ionicons
+                        name={rating && rating >= star ? 'star' : 'star-outline'}
+                        size={28}
+                        color="#FFD700"
+                        style={{ marginRight: 6 }}
+                        testID={`rating-star-${star}`}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+
+                <Text style={styles.sectionTitle}>Write a Review</Text>
+                <TextInput
+                  testID="review-input"
+                  placeholder="Write your review here..."
+                  multiline
+                  value={newReview}
+                  onChangeText={setNewReview}
+                  style={styles.reviewInput}
+                />
+                <TouchableOpacity
+                  testID="submit-review-button"
+                  onPress={handleSubmitReview}
+                  style={styles.submitButton}
+                >
+                  <Text style={styles.submitButtonText}>Submit Review</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.showMoreButton}>
-                <Text style={styles.showMoreButtonText}>Show More</Text>
-              </TouchableOpacity>
             </View>
           )}
 
-          {/* Google Reviews */}
-          {activeReviewTab === "Google" && (
-            <View>
-              <Text style={styles.googleReviewStats}>130 Reviews ⭐ 4.2</Text>
-              <Text style={styles.reviewNote}>
-                *Ratings and reviews gathered from online sources*
-              </Text>
-              {/* Ratings Breakdown */}
-              <View style={styles.ratingsBreakdown}>
-                {[5, 4, 3, 2, 1].map((stars) => (
-                  <View key={stars} style={styles.ratingRow}>
-                    <Text style={styles.ratingText}>{stars} Stars</Text>
-                    <View style={styles.ratingBar}>
-                      <View
-                        style={[
-                          styles.filledRatingBar,
-                          { width: `${stars * 20}%` },
-                        ]}
-                      />
-                    </View>
-                    <Text style={styles.ratingCount}>{stars * 20}</Text>
-                  </View>
-                ))}
-              </View>
-              {/* Individual Reviews */}
-              {["Vlog KAHDI", "Vlog KAHDI", "Vlog KAHDI"].map(
-                (reviewer, index) => (
-                  <View key={index} style={styles.googleReview}>
-                    <Text style={styles.reviewerName}>{reviewer}</Text>
-                    <Text style={styles.reviewText}>
-                      ⭐ 5.0 - Excellent service. Highly recommended!
-                    </Text>
-                  </View>
-                )
-              )}
-            </View>
-          )}
         </View>
       )}
-
-      {/* Contact Button */}
-      <TouchableOpacity
-        style={styles.contactButton}
-        onPress={() => router.push("/message")}
-      >
-        <Text style={styles.contactButtonText}>Contact Now</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -862,6 +880,32 @@ const styles = StyleSheet.create({
   },
   cartIconButton: {
     padding: 4,
+  },
+  addReviewContainer: {
+    marginTop: 20,
+    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+  },
+  reviewInput: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    minHeight: 80,
+    marginBottom: 12,
+    backgroundColor: '#FAFAFA',
+    textAlignVertical: 'top',
+  },
+  submitButton: {
+    backgroundColor: '#7B2869',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 
 

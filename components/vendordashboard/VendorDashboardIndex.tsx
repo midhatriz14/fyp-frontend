@@ -211,7 +211,7 @@ const DashboardScreen = () => {
             <View style={styles.bottomNavigation}>
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => router.push("/myevents")}
+                    onPress={() => router.push("/vendormyevents")}
                 >
                     <View style={styles.iconContainer}>
                         <Image

@@ -1,6 +1,8 @@
+import getVendorOrders from "@/services/getVendorOrders";
+import { getSecureData } from "@/store";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Dimensions,
     FlatList,
@@ -14,18 +16,40 @@ import { Calendar } from "react-native-calendars";
 const { width } = Dimensions.get('window');
 
 const MyEventsScreen = () => {
-    const [selectedDate, setSelectedDate] = useState<string>("2024-12-03");
+    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+    const [orders, setOrders] = useState<any[]>([]);
+    const [events, setEvents] = useState<any[]>([]);
 
-    const events = [
-        {
-            id: "1",
-            title: "Family Get-Together",
-            date: "2023-12-06",
-            time: "11:30 am - 5:00 pm",
-            location: "A5 Villa, Kochi",
-            image: require("@/assets/images/GetStarted.png"), // Replace with your actual image
-        },
-    ];
+    useEffect(() => {
+        // Fetch orders and stats on component mount
+        const fetchData = async () => {
+            try {
+                const user = JSON.parse(await getSecureData("user") || "");
+                if (!user) {
+                    throw "user not found";
+                }
+                const ordersData = await getVendorOrders("Vendor", user._id);  // Fetch all orders
+                console.log(ordersData);
+                setOrders(ordersData);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        if (selectedDate && orders.length > 0) {
+            const selected = new Date(selectedDate).toISOString().split('T')[0];
+
+            const ordersArr = orders.filter(x => {
+                const eventDate = new Date(x.eventDate).toISOString().split('T')[0];
+                return eventDate === selected;
+            });
+
+            setEvents(ordersArr);
+        }
+    }, [selectedDate, orders]);
 
     return (
         <View style={styles.container}>
@@ -41,7 +65,7 @@ const MyEventsScreen = () => {
             </View>
 
             <Calendar
-                current={"2024-12-01"}
+                current={selectedDate}
                 markedDates={{
                     [selectedDate]: { selected: true, selectedColor: "#780C60" }, // Selected Date Color
                 }}
@@ -66,19 +90,18 @@ const MyEventsScreen = () => {
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <View style={styles.eventCard}>
-                        <Image source={item.image} style={styles.eventImage} />
                         <View style={styles.eventDetails}>
                             <Text style={styles.eventDate}>
-                                Wednesday, 6 Dec 2023
+                                {new Date(item.eventDate).toDateString()}
                             </Text>
-                            <Text style={styles.eventTitle}>{item.title}</Text>
+                            <Text style={styles.eventTitle}>{item.eventName}</Text>
                             <View style={styles.eventMeta}>
                                 <Ionicons name="time-outline" size={16} color="#555" />
-                                <Text style={styles.eventText}>{item.time}</Text>
+                                <Text style={styles.eventText}>{item.eventTime}</Text>
                             </View>
                             <View style={styles.eventMeta}>
                                 <Ionicons name="location-outline" size={16} color="#555" />
-                                <Text style={styles.eventText}>{item.location}</Text>
+                                <Text style={styles.eventText}>{item.guests}</Text>
                             </View>
                         </View>
                     </View>
