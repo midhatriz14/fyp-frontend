@@ -74,12 +74,24 @@ const PackageScreen = () => {
                 >
                     <Text style={styles.deleteText}>Delete</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={styles.editButton}
                     onPress={() => router.push('/editpackage')}
                 >
                     <Text style={styles.editText}>Edit ✎</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <TouchableOpacity
+  style={styles.editButton}
+  onPress={() =>
+    router.push({
+      pathname: '/editpackage',
+      params: { packageId: packageDetails?._id },
+    })
+  }
+>
+  <Text style={styles.editText}>Edit ✎</Text>
+</TouchableOpacity>
+
 
             </View>
 
