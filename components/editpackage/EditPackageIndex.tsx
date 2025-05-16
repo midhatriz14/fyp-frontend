@@ -1,6 +1,6 @@
 
 import updatePackage from '@/services/updatePackage';
-import { getSecureData } from '@/store';
+import { getSecureData, saveSecureData } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -44,27 +44,36 @@ const PackageScreen = () => {
 
   const updatePackageDetails = async () => {
     if (!packageId) return;
-  
+
     try {
       const updatedData = {
         packageName: editableName,
         price: Number(editablePrice),
         services: editableServices,
       };
-  
+
       const updatedPackage = await updatePackage(packageId as string, updatedData);
       setPackageDetails(updatedPackage);
+
+      const user = JSON.parse((await getSecureData('user')) || '');
+      if (!user || !user.packages) throw 'User or packages not found';
+      const pkgIndex = user.packages.findIndex((x: any) => x._id === packageId);
+
+      user.packages[pkgIndex] = updatedPackage;
+
+      saveSecureData("user", JSON.stringify(user));
+
       alert('Package updated successfully!');
       router.push({
         pathname: '/vendorpackages',
         params: { packageId: packageId },
-    });
+      });
     } catch (error) {
       console.error('Update error:', error);
       alert('Failed to update package');
     }
   };
-  
+
 
   const confirmLogout = () => {
     setModalVisible(false);
@@ -121,28 +130,28 @@ const PackageScreen = () => {
         />
 
         <Text style={styles.sectionHeader}>Services</Text>
-        
+
         <TextInput
-  style={[styles.input, { height: servicesInputHeight, textAlignVertical: 'top' }]}
-  value={editableServices}
-  onChangeText={setEditableServices}
-  multiline
-  onContentSizeChange={(e) =>
-    setServicesInputHeight(e.nativeEvent.contentSize.height < 200 ? 200 : e.nativeEvent.contentSize.height)
-  }
-  placeholder="Describe services"
-  placeholderTextColor="#999"
-/>
+          style={[styles.input, { height: servicesInputHeight, textAlignVertical: 'top' }]}
+          value={editableServices}
+          onChangeText={setEditableServices}
+          multiline
+          onContentSizeChange={(e) =>
+            setServicesInputHeight(e.nativeEvent.contentSize.height < 200 ? 200 : e.nativeEvent.contentSize.height)
+          }
+          placeholder="Describe services"
+          placeholderTextColor="#999"
+        />
 
       </View>
 
       {/* Save Button */}
       <TouchableOpacity
-  style={styles.saveButton}
-  onPress={updatePackageDetails}
->
-  <Text style={styles.saveButtonText}>Save</Text>
-</TouchableOpacity>
+        style={styles.saveButton}
+        onPress={updatePackageDetails}
+      >
+        <Text style={styles.saveButtonText}>Save</Text>
+      </TouchableOpacity>
 
 
       {/* Bottom Navigation */}

@@ -1,6 +1,7 @@
 
 
-import { getSecureData } from '@/store';
+import deletePackage from '@/services/deletePackage';
+import { getSecureData, saveSecureData } from '@/store';
 import { Ionicons } from '@expo/vector-icons'; // For icons
 import { useRoute } from '@react-navigation/native';
 import { router } from 'expo-router';
@@ -43,9 +44,16 @@ const PackageScreen = () => {
         console.log(packageDetails);
     }, [packageDetails]);
 
-    const confirmLogout = () => {
+    const confirmLogout = async () => {
         setModalVisible(false);
         console.log('Deleting Package...');
+        await deletePackage(packageId);
+        const user = JSON.parse((await getSecureData('user')) || '');
+        if (!user || !user.packages) throw 'User or packages not found';
+
+        user.packages = user.packages.filter((pkg: any) => pkg._id !== packageId);
+
+        await saveSecureData('user', JSON.stringify(user));
         router.push('/vendordashboard'); // Redirect after confirming delete
     };
 
@@ -81,16 +89,16 @@ const PackageScreen = () => {
                     <Text style={styles.editText}>Edit ✎</Text>
                 </TouchableOpacity> */}
                 <TouchableOpacity
-  style={styles.editButton}
-  onPress={() =>
-    router.push({
-      pathname: '/editpackage',
-      params: { packageId: packageDetails?._id },
-    })
-  }
->
-  <Text style={styles.editText}>Edit ✎</Text>
-</TouchableOpacity>
+                    style={styles.editButton}
+                    onPress={() =>
+                        router.push({
+                            pathname: '/editpackage',
+                            params: { packageId: packageDetails?._id },
+                        })
+                    }
+                >
+                    <Text style={styles.editText}>Edit ✎</Text>
+                </TouchableOpacity>
 
 
             </View>
