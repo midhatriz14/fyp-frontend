@@ -19,7 +19,8 @@ const AccountScreen: React.FC = () => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const [username, setUsername] = useState(""); // State for username
-  const [email, setEmail] = useState(""); 
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     fetchUserDetails(); // Fetch username and email on component mount
@@ -30,12 +31,17 @@ const AccountScreen: React.FC = () => {
     const parsedUser = JSON.parse(storedUser);
     setUsername(parsedUser.name);
     setEmail(parsedUser.email); // Set the email fetched from the stored data
+    setRole(parsedUser.role);
   };
 
   const handleMenuPress = (menuTitle: string) => {
     switch (menuTitle) {
       case 'Edit Profile':
-        router.push('/editprofile');
+        if (role === "Organizer") {
+          router.push('/editprofile');
+        } else {
+          router.push('/vendoreditprofile');
+        }
         break;
       case 'Notifications':
         router.push('/notificationacc');
@@ -88,7 +94,7 @@ const AccountScreen: React.FC = () => {
     }
     router.push('/intro'); // Navigate to login/intro page
   };
-  
+
 
   const cancelLogout = () => {
     setModalVisible(false);
@@ -103,7 +109,7 @@ const AccountScreen: React.FC = () => {
   ];
 
   // Get the first letter of the username for the avatar
-  const avatarInitial = username ? username.charAt(0).toUpperCase() : "N/A"; 
+  const avatarInitial = username ? username.charAt(0).toUpperCase() : "N/A";
 
   return (
     <View style={styles.container}>
@@ -152,11 +158,11 @@ const AccountScreen: React.FC = () => {
           onPress={() => router.push("/myevents")}
         >
           <View style={styles.iconContainer}>
-                        <Image
-                            source={require('@/assets/images/myevent.png')}
-                            style={styles.iconImage}
-                        />
-                    </View>
+            <Image
+              source={require('@/assets/images/myevent.png')}
+              style={styles.iconImage}
+            />
+          </View>
           <Text style={styles.navText}>My Events</Text>
         </TouchableOpacity>
 
@@ -190,15 +196,15 @@ const AccountScreen: React.FC = () => {
   </View>
   <Text style={styles.navText}>Home</Text>
 </TouchableOpacity> */}
-<TouchableOpacity
-  style={[styles.navItem, styles.homeButton]}
-  onPress={() => router.push('/dashboard')}
->
-  <View style={styles.homeButtonIconContainer}>
-    <Ionicons name="home" size={40} color="#fff" />
-  </View>
-  <Text style={styles.navText}>Home</Text>
-</TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.navItem, styles.homeButton]}
+          onPress={() => router.push('/dashboard')}
+        >
+          <View style={styles.homeButtonIconContainer}>
+            <Ionicons name="home" size={40} color="#fff" />
+          </View>
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
 
 
 
@@ -254,7 +260,7 @@ const AccountScreen: React.FC = () => {
               >
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
-              
+
               {/* <TouchableOpacity
                 style={styles.confirmButton}
                 onPress={() => {
@@ -265,11 +271,11 @@ const AccountScreen: React.FC = () => {
                 <Text style={styles.confirmButtonText}>Log Out</Text>
               </TouchableOpacity> */}
               <TouchableOpacity
-  style={styles.confirmButton}
-  onPress={confirmLogout}
->
-  <Text style={styles.confirmButtonText}>Log Out</Text>
-</TouchableOpacity>
+                style={styles.confirmButton}
+                onPress={confirmLogout}
+              >
+                <Text style={styles.confirmButtonText}>Log Out</Text>
+              </TouchableOpacity>
 
             </View>
           </View>
@@ -463,8 +469,8 @@ const styles = StyleSheet.create({
 
   homeButton: {
     transform: [{ translateY: -20 }], // move it more upward (from -10 to -15)
-  
-},
+
+  },
 });
 
 export default AccountScreen;
