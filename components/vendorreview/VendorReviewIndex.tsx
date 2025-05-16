@@ -61,7 +61,7 @@ const ReviewScreen = () => {
       </View>
     );
   }
-
+  console.log(vendorData.contactDetails.brandLogo, "abc");
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.sectionTitle}>Reviews</Text>
@@ -70,12 +70,12 @@ const ReviewScreen = () => {
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Personal Details</Text>
         <View style={styles.row}>
-          <Image
+        <Image
             testID="vendor-image" // ✅ Add this testID
             source={{
-              uri: vendorData.images[0]
-                ? `https://your-server-url.com${vendorData.images[0]}`
-                : "https://example.com/avatar.jpg",
+              uri: vendorData && vendorData.contactDetails
+                ? vendorData.contactDetails.brandLogo
+                : "https://example.com/avatar.jpg"
             }}
             style={styles.avatar}
           />

@@ -1057,7 +1057,7 @@ const AccountScreen: React.FC = () => {
 
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push("/account")}
+          onPress={() => router.push("/vendoraccount")}
         >
           <View style={styles.iconContainer}>
             <Image

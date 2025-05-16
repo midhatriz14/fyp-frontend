@@ -53,7 +53,7 @@ const WelcomeIndex: React.FC = () => {
 
     setTimeout(() => {
       redirectUser();
-      // router.push("/vendorcontactdetails");
+      //router.push("/vendorreview");
     }, 1000);
   }, []);
 
