@@ -1,5 +1,6 @@
 
 
+import { getSecureData } from '@/store';
 import { Ionicons } from '@expo/vector-icons'; // For icons
 import { useRoute } from '@react-navigation/native';
 import { router } from 'expo-router';
@@ -12,31 +13,35 @@ import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 const PackageScreen = () => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [packageDetails, setPackageDetails] = useState<any>(null);
-    const [vendor_Id, setVendorId] = useState<string | null>(null);
 
 
     const route = useRoute();
-    const { packageId, vendorId } = route.params as { packageId: string; vendorId: string };  // Get both packageId and vendorId from route params
+    const { packageId } = route.params as { packageId: string; vendorId: string };  // Get both packageId and vendorId from route params
 
     useEffect(() => {
-        if (packageId && vendorId) {
-            setVendorId(vendorId); // Save vendorId to state
+        console.log("packageId", packageId)
+        if (packageId) {
             fetchPackageDetails(packageId);  // Then fetch package details
         }
-    }, [packageId, vendorId]);
+    }, [packageId]);
 
 
     const fetchPackageDetails = async (packageId: string) => {
         try {
-            const response = await fetch(`http://13.233.214.252:3000/vendor/packages/${vendor_Id}/${packageId}`);
-            const data = await response.json();
-            setPackageDetails(data);
+            const user = JSON.parse(await getSecureData("user") || "");
+            if (!user) {
+                throw "user not found";
+            }
+            const packageObj = user.packages.find((x: any) => x._id === packageId);
+            setPackageDetails(user.packages.find((x: any) => x._id === packageId));
         } catch (error) {
             console.error('Error fetching package details:', error);
         }
     };
 
-
+    useEffect(() => {
+        console.log(packageDetails);
+    }, [packageDetails]);
 
     const confirmLogout = () => {
         setModalVisible(false);
@@ -55,7 +60,7 @@ const PackageScreen = () => {
                 <TouchableOpacity onPress={() => router.back()}>
                     <Ionicons name="arrow-back" size={24} color="#000" />
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Package 1</Text>
+                <Text style={styles.headerTitle}>{packageDetails ? packageDetails.packageName : ""}</Text>
                 <TouchableOpacity>
                     <Ionicons name="notifications-outline" size={24} color="#000" />
                 </TouchableOpacity>
@@ -106,19 +111,11 @@ const PackageScreen = () => {
                         <Text style={styles.sectionHeader}>Package Name</Text>
                         <Text style={styles.sectionText}>{packageDetails.packageName}</Text>
 
-                        <Text style={styles.sectionHeader}>Deliverables</Text>
-                        <Text style={styles.sectionText}>{packageDetails.deliverables || 'N/A'}</Text>
+                        <Text style={styles.sectionHeader}>Price</Text>
+                        <Text style={styles.sectionText}>Rs. {packageDetails.price || 'N/A'}</Text>
 
-                        <Text style={styles.sectionHeader}>Photography</Text>
-                        <Text style={styles.sectionText}>{packageDetails.photography || 'N/A'}</Text>
-
-                        <Text style={styles.sectionHeader}>Team</Text>
-                        <Text style={styles.sectionText}>{packageDetails.team || 'N/A'}</Text>
-
-                        <Text style={styles.sectionHeader}>Videography</Text>
-                        <Text style={styles.sectionText}>{packageDetails.videography || 'N/A'}</Text>
-
-                        <Text style={styles.priceText}>Rs. {packageDetails.price || 'N/A'}/-</Text>
+                        <Text style={styles.sectionHeader}>Services</Text>
+                        <Text style={styles.sectionText}>{packageDetails.services || 'N/A'}</Text>
                     </>
                 ) : (
                     <Text style={styles.sectionText}>Loading package details...</Text>

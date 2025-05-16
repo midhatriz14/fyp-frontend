@@ -1,6 +1,7 @@
 import createConversation from "@/services/createConversation";
 import getVendorOrderStats from "@/services/getVendorOrderStats";
-import getVendorOrders, { GetOrdersResponse } from "@/services/getVendorOrders";
+import getVendorOrders from "@/services/getVendorOrders";
+import patchUpdateOrderStatus from "@/services/patchUpdateOrderStatus";
 import { getSecureData, saveSecureData } from "@/store";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
@@ -23,7 +24,7 @@ const { width } = Dimensions.get('window');
 const OrderSummary = () => {
     const { selectedTab } = useLocalSearchParams(); // Read tab from navigation params
     const [selectedFilter, setSelectedFilter] = useState<"All" | "Processing" | "Completed">("All");
-    const [orders, setOrders] = useState<GetOrdersResponse[]>([]);
+    const [orders, setOrders] = useState<any[]>([]);
     const [orderStats, setOrderStats] = useState({ totalOrders: 0, processing: 0, completed: 0 });
 
     useEffect(() => {
@@ -54,16 +55,21 @@ const OrderSummary = () => {
         }
     };
 
-    const filteredOrders = selectedFilter === "All" ? orders : orders.filter(order => order.status === selectedFilter);
+    const filteredOrders = selectedFilter === "All" ? orders : orders.filter(order => order.status !== "cancelled");
 
-    const handleDelete = (id: string) => {
+    const handleDelete = async (id: string) => {
+        await patchUpdateOrderStatus(id, "cancelled");
         setOrders(prevOrders => prevOrders.filter(order => order.orderId !== id));
+        alert("Order Cancelled");
     };
 
-    const markAsCompleted = (id: string) => {
+    const mark = async (id: string, status: "completed" | "pending" | "confirmed" | "cancelled") => {
+        console.log(id);
+        await patchUpdateOrderStatus(id, status);
         setOrders(prevOrders =>
-            prevOrders.map(order => order.orderId === id ? { ...order, status: "Completed" } : order)
+            prevOrders.map(order => order.orderId === id ? { ...order, status: status } : order)
         );
+        alert("Order Updated");
     };
 
     // Handler for summary card clicks
@@ -163,12 +169,32 @@ const OrderSummary = () => {
                                 <Text>Price: {item.totalAmount}</Text>
                                 <Text>Status: {item.status}</Text>
                                 <View style={styles.actionButtons}>
-                                    <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.orderId)}>
-                                        <Text style={styles.buttonText}>Delete</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.completeButton} onPress={() => markAsCompleted(item.orderId)}>
-                                        <Text style={styles.buttonText}>Mark As Completed</Text>
-                                    </TouchableOpacity>
+                                    {
+                                        item.status !== "cancelled"
+                                            ?
+                                            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item._id)}>
+                                                <Text style={styles.buttonText}>Delete</Text>
+                                            </TouchableOpacity>
+                                            :
+                                            <></>
+                                    }
+
+                                    {
+                                        item.status !== "completed" && item.status !== "cancelled"
+                                            ?
+                                            item.status === "pending"
+                                                ?
+                                                <TouchableOpacity style={styles.completeButton} onPress={() => mark(item._id, "confirmed")}>
+                                                    <Text style={styles.buttonText}>Mark As Processing</Text>
+                                                </TouchableOpacity>
+                                                :
+                                                <TouchableOpacity style={styles.completeButton} onPress={() => mark(item._id, "completed")}>
+                                                    <Text style={styles.buttonText}>Mark As Completed</Text>
+                                                </TouchableOpacity>
+                                            :
+                                            <></>
+                                    }
+
                                     <TouchableOpacity style={styles.messageButton} onPress={() => handleMessageButtonClick(item.organizerId._id)}>
                                         <Text style={styles.buttonText}>Message</Text>
                                     </TouchableOpacity>

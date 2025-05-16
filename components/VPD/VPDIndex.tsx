@@ -122,7 +122,7 @@ const PhotographerDetailsScreen: React.FC = () => {
                 </TouchableOpacity>
 
                 {/* Title */}
-                <Text style={styles.title}>Photographer Details</Text>
+                <Text style={styles.title}>{vendorData.name}</Text>
 
                 {/* Cart Icon */}
                 {/* <TouchableOpacity
@@ -143,7 +143,7 @@ const PhotographerDetailsScreen: React.FC = () => {
                 testID="vendor-cover-image" // ✅ Added testID
                 source={{
                     uri: vendorData?.coverImage
-                        ? `http://13.233.214.252:3000${vendorData.coverImage}`
+                        ? `${vendorData.coverImage}`
                         : "https://via.placeholder.com/200",
                 }}
                 style={styles.mainImage}
@@ -253,7 +253,7 @@ const PhotographerDetailsScreen: React.FC = () => {
                                 <Image
                                     key={index}
                                     source={{
-                                        uri: `http://13.233.214.252:3000${image}`,
+                                        uri: `${image}`,
                                     }}
                                     style={styles.photo}
                                 />
@@ -351,7 +351,12 @@ const PhotographerDetailsScreen: React.FC = () => {
                                 <TouchableOpacity
                                     testID={`edit-package-${pkg._id}`}
                                     style={styles.cartButton}
-                                    onPress={() => router.push(`/vendorpackages`)}
+                                    onPress={() => {
+                                        router.push({
+                                            pathname: '/vendorpackages',
+                                            params: { packageId: pkg._id },
+                                        });
+                                    }}
                                 >
                                     <Text style={styles.cartButtonText}>Edit</Text>
                                 </TouchableOpacity>

@@ -23,6 +23,8 @@ const DashboardScreen = () => {
     const [orderCountArray, setOrderCountArray] = useState([]);
     const [orderAmountArray, setOrderAmountArray] = useState([]);
     const [monthNameArray, setMonthNameArray] = useState([]);
+    const [avatar, setAvatar] = useState<string>("");
+    const [packages, setPackages] = useState([]);
     const monthNames = [
         '', 'Jan', 'Feb', 'Mar', 'Apr', 'May',
         'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
@@ -40,10 +42,10 @@ const DashboardScreen = () => {
                 if (!user) {
                     throw "user not found";
                 }
+                setPackages(user.packages || []);
                 const statsData = await getVendorOrderStats("Vendor", user._id);  // Fetch order stats
                 setOrderStats(statsData);
                 const response = await getOrderStatsMonthly(user._id);
-                console.log("order stats monthly", response);
                 const totalAmountArray = response.map((item: any) => item.totalAmount);
                 const orderCountArray = response.map((item: any) => item.orderCount);
                 const monthArray = response.map((item: any) => item.month);
@@ -63,6 +65,7 @@ const DashboardScreen = () => {
         const storedUser = await getSecureData("user");
         if (storedUser) {
             const user = JSON.parse(storedUser);
+            setAvatar(user.contactDetails.brandLogo);
             setUsername(user.name);
             setVendorId(user._id);
         } else {
@@ -76,7 +79,10 @@ const DashboardScreen = () => {
                 <View style={styles.header}>
                     <View style={styles.profileContainer}>
                         <View style={styles.profileDetails}>
-
+                            <Image
+                                source={{ uri: avatar }}
+                                style={{ width: 50, height: 50 }}
+                            />
                             <Text style={styles.welcomeText}>Welcome , </Text>
                             <Text style={styles.username}>{username}</Text>
                         </View>
@@ -121,51 +127,61 @@ const DashboardScreen = () => {
                             <Text style={styles.dropdownText}>This Week</Text>
                         </TouchableOpacity>
                     </View>
-                    <LineChart
-                        data={{
-                            labels: monthNameArray,
-                            datasets: [
-                                {
-                                    data: orderAmountArray,
-                                    color: () => `purple`,
-                                    strokeWidth: 2,
-                                },
-                                {
-                                    data: orderCountArray,
-                                    color: () => `red`,
-                                    strokeWidth: 2,
-                                },
-                            ],
-                            legend: ["Amount", "Orders"],
-                        }}
-                        width={screenWidth - 32}
-                        height={220}
-                        chartConfig={chartConfig}
-                        bezier
-                        style={styles.chart}
-                    />
+                    {
+                        monthNameArray.length > 0 && orderAmountArray.length > 0 && orderCountArray.length > 0
+                            ?
+                            < LineChart
+                                data={{
+                                    labels: monthNameArray,
+                                    datasets: [
+                                        {
+                                            data: orderAmountArray,
+                                            color: () => `purple`,
+                                            strokeWidth: 2,
+                                        },
+                                        {
+                                            data: orderCountArray,
+                                            color: () => `red`,
+                                            strokeWidth: 2,
+                                        },
+                                    ],
+                                    legend: ["Amount", "Orders"],
+                                }}
+                                width={screenWidth - 32}
+                                height={220}
+                                chartConfig={chartConfig}
+                                bezier
+                                style={styles.chart}
+                            />
+                            :
+                            <></>
+                    }
+
                 </View>
 
                 <View style={styles.sectionContainer}>
                     <Text style={styles.sectionTitle}>Current Packages</Text>
                     <View style={styles.packageContainer}>
-                        {packages.map((pkg, index) => (
+                        {packages.map((pkg: any, index) => (
                             <TouchableOpacity
                                 key={index}
-                                style={[styles.packageBox, { backgroundColor: pkg.color }]}
+                                style={[styles.packageBox, { backgroundColor: "#B0B0B0" }]}
                                 onPress={() => {
                                     router.push({
                                         pathname: '/vendorpackages',
-                                        params: { packageId: pkg.value },
+                                        params: { packageId: pkg._id },
                                     });
                                 }}
                             >
-                                <Text style={styles.packageValue}>{pkg.value}</Text>
+                                <Text style={styles.packageValue}>{pkg.packageName}</Text>
                                 <Text style={styles.packageLabel}>Package</Text>
                                 <TouchableOpacity
                                     style={styles.detailsButton}
                                     onPress={() => {
-                                        router.push('/vendorpackages');
+                                        router.push({
+                                            pathname: '/vendorpackages',
+                                            params: { packageId: pkg._id },
+                                        });
                                     }}
                                 >
                                     <Text style={styles.detailsText}>Details</Text>
