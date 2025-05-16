@@ -173,7 +173,7 @@ const DashboardScreen = () => {
                                     });
                                 }}
                             >
-                                <Text style={styles.packageValue}>{pkg.packageName}</Text>
+                                {/* <Text style={styles.packageValue}>{pkg.packageName}</Text>
                                 <Text style={styles.packageLabel}>Package</Text>
                                 <TouchableOpacity
                                     style={styles.detailsButton}
@@ -185,7 +185,23 @@ const DashboardScreen = () => {
                                     }}
                                 >
                                     <Text style={styles.detailsText}>Details</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
+                                <View style={styles.packageContent}>
+  <Text style={styles.packageValue}>{pkg.packageName}</Text>
+  <Text style={styles.packageLabel}>Package</Text>
+  <TouchableOpacity
+    style={styles.detailsButton}
+    onPress={() => {
+      router.push({
+        pathname: '/vendorpackages',
+        params: { packageId: pkg._id },
+      });
+    }}
+  >
+    <Text style={styles.detailsText}>Details</Text>
+  </TouchableOpacity>
+</View>
+
                             </TouchableOpacity>
                         ))}
                     </View>
@@ -359,7 +375,7 @@ const styles = StyleSheet.create({
     chart: { borderRadius: 16 },
     packageContainer: { flexDirection: "row", justifyContent: "space-between" },
     packageBox: { width: "30%", padding: 10, borderRadius: 10, alignItems: "center" },
-    packageValue: { fontSize: 24, fontWeight: "bold" },
+    packageValue: { fontSize: 12, fontWeight: "bold" },
     packageLabel: { fontSize: 14 },
     detailsButton: { marginTop: 5, backgroundColor: "#fff", borderRadius: 5, padding: 5 },
     detailsText: { color: "#000" },
@@ -436,7 +452,11 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         fontWeight: "bold",
     },
-
+    packageContent: {
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      
 
 });
 
