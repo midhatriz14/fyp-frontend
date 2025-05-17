@@ -3,8 +3,10 @@ import patchUpdateProfile from '@/services/patchUpdateProfile'; // import your A
 import { getSecureData, saveSecureData } from '@/store';
 //import Ionicons from '@expo/vector-icons';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
+const { id } = useGlobalSearchParams();
 
-import { useRouter } from 'expo-router';
+import { useGlobalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   Image,
@@ -27,6 +29,11 @@ const EditProfileScreen: React.FC = () => {
   const [address, setAddress] = useState('');
   const [selectedStaff, setSelectedStaff] = useState<string>("");
   const [refundPolicy, setRefundPolicy] = useState<string>("");
+  const [vendorData, setVendorData] = useState<any>(null);
+  const [description, setDescription] = useState('');
+  const [citiesCovered, setCitiesCovered] = useState('');
+  const [loading, setLoading] = useState(true); // since you're using it in fetchVendorDetails
+
 
   useEffect(() => {
     fetchUserDetails();
@@ -41,6 +48,14 @@ const EditProfileScreen: React.FC = () => {
         setEmail(user.email || '');
         setPhoneNumber(user.phoneNumber || user.phone || user.phone_number || '');
         setAddress(user.address || '');
+        setSelectedStaff(user.staff || ''); // 👈 staff
+        setRefundPolicy(user.refundPolicy || ''); // 👈 refund policy
+
+
+
+        // Additional fields
+        setDescription(user.description || '');
+        setCitiesCovered(user.citiesCovered || '')
       }
     } catch (error) {
       console.error('Failed to fetch user data:', error);
@@ -62,13 +77,20 @@ const EditProfileScreen: React.FC = () => {
         return;
       }
 
+
       const updateData = {
         name,
         email,
         phoneNumber,
         address,
         userId,
+        description,
+        citiesCovered,
+        staff: selectedStaff,
+        refundPolicy,
       };
+
+
 
       const updatedUser = await patchUpdateProfile(userId, updateData);
       await saveSecureData('user', JSON.stringify(updatedUser));
@@ -78,6 +100,28 @@ const EditProfileScreen: React.FC = () => {
       alert('Failed to save profile. Please try again.');
     }
   };
+
+  useEffect(() => {
+    const fetchVendorDetails = async () => {
+      try {
+        const response = await axios.get(`http://13.233.214.252:3000/vendor?userId=${id}`);
+        setVendorData(response.data);
+        //setActivePackage(response.data.packages?.[0]?._id || null); // Set the first package as active by default
+        // 
+      }
+      catch (error) {
+        console.error('Error fetching vendor data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    console.log("id", id);
+    if (id) {
+      fetchVendorDetails();
+    }
+
+  }, [id]);
+
 
   return (
     <View style={styles.container} testID="screen-container">
@@ -171,50 +215,63 @@ const EditProfileScreen: React.FC = () => {
             />
           </View>
 
+          {/* <View style={styles.inputContainer}>
+            <Text style={styles.label}>Description</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter description"
+              value={description}
+              onChangeText={setDescription}
+            />
+          </View> */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Description</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter your address"
-              value={address}
-              onChangeText={setAddress}
+              placeholder="Enter description"
+              value={description !== '' ? description : vendorData?.BusinessDetails?.description || ''}
+              onChangeText={setDescription}
+              multiline
             />
           </View>
+
+
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Cities Covered</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter your address"
-              value={address}
-              onChangeText={setAddress}
+              placeholder="Enter cities covered"
+              value={citiesCovered}
+              onChangeText={setCitiesCovered}
             />
           </View>
 
+
           {/* Staff */}
           <Text style={styles.label}>Staff</Text>
-            <View style={styles.staffContainer}>
-                {[
-                    { label: 'MALE', icon: 'male' },
-                    { label: 'FEMALE', icon: 'female' },
-                    { label: 'TRANSGENDER', icon: 'transgender-alt' },
-                ].map((staff) => (
-                    <TouchableOpacity
-                        key={staff.label}
-                        style={[
-                            styles.staffOption,
-                            selectedStaff === staff.label && styles.staffSelected,
-                        ]}
-                        onPress={() => setSelectedStaff(staff.label)}
-                    >
-                        <FontAwesome5 name={staff.icon}
-                            size={20}
-                            style={[
-                                styles.staffIcon,
-                                selectedStaff === staff.label && styles.staffSelectedIcon,
-                            ]} />
+          <View style={styles.staffContainer}>
+            {[
+              { label: 'MALE', icon: 'male' },
+              { label: 'FEMALE', icon: 'female' },
+              { label: 'TRANSGENDER', icon: 'transgender-alt' },
+            ].map((staff) => (
+              <TouchableOpacity
+                key={staff.label}
+                style={[
+                  styles.staffOption,
+                  selectedStaff === staff.label && styles.staffSelected,
+                ]}
+                onPress={() => setSelectedStaff(staff.label)}
+              >
+                <FontAwesome5 name={staff.icon}
+                  size={20}
+                  style={[
+                    styles.staffIcon,
+                    selectedStaff === staff.label && styles.staffSelectedIcon,
+                  ]} />
 
-                        {/* <Icon
+                {/* <Icon
                             name={staff.icon}
                             size={20}
                             style={[
@@ -222,43 +279,43 @@ const EditProfileScreen: React.FC = () => {
                                 selectedStaff === staff.label && styles.staffSelectedIcon,
                             ]}
                         /> */}
-                        <Text
-                            style={[
-                                styles.staffText,
-                                selectedStaff === staff.label && styles.staffSelectedText,
-                            ]}
-                        >
-                            {staff.label}
-                        </Text>
-                    </TouchableOpacity>
-                ))}
-            </View>
+                <Text
+                  style={[
+                    styles.staffText,
+                    selectedStaff === staff.label && styles.staffSelectedText,
+                  ]}
+                >
+                  {staff.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
 
-            {/* Refund Policy */}
-            <Text style={styles.label}>Refund Policy*</Text>
-            <View style={styles.covidContainer}>
-                {['REFUNDABLE', 'NON-REFUNDABLE', 'PARTIALLY REFUNDABLE'].map(
-                    (policy) => (
-                        <TouchableOpacity
-                            key={policy}
-                            style={[
-                                styles.covidOption,
-                                refundPolicy === policy && styles.covidSelected,
-                            ]}
-                            onPress={() => setRefundPolicy(policy)}
-                        >
-                            <Text
-                                style={[
-                                    styles.covidText,
-                                    refundPolicy === policy && styles.covidSelectedText,
-                                ]}
-                            >
-                                {policy}
-                            </Text>
-                        </TouchableOpacity>
-                    )
-                )}
-            </View>
+          {/* Refund Policy */}
+          <Text style={styles.label}>Cancellation Policy*</Text>
+          <View style={styles.covidContainer}>
+            {['REFUNDABLE', 'NON-REFUNDABLE', 'PARTIALLY REFUNDABLE'].map(
+              (policy) => (
+                <TouchableOpacity
+                  key={policy}
+                  style={[
+                    styles.covidOption,
+                    refundPolicy === policy && styles.covidSelected,
+                  ]}
+                  onPress={() => setRefundPolicy(policy)}
+                >
+                  <Text
+                    style={[
+                      styles.covidText,
+                      refundPolicy === policy && styles.covidSelectedText,
+                    ]}
+                  >
+                    {policy}
+                  </Text>
+                </TouchableOpacity>
+              )
+            )}
+          </View>
 
         </View>
       </ScrollView>
@@ -363,7 +420,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   content: {
-   //flexGrow: 1,
+    //flexGrow: 1,
     padding: 20,
     paddingBottom: 160,
   },
@@ -487,94 +544,97 @@ const styles = StyleSheet.create({
 
   homeButton: {
     transform: [{ translateY: -20 }], // move it more upward (from -10 to -15)
-  
-},
-staffContainer: {
-  flexDirection: 'row', // Align items horizontally
-  //justifyContent: 'space-between', // Add spacing between items
-  marginBottom: 16,
-},
 
-staffOption: {
-  flexDirection: 'row', // Align icon and text horizontally
-  alignItems: 'center', // Center items vertically
-  borderWidth: 2,
-  borderColor: '#B085A6', // Light purple border
-  borderRadius: 10, // Rounded corners
-  paddingVertical: 10, // Vertical padding
-  paddingHorizontal: 12, // Horizontal padding to allow space around text
-  backgroundColor: '#FBEFF7', // Light background color
-  marginHorizontal: 5, // Space between boxes
-},
+  },
+  staffContainer: {
+    flexDirection: 'row', // Align items horizontally
+    //justifyContent: 'space-between', // Add spacing between items
+    marginBottom: 16,
+  },
 
-staffSelected: {
-  backgroundColor: '#780C60', // Selected box background color
-  borderColor: '#780C60',
-},
+  staffOption: {
+    flexDirection: 'row', // Align icon and text horizontally
+    alignItems: 'center', // Center items vertically
+    borderWidth: 2,
+    borderColor: '#B085A6', // Light purple border
+    borderRadius: 10, // Rounded corners
+    paddingVertical: 10, // Vertical padding
+    paddingHorizontal: 12, // Horizontal padding to allow space around text
+    backgroundColor: '#FBEFF7', // Light background color
+    marginHorizontal: 5, // Space between boxes
+  },
 
-staffIcon: {
-  color: '#780C60', // Default icon color
-  fontSize: 20,
-  marginRight: 2, // Space between icon and text
-},
+  staffSelected: {
+    backgroundColor: '#780C60', // Selected box background color
+    borderColor: '#780C60',
+  },
 
-staffSelectedIcon: {
-  color: '#FFF', // White color for selected icon
-},
+  staffIcon: {
+    color: '#780C60', // Default icon color
+    fontSize: 20,
+    marginRight: 2, // Space between icon and text
+  },
 
-staffText: {
-  fontSize: 8,
-  color: '#780C60', // Default text color
-  fontWeight: '600',
-},
+  staffSelectedIcon: {
+    color: '#FFF', // White color for selected icon
+  },
 
-staffSelectedText: {
-  color: '#FFF', // White color for selected text
-},
-covidContainer: {
-  // flexDirection: 'row',
-  // justifyContent: 'space-between',
-  // marginBottom: 16,
-  flexDirection: 'row', // Align items horizontally
-  //justifyContent: 'space-between', // Add spacing between items
-  marginBottom: 16,
-},
-covidOption: {
-  // padding: 10,
-  // borderWidth: 1,
-  // borderColor: '#B3A3A3',
-  // borderRadius: 8,
-  // flex: 1,
-  // alignItems: 'center',
-  // marginHorizontal: 4,
-  flexDirection: 'row', // Align icon and text horizontally
-  alignItems: 'center', // Center items vertically
-  borderWidth: 2,
-  borderColor: '#B085A6', // Light purple border
-  borderRadius: 10, // Rounded corners
-  paddingVertical: 10, // Vertical padding
-  paddingHorizontal: 12, // Horizontal padding to allow space around text
-  backgroundColor: '#FBEFF7', // Light background color
-  marginHorizontal: 5, // Space between boxes
-},
-covidSelected: {
-  // backgroundColor: '#FBEFF7',
-  // borderColor: '#800080',
-  backgroundColor: '#780C60', // Selected box background color
-  borderColor: '#780C60',
-},
-covidText: {
-  // fontSize: 14,
-  // color: '#666',
-  fontSize: 8,
-  color: '#780C60', // Default text color
-  fontWeight: '600',
-},
-covidSelectedText: {
-  // color: "#780C60",
-  // fontWeight: 'bold',
-  color: '#FFF', // White color for selected text
-},
+  staffText: {
+    fontSize: 8,
+    color: '#780C60', // Default text color
+    fontWeight: '600',
+  },
+
+  staffSelectedText: {
+    color: '#FFF', // White color for selected text
+  },
+  covidContainer: {
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // marginBottom: 16,
+    flexDirection: 'row', // Align items horizontally
+    //justifyContent: 'space-between', // Add spacing between items
+    marginBottom: 16,
+  },
+  covidOption: {
+    // padding: 10,
+    // borderWidth: 1,
+    // borderColor: '#B3A3A3',
+    // borderRadius: 8,
+    // flex: 1,
+    // alignItems: 'center',
+    // marginHorizontal: 4,
+    flexDirection: 'row', // Align icon and text horizontally
+    alignItems: 'center', // Center items vertically
+    borderWidth: 2,
+    borderColor: '#B085A6', // Light purple border
+    borderRadius: 10, // Rounded corners
+    paddingVertical: 10, // Vertical padding
+    paddingHorizontal: 12, // Horizontal padding to allow space around text
+    backgroundColor: '#FBEFF7', // Light background color
+    marginHorizontal: 5, // Space between boxes
+  },
+  covidSelected: {
+    // backgroundColor: '#FBEFF7',
+    // borderColor: '#800080',
+    backgroundColor: '#780C60', // Selected box background color
+    borderColor: '#780C60',
+  },
+  covidText: {
+    // fontSize: 14,
+    // color: '#666',
+    fontSize: 8,
+    color: '#780C60', // Default text color
+    fontWeight: '600',
+  },
+  covidSelectedText: {
+    // color: "#780C60",
+    // fontWeight: 'bold',
+    color: '#FFF', // White color for selected text
+  },
 });
 
 export default EditProfileScreen;
+
+
+

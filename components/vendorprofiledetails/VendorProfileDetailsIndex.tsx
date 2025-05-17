@@ -49,7 +49,7 @@ const PhotographerDetailsScreen: React.FC = () => {
 
       setNewReview('');
       setRating(null);
-      await getVendorReviews(userId);
+      await getVendorReviews(vendorData._id);
     } catch (error) {
       console.error('Error submitting review:', error);
       alert('Failed to submit review. Please try again.')
@@ -61,6 +61,7 @@ const PhotographerDetailsScreen: React.FC = () => {
   const fetchReviews = async () => {
     try {
       const data = await getVendorReviews(vendorData._id);
+      console.log("reviews", data);
       setReviews(data);
     } catch (error) {
       console.error('Error fetching reviews:', error);
