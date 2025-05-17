@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import React from "react";
 import renderer from "react-test-renderer";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
+ 
 import SelectRoleScreen from "../selectrole/SelectRoleIndex";
 import { router } from "expo-router";
-import SelectRoleIndex from "../selectrole/SelectRoleIndex";
 
 jest.mock("@/store", () => ({
   saveSecureData: jest.fn(),
@@ -290,7 +291,7 @@ describe("SelectRoleScreen", () => {
     // Component Structure Tests
     describe("Component Structure Tests", () => {
       it("includes all required UI elements", () => {
-        const { getByText, queryByText } = render(<SelectRoleScreen />);
+        const { getByText } = render(<SelectRoleScreen />);
 
         // Check for presence of all important elements
         expect(getByText("Select Your Role")).toBeTruthy();
@@ -395,7 +396,7 @@ describe("SelectRoleScreen", () => {
     });
 
     it("matches snapshot when modal is open", () => {
-      const { getByText, getByTestId } = render(<SelectRoleScreen />);
+      const { getByText } = render(<SelectRoleScreen />);
 
       // Open the modal
       fireEvent.press(getByText("Select"));

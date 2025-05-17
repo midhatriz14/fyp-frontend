@@ -1432,8 +1432,8 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
         style={
           {
             "alignItems": "center",
-            "backgroundColor": "#FBEFF7",
-            "borderColor": "#B085A6",
+            "backgroundColor": "#780C60",
+            "borderColor": "#780C60",
             "borderRadius": 10,
             "borderWidth": 2,
             "flexDirection": "row",
@@ -1454,7 +1454,9 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
                 "fontSize": 20,
                 "marginRight": 2,
               },
-              false,
+              {
+                "color": "#FFF",
+              },
             ]
           }
         />
@@ -1466,7 +1468,9 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
                 "fontSize": 8,
                 "fontWeight": "600",
               },
-              false,
+              {
+                "color": "#FFF",
+              },
             ]
           }
         >
@@ -1692,8 +1696,8 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
         style={
           {
             "alignItems": "center",
-            "backgroundColor": "#FBEFF7",
-            "borderColor": "#B085A6",
+            "backgroundColor": "#780C60",
+            "borderColor": "#780C60",
             "borderRadius": 10,
             "borderWidth": 2,
             "flexDirection": "row",
@@ -1712,7 +1716,9 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
                 "fontSize": 8,
                 "fontWeight": "600",
               },
-              false,
+              {
+                "color": "#FFF",
+              },
             ]
           }
         >
@@ -1750,8 +1756,8 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
         style={
           {
             "alignItems": "center",
-            "backgroundColor": "#FBEFF7",
-            "borderColor": "#B085A6",
+            "backgroundColor": "#780C60",
+            "borderColor": "#780C60",
             "borderRadius": 10,
             "borderWidth": 2,
             "flexDirection": "row",
@@ -1770,7 +1776,9 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
                 "fontSize": 8,
                 "fontWeight": "600",
               },
-              false,
+              {
+                "color": "#FFF",
+              },
             ]
           }
         >
@@ -1801,7 +1809,7 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
           "paddingVertical": 5,
         }
       }
-      value=""
+      value="Islamabad"
     />
     <Text
       style={
@@ -1925,8 +1933,8 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
         style={
           {
             "alignItems": "center",
-            "backgroundColor": "#FBEFF7",
-            "borderColor": "#B085A6",
+            "backgroundColor": "#780C60",
+            "borderColor": "#780C60",
             "borderRadius": 10,
             "borderWidth": 2,
             "flexDirection": "row",
@@ -1947,7 +1955,9 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
                 "fontSize": 20,
                 "marginRight": 2,
               },
-              false,
+              {
+                "color": "#FFF",
+              },
             ]
           }
         />
@@ -1959,7 +1969,9 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
                 "fontSize": 8,
                 "fontWeight": "600",
               },
-              false,
+              {
+                "color": "#FFF",
+              },
             ]
           }
         >
@@ -2086,7 +2098,7 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
           "paddingVertical": 5,
         }
       }
-      value=""
+      value="Party makeup services"
     />
     <Text
       style={
@@ -2138,8 +2150,8 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
         style={
           {
             "alignItems": "center",
-            "backgroundColor": "#FBEFF7",
-            "borderColor": "#B085A6",
+            "backgroundColor": "#780C60",
+            "borderColor": "#780C60",
             "borderRadius": 10,
             "borderWidth": 2,
             "flexDirection": "row",
@@ -2158,7 +2170,9 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
                 "fontSize": 8,
                 "fontWeight": "600",
               },
-              false,
+              {
+                "color": "#FFF",
+              },
             ]
           }
         >
@@ -2248,7 +2262,7 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
           "paddingVertical": 5,
         }
       }
-      value=""
+      value="1000"
     />
     <Text
       style={
@@ -2300,8 +2314,8 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
         style={
           {
             "alignItems": "center",
-            "backgroundColor": "#FBEFF7",
-            "borderColor": "#B085A6",
+            "backgroundColor": "#780C60",
+            "borderColor": "#780C60",
             "borderRadius": 10,
             "borderWidth": 2,
             "flexDirection": "row",
@@ -2320,7 +2334,9 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
                 "fontSize": 8,
                 "fontWeight": "600",
               },
-              false,
+              {
+                "color": "#FFF",
+              },
             ]
           }
         >
@@ -2436,8 +2452,8 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
         style={
           {
             "alignItems": "center",
-            "backgroundColor": "#FBEFF7",
-            "borderColor": "#B085A6",
+            "backgroundColor": "#780C60",
+            "borderColor": "#780C60",
             "borderRadius": 10,
             "borderWidth": 2,
             "flexDirection": "row",
@@ -2456,7 +2472,9 @@ exports[`SNAPSHOT-02: BusinessDetailsForm updates correctly when selecting input
                 "fontSize": 8,
                 "fontWeight": "600",
               },
-              false,
+              {
+                "color": "#FFF",
+              },
             ]
           }
         >

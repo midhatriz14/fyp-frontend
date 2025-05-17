@@ -1,14 +1,19 @@
+/* eslint-disable import/no-unresolved */
 import React from "react";
 import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
 import { Alert } from "react-native";
 import BusinessDetailsScreen from "../bdphotographer/BDPhotographerIndex";
+ 
 import { getSecureData } from "@/store";
 import postPhotographyBusinessDetails from "@/services/postPhotographyBusinessDetails";
 import { router } from "expo-router";
-import { StyleSheet } from "react-native";
+import { beforeEach, describe, expect, it } from "@jest/globals";
+//import type { Mock } from "jest-mock";
+
 
 // Mocking libraries
 jest.mock("react-native-reanimated", () =>
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   require("react-native-reanimated/mock")
 );
 jest.mock("react-native/Libraries/LogBox/LogBox", () => ({
@@ -466,7 +471,6 @@ describe("BusinessDetailsScreen Tests", () => {
     const downPaymentInput = getByPlaceholderText("Enter Down Payment");
 
     // Get the initial value to verify the prop
-    const initialProps = downPaymentInput.props;
 
     // Fire change text event
     fireEvent.changeText(downPaymentInput, "5000@!");

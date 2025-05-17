@@ -3,13 +3,12 @@ import React from "react";
 import { render, fireEvent, RenderResult, act} from "@testing-library/react-native";
 import NotificationsAccIndex from "../notificationacc/NotificationAccIndex";
 
+import { useRouter } from "expo-router";
+
 // Mock useRouter before any imports that might use it
-import { Mock } from "jest-mock";
 jest.mock("expo-router", () => ({
   useRouter: jest.fn(),
 }));
-
-import { useRouter } from "expo-router";
 
 describe("NotificationsAccIndex Component", () => {
   let component: RenderResult;

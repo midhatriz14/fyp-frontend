@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-require-imports */
 import React from "react";
 import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
 import { useRouter } from "expo-router";
@@ -66,6 +68,7 @@ describe("VendorCategoriesIndex Component", () => {
         },
       ];
 
+       
       require("@/services/getAllCategories").mockResolvedValueOnce(
         mockCategories
       );
